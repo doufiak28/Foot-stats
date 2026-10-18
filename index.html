@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#ffffff">
   <meta name="description" content="Foot-stats : analyse football 1X2, nuls, BTTS, Over/Under 2,5 avec un modèle de Poisson. Calendriers et résultats depuis des données publiques actualisables en ligne, sans clé API.">
-  <title>Foot-stats — Fiabilité et bilan</title>
+  <title>Foot-stats — Fiabilité sur 3 saisons</title>
   <style>
     :root{color-scheme:light;--ink:#17223b;--muted:#68758b;--line:#e3e9f0;--bg:#f4f7fb;--blue:#255ad8;--light:#eaf0ff;--green:#117853;--pale:#e9f8f1;--amber:#8d550d;--amberbg:#fff7e8;--white:#fff}
     *{box-sizing:border-box}
@@ -65,6 +65,19 @@
     .quality.medium{color:#166445}
     .audit-panel{background:#f5f8fc;border:1px solid var(--line);border-radius:12px;padding:14px;line-height:1.55}
     .audit-panel strong{color:#17223b}
+    .archive-tbl{width:100%;border-collapse:collapse;font-size:12px;min-width:550px}
+    .archive-tbl th,.archive-tbl td{border-bottom:1px solid var(--line);padding:11px 9px;text-align:right;font-variant-numeric:tabular-nums}
+    .archive-tbl th:first-child,.archive-tbl td:first-child{text-align:left;white-space:normal;min-width:145px}
+    .archive-tbl thead th{background:#edf2fa;color:#40516b}
+    .archive-tbl tr:last-child td{border-bottom:0}
+    .archive-explain{border-left:3px solid #b3c8f6;padding:10px 13px;margin:14px 0;background:#f6f9ff;border-radius:0 9px 9px 0;font-size:12px}
+    .archive-emphasis{color:#175d47;font-weight:800}
+    .archive-warn{color:#92551c;font-weight:700}
+    .archive-status{white-space:pre-line}
+    .archive-actions{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:14px}
+    .archive-actions button{flex:1 1 180px}
+    .archive-caption{font-size:12px;color:var(--muted);padding:8px 0}
+    
     .audit-note{font-size:12px;color:#68758b;margin-top:9px}
     .quality.low{color:#966018}
     .lineup-card{grid-column:1/-1}
@@ -135,11 +148,23 @@
         <div class="table-scroll"><table class="day-table"><thead><tr><th>Match</th><th>1</th><th>X</th><th>2</th><th>BTTS</th><th>+2,5</th><th>Échantillon</th><th>Détail</th></tr></thead><tbody id="day-body"><tr><td colspan="8">Chargement…</td></tr></tbody></table></div>
         <p class="footnote">« Échantillon » décrit la base de résultats, pas un taux de réussite. Les chiffres sont des tendances Poisson estimées à partir des scores : pas de validation de pari, ni de correction automatique pour les absents.</p>
       </section>
-      <section class="card day-card" aria-labelledby="audit-h"><h3 id="audit-h">3. Vérifier la fiabilité du modèle</h3>
+      <section class="card day-card" aria-labelledby="audit-h"><h3 id="audit-h">3. Vérifier la fiabilité actuelle</h3>
         <div class="audit-panel" id="audit-result" role="status">Calcul du bilan des prévisions passées…</div>
         <p class="audit-note">Test chronologique : chaque match est prévu à partir des <strong>résultats de dates antérieures uniquement</strong>. On compare l'erreur de Foot-stats à celle d'un modèle de référence utilisant seulement les fréquences de victoires, nuls et défaites de la ligue. « Brier » : plus petit = mieux. Avant 50 matchs testables, aucun verdict de fiabilité n'est donné. Ce contrôle n'utilise ni cotes ni xG.</p>
       </section>
-      <section class="card lineup-card" aria-labelledby="lineup-h"><h3 id="lineup-h">4. Compositions et absents <span class="small">(facultatif)</span></h3>
+      <section class="card day-card" aria-labelledby="archive-h">
+        <h3 id="archive-h">4. Bilan historique sur 3 saisons</h3>
+        <p class="small">Saisons terminées 2023/24, 2024/25 et 2025/26. Chaque match est simulé <strong>avant son coup d’envoi</strong> à partir des résultats antérieurs de <strong>la même saison</strong>. Une saison manquante est signalée, jamais inventée. Sans compositions, xG mesurés ni cotes historiques.</p>
+        <div class="archive-actions">
+          <button type="button" class="action secondary" id="archive-one">Tester le championnat sélectionné</button>
+          <button type="button" class="action" id="archive-all">Comparer les 10 championnats</button>
+        </div>
+        <div id="archive-status" class="auto-status archive-status" role="status">Appuie sur « Tester le championnat sélectionné » pour télécharger les trois saisons historiques. Le calcul se fait sur ton téléphone.</div>
+        <div class="table-scroll"><table class="archive-tbl"><thead><tr><th>Championnat / saison</th><th>Matchs testés</th><th>1X2 Foot-stats</th><th>1X2 référence</th><th>Écart favorable</th><th>Nuls</th><th>BTTS</th><th>+2,5</th></tr></thead><tbody id="archive-body"><tr><td colspan="8">Aucun historique testé pour le moment.</td></tr></tbody></table></div>
+        <div class="archive-explain">Les chiffres sont des <strong>scores de Brier</strong> (plus petits = meilleurs). Pour les trois derniers marchés, l'affichage indique le Brier du modèle. L’écart favorable = Brier référence moins Brier Foot-stats : positif signifie meilleur sur les matchs testés. Le classement utilise la saison <strong>2025/26</strong> comme période de confirmation et n’affiche un rang que si au moins 150 matchs sont testables sur cette saison et 300 sur les trois saisons, avec au moins deux saisons exploitables. Cela ne démontre pas la rentabilité des paris.</div>
+        <p class="small">Archives publiques : <a href="https://github.com/openfootball/football.json" target="_blank" rel="noopener">OpenFootball / football.json</a> (domaine public). Le classement exclut la MLS : elle se joue sur une année civile et nécessite un historique distinct. La version actuelle du modèle reste fixe pendant le test ; il ne s’ajuste pas après avoir vu les résultats.</p>
+      </section>
+      <section class="card lineup-card" aria-labelledby="lineup-h"><h3 id="lineup-h">5. Compositions et absents <span class="small">(facultatif)</span></h3>
         <div class="field"><label for="lineup-status">Type d'information</label><select id="lineup-status"><option value="unknown">Compositions non vérifiées</option><option value="probable">Compositions probables vérifiées par toi</option><option value="official">Compositions officielles vérifiées par toi</option></select></div>
         <div class="two">
           <div class="field"><label for="lineup-home">Absents / changement domicile</label><input id="lineup-home" maxlength="180" placeholder="Ex. avant-centre absent"></div>
@@ -152,7 +177,7 @@
         </div>
         <p class="impact-note">⚠ Les noms saisis ne modifient pas automatiquement les probabilités. Seuls les pourcentages ci-dessus les ajustent. Aucun titulaire, blessé ou suspendu n'est inventé ni récupéré par cette version.</p>
       </section>
-      <section class="card" aria-labelledby="odds-h"><h3 id="odds-h">5. Cotes du bookmaker <span class="small">(facultatif)</span></h3>
+      <section class="card" aria-labelledby="odds-h"><h3 id="odds-h">6. Cotes du bookmaker <span class="small">(facultatif)</span></h3>
         <div class="three"><div class="field"><label for="odd1">1 — Domicile</label><input id="odd1" type="number" min="1.01" step="0.01" inputmode="decimal" placeholder="Ex. 2.10"></div><div class="field"><label for="oddx">X — Nul</label><input id="oddx" type="number" min="1.01" step="0.01" inputmode="decimal" placeholder="Ex. 3.30"></div><div class="field"><label for="odd2">2 — Extérieur</label><input id="odd2" type="number" min="1.01" step="0.01" inputmode="decimal" placeholder="Ex. 3.50"></div></div>
         <p class="small">Les cotes se saisissent toujours manuellement : pas de bookmaker connecté ni de cotes en direct.</p>
         <div class="actions"><button class="action" id="calculate" type="button">Calculer les tendances</button><button class="action ghost" id="reset" type="button">Effacer les champs</button></div>
@@ -422,8 +447,8 @@
     // Pas de données des rencontres de la même journée, même si elles ont déjà été jouées.
     const PRIOR_GAMES=8;
     const MIN_LEAGUE_MATCHES=36;
-    function historicalStats(fixture){
-      const previous=matchFeed.filter(m=>m.date<fixture.date&&resultOf(m));
+    function historicalStats(fixture,feed=matchFeed){
+      const previous=feed.filter(m=>m.date<fixture.date&&resultOf(m));
       if(previous.length<MIN_LEAGUE_MATCHES)return null;
       const avgH=previous.reduce((a,m)=>a+resultOf(m)[0],0)/previous.length;
       const avgA=previous.reduce((a,m)=>a+resultOf(m)[1],0)/previous.length;
@@ -612,6 +637,132 @@
     $('league').addEventListener('change',()=>loadLeague());
     $('reload-data').addEventListener('click',()=>loadLeague(true));
     loadLeague();
+    // Bilan 3 saisons : tests walk-forward par saison, sans données d'après-match.
+    // 2025/26 est traité comme période de confirmation NON utilisée pour ajuster les paramètres.
+    const ARCHIVE_SEASONS=['2023-24','2024-25','2025-26'];
+    const ARCHIVE_LEAGUES=Object.keys(LEAGUE_CODES);
+    const archiveCache=new Map();
+    let archiveBusy=false;
+    function metricFmt(x){return Number.isFinite(x)?x.toLocaleString('fr-FR',{minimumFractionDigits:3,maximumFractionDigits:3}):'—'}
+    function archiveScoreOf(x){return resultOf(x)}
+    async function archiveLoad(league,season){
+      const code=LEAGUE_CODES[league];
+      if(!code)throw Error('archive indisponible pour '+league);
+      const key=season+'/'+code;
+      if(!archiveCache.has(key)){
+        const promise=(async()=>{
+          const url=`https://raw.githubusercontent.com/openfootball/football.json/master/${season}/${code}.json`;
+          const response=await fetch(url,{cache:'default'});
+          if(!response.ok)throw Error('HTTP '+response.status);
+          const data=await response.json();
+          if(!data||!Array.isArray(data.matches))throw Error('fichier incomplet');
+          const result=data.matches.filter(x=>validFixture(x)&&archiveScoreOf(x)).sort((a,b)=>a.date.localeCompare(b.date));
+          if(result.length<60)throw Error('archive trop incomplète ('+result.length+' résultats)');
+          return result;
+        })().catch(e=>{archiveCache.delete(key);throw e});
+        archiveCache.set(key,promise);
+      }
+      return archiveCache.get(key);
+    }
+    function archiveTest(matches){
+      // Repartir de zéro pour chaque saison : aucun résultat des saisons voisines dans le modèle.
+      const ordered=matches.filter(m=>resultOf(m)).sort((a,b)=>a.date.localeCompare(b.date));
+      let n=0, sum=0, ref=0, draw=0, drawRef=0, btts=0, bttsRef=0, over=0, overRef=0;
+      for(const m of ordered){
+        const past=ordered.filter(g=>g.date<m.date); // EXCLUSION stricte du jour-même.
+        const st=historicalStats(m,past);
+        if(!st)continue;
+        const actual=resultOf(m);if(!actual)continue;
+        const h=actual[0],a=actual[1],onehot=[+(h>a),+(h===a),+(h<a)];
+        const freq=[0,0,0];let bYes=0,oYes=0;
+        for(const g of past){const s=resultOf(g);if(s[0]>s[1])freq[0]++;else if(s[0]===s[1])freq[1]++;else freq[2]++;
+          if(s[0]>0&&s[1]>0)bYes++;
+          if(s[0]+s[1]>2)oYes++;
+        }
+        const base=freq.map(v=>(v+1)/(past.length+3));
+        const baseBTTS=(bYes+1)/(past.length+2),baseOver=(oYes+1)/(past.length+2);
+        const p=model(st.a,st.b), pp=[p.p1,p.px,p.p2];
+        const squared=(pr,y)=>(pr-y)*(pr-y);
+        sum+=pp.reduce((z,v,i)=>z+squared(v,onehot[i]),0)/3;
+        ref+=base.reduce((z,v,i)=>z+squared(v,onehot[i]),0)/3;
+        draw+=squared(p.px,onehot[1]);drawRef+=squared(base[1],onehot[1]);
+        btts+=squared(p.btts,+(h>0&&a>0));bttsRef+=squared(baseBTTS,+(h>0&&a>0));
+        over+=squared(p.over,+(h+a>2));overRef+=squared(baseOver,+(h+a>2));
+        n++;
+      }
+      const mean=x=>n?x/n:null;
+      return {n,total:ordered.length,brier:mean(sum),reference:mean(ref),draw:mean(draw),drawRef:mean(drawRef),btts:mean(btts),bttsRef:mean(bttsRef),over:mean(over),overRef:mean(overRef)};
+    }
+    function archiveCell(tr,val,cls=''){
+      const td=document.createElement('td');td.textContent=val;if(cls)td.className=cls;tr.append(td);
+    }
+    function archiveRow(name,r,rank=''){
+      const tr=document.createElement('tr');
+      archiveCell(tr,rank?rank+' · '+name:name);
+      if(!r){const td=document.createElement('td');td.colSpan=7;td.textContent='Archive absente / échantillon incomplet : non classé';tr.append(td);return tr;}
+      const diff=r.reference-r.brier;
+      archiveCell(tr,r.n+' / '+r.total);
+      archiveCell(tr,metricFmt(r.brier));archiveCell(tr,metricFmt(r.reference));
+      archiveCell(tr,(diff>=0?'+':'')+metricFmt(diff),diff>0?'archive-emphasis':'archive-warn');
+      archiveCell(tr,metricFmt(r.draw));archiveCell(tr,metricFmt(r.btts));archiveCell(tr,metricFmt(r.over));
+      return tr;
+    }
+    function archiveStatus(message,warn=false){const el=$('archive-status');el.textContent=message;el.className='auto-status archive-status'+(warn?' warn':' ok');}
+    function archiveBusySet(isBusy){archiveBusy=isBusy;$('archive-one').disabled=isBusy;$('archive-all').disabled=isBusy;}
+    async function archiveForLeague(league,onProgress){
+      const results=[];const errors=[];
+      for(const season of ARCHIVE_SEASONS){
+        onProgress?.(season);
+        try{results.push({season,stats:archiveTest(await archiveLoad(league,season))});}
+        catch(e){results.push({season,stats:null});errors.push(`${season} : ${e.message}`);}
+      }
+      const recent=results.find(x=>x.season==='2025-26')?.stats||null;
+      const tested=results.reduce((n,x)=>n+(x.stats?.n||0),0);
+      const valid=results.filter(x=>x.stats&&x.stats.n>0).length;
+      const eligible=Boolean(recent&&recent.n>=150&&tested>=300&&valid>=2);
+      return {league,results,recent,tested,valid,eligible,errors};
+    }
+    $('archive-one').addEventListener('click',async()=>{
+      if(archiveBusy)return;
+      archiveBusySet(true);const league=$('league').value;
+      $('archive-body').replaceChildren();
+      try{
+        archiveStatus('Téléchargement des archives : '+league+'…');
+        const row=await archiveForLeague(league,season=>archiveStatus('Analyse de '+league+' · '+season+'…'));
+        for(const obj of row.results)$('archive-body').append(archiveRow(league+' · '+obj.season,obj.stats));
+        archiveStatus(`${league} : ${row.tested} rencontres testées sur ${row.valid} saison(s). `+(row.eligible?'Saison 2025/26 suffisamment documentée pour comparer au modèle de référence.':'Données trop limitées pour un classement fiable.')+(row.errors.length?' Fichiers absents ou incomplets : '+row.errors.join(' ; '):'') ,Boolean(row.errors.length||!row.eligible));
+      }catch(e){archiveStatus('Erreur : '+e.message,true)}
+      finally{archiveBusySet(false)}
+    });
+    $('archive-all').addEventListener('click',async()=>{
+      if(archiveBusy)return;archiveBusySet(true);
+      const tbody=$('archive-body');tbody.replaceChildren();
+      const rows=[];let completed=0;
+      try{
+        archiveStatus('Comparaison des dix championnats : téléchargement des résultats historiques…');
+        // Deux championnats à la fois pour limiter la charge du téléphone.
+        let pos=0;
+        async function worker(){
+          while(pos<ARCHIVE_LEAGUES.length){
+            const league=ARCHIVE_LEAGUES[pos++];
+            const row=await archiveForLeague(league);
+            rows.push(row);completed++;
+            archiveStatus(`Analyse terminée : ${completed}/10 championnats. ${league} : ${row.tested} matchs testés.`+(row.errors.length?' Archives incomplètes.':''),false);
+            // Laisser le navigateur afficher l'avancement.
+            await new Promise(resolve=>setTimeout(resolve,0));
+          }
+        }
+        await Promise.all([worker(),worker()]);
+        const ranked=rows.filter(x=>x.eligible).sort((a,b)=>(b.recent.reference-b.recent.brier)-(a.recent.reference-a.recent.brier));
+        const rankOf=new Map(ranked.map((row,i)=>[row.league,String(i+1)]));
+        for(const row of [...ranked,...rows.filter(x=>!x.eligible).sort((a,b)=>a.league.localeCompare(b.league))]){
+          tbody.append(archiveRow(row.league+' · 2025/26',row.recent,row.eligible?'#'+rankOf.get(row.league):'Non classé'));
+        }
+        const incomplete=rows.filter(x=>x.errors.length).map(x=>x.league).join(', ');
+        archiveStatus(`${ranked.length}/10 championnats classables · classement selon l’écart Brier 1X2 sur 2025/26 (dernier exercice terminé). Nombre de matchs testés affiché pour chaque championnat.`+(incomplete?' Archives manquantes / incomplètes : '+incomplete+'.':'')+' Résultat historique uniquement : aucun avantage de pari démontré.',ranked.length!==10);
+      }catch(e){archiveStatus('Comparaison interrompue : '+e.message,true)}
+      finally{archiveBusySet(false)}
+    });
   </script>
 </body>
 </html>
