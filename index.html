@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#ffffff">
-  <meta name="description" content="Foot-stats : analyse football 1X2, nuls, BTTS, Over/Under 2,5 avec un modèle de Poisson. Mise à jour des calendriers et des scores par Internet, sans clé API.">
+  <meta name="description" content="Foot-stats : analyse football 1X2, nuls, BTTS, Over/Under 2,5 avec un modèle de Poisson. Calendriers et résultats depuis des données publiques actualisables en ligne, sans clé API.">
   <title>Foot-stats — Analyses football</title>
   <style>
     :root{color-scheme:light;--ink:#17223b;--muted:#68758b;--line:#e3e9f0;--bg:#f4f7fb;--blue:#255ad8;--light:#eaf0ff;--green:#117853;--pale:#e9f8f1;--amber:#8d550d;--amberbg:#fff7e8;--white:#fff}
@@ -91,14 +91,14 @@
   <header><div class="wrap"><div class="brand"><div class="logo" aria-hidden="true">⚽</div><div><h1>Foot-stats</h1><p>Analyse football · résultats et calendrier en ligne</p></div></div></div></header>
   <main class="wrap">
     <div class="toprow"><h2>Analyses football</h2><span class="tag" id="mode-badge">● Chargement…</span></div>
-    <div class="notice"><strong>Mode automatique gratuit :</strong> à chaque ouverture, Foot-stats consulte les scores et calendriers publics (OpenFootball) disponibles. Les données peuvent être <strong>en retard ou incomplètes</strong>. Les buts attendus sont <strong>estimés à partir des scores</strong>, pas des xG mesurés. Ni cotes en direct, ni compositions, ni garanties de résultat.</div>
+    <div class="notice"><strong>Mode automatique gratuit :</strong> à chaque ouverture, Foot-stats recharge les résultats et calendriers publics (Open Matchday, puis OpenFootball en secours). Les mises à jour dépendent de ces fournisseurs et peuvent être <strong>en retard ou incomplètes</strong>. Les buts attendus sont <strong>estimés à partir des scores</strong>, pas des xG mesurés. Ni cotes en direct, ni compositions, ni garanties de résultat.</div>
     <div class="layout">
       <section class="card" aria-labelledby="match-h"><h3 id="match-h">1. Choisir le match</h3>
         <div class="field"><label for="league">Championnat</label><select id="league">
           <option>Ligue 1</option><option>Ligue 2</option><option>Serie A</option><option>Serie B</option><option>Bundesliga</option><option>Bundesliga 2</option><option>La Liga</option><option>La Liga 2</option><option>Premier League</option><option>Championship</option><option>MLS</option>
         </select></div>
         <div class="auto-status" id="data-status" role="status">Chargement des données…</div>
-        <div class="auto-row"><span class="subheading">Calendrier automatique · <span id="season-label">2026/27</span></span><button type="button" id="reload-data" class="action secondary">↻ Actualiser</button></div>
+        <div class="auto-row"><span class="subheading">Matchs et résultats publics · <span id="season-label">2026/27</span></span><button type="button" id="reload-data" class="action secondary">↻ Actualiser</button></div>
         <div class="field"><label for="auto-match">Sélectionne un match du calendrier</label><select id="auto-match" disabled><option>Chargement…</option></select><p class="hint" id="auto-help">La liste se remplit si la source publie cette saison.</p></div>
         <div class="two"><div class="field"><label for="home">Équipe à domicile</label><input id="home" autocomplete="off" placeholder="Ex. Marseille" maxlength="50"></div><div class="field"><label for="away">Équipe à l'extérieur</label><input id="away" autocomplete="off" placeholder="Ex. Lille" maxlength="50"></div></div>
         <div class="soft"><div class="subheading">Buts prévus par le modèle (pas des xG observés)</div>
@@ -127,7 +127,7 @@
       </section>
     </div>
     <section class="card" aria-labelledby="history-h"><div class="toprow" style="margin:0 0 13px"><h3 id="history-h" style="margin:0">Mes analyses enregistrées</h3><button id="clear-history" class="mini danger" type="button">Tout effacer</button></div><div class="history" id="history"><p class="small">Aucune analyse enregistrée pour le moment.</p></div><p class="footnote">Les analyses sont enregistrées uniquement dans le navigateur de ce téléphone. Elles ne se synchronisent pas automatiquement.</p></section>
-    <footer>Foot-stats · Site gratuit, statistiques indicatives · Source : <a href="https://github.com/openfootball/football.json" target="_blank" rel="noopener">OpenFootball (domaine public)</a> · Données ni garanties ni temps réel</footer>
+    <footer>Foot-stats · Site gratuit, statistiques indicatives · Sources : <a href="https://github.com/oladeeayo/open-matchday" target="_blank" rel="noopener">Open Matchday</a> et <a href="https://github.com/openfootball/football.json" target="_blank" rel="noopener">OpenFootball (secours)</a> · Résultats ni garantis ni en direct · Usage personnel</footer>
   </main>
   <script>
     'use strict';
@@ -244,8 +244,9 @@
       if(confirm('Effacer toutes les analyses enregistrées sur ce téléphone ?')){writeHistory([]);showHistory()}
     });
     showHistory();
-    // Chargement automatique : 10 championnats, sans API payante ni GitHub Actions.
-    // La source est un projet collaboratif ; des données manquantes/stales sont signalées.
+    // Données des 10 championnats européens + MLS (sans clé API ni serveur).
+    // On privilégie les CSV de résultats/fixtures publiés par open-matchday.
+    // Une publication n'est pas une garantie de scores temps réel.
     const LEAGUE_CODES={
       'Ligue 1':'fr.1','Ligue 2':'fr.2',
       'Serie A':'it.1','Serie B':'it.2',
@@ -253,6 +254,86 @@
       'La Liga':'es.1','La Liga 2':'es.2',
       'Premier League':'en.1','Championship':'en.2'
     };
+    const MATCHDAY_FOLDERS={
+      'Ligue 1':'FRA_1_ligue-1','Ligue 2':'FRA_2_ligue-2',
+      'Serie A':'ITA_1_serie-a','Serie B':'ITA_2_serie-b',
+      'Bundesliga':'GER_1_bundesliga','Bundesliga 2':'GER_2_2-bundesliga',
+      'La Liga':'ESP_1_la-liga','La Liga 2':'ESP_2_segunda-division',
+      'Premier League':'ENG_1_premier-league','Championship':'ENG_2_championship',
+      'MLS':'USA_1_mls'
+    };
+    const MATCHDAY_ROOT='https://raw.githubusercontent.com/oladeeayo/open-matchday/master/';
+    // Parse un vrai CSV (guillemets, virgules dans les noms, CRLF et BOM).
+    function parseCSV(csv){
+      const rows=[];let row=[],field='',quoted=false;
+      const content=String(csv).replace(/^\uFEFF/,'');
+      for(let i=0;i<content.length;i++){
+        const c=content[i];
+        if(c==='"'){
+          if(quoted && content[i+1]==='"'){field+='"';i++;}
+          else quoted=!quoted;
+        }else if(c===','&&!quoted){row.push(field);field='';}
+        else if((c==='\n'||c==='\r')&&!quoted){
+          if(c==='\r'&&content[i+1]==='\n')i++;
+          row.push(field);field='';
+          if(row.some(v=>v.trim()))rows.push(row);
+          row=[];
+        }else field+=c;
+      }
+      row.push(field);if(row.some(v=>v.trim()))rows.push(row);
+      if(rows.length<2)return [];
+      const keys=rows.shift().map((x,i)=>i?x.trim():x.trim().replace(/^\uFEFF/,''));
+      return rows.map(cols=>Object.fromEntries(keys.map((k,i)=>[k,(cols[i]??'').trim()])))
+        .filter(o=>Object.values(o).some(Boolean));
+    }
+    function scoreNum(value){
+      const s=String(value??'').trim();return /^\d{1,2}$/.test(s)&&Number(s)<=20?Number(s):null;
+    }
+    function sourceToMatch(row,finished){
+      const date=String(row.date||'').trim();
+      const team1=String(row.home||'').trim(),team2=String(row.away||'').trim();
+      const g1=scoreNum(row.ft_home),g2=scoreNum(row.ft_away);
+      const round=String(row.gw||'').trim();
+      const rawTime=String(row.time||'').trim();
+      const m={date,team1,team2,round:round?'Journée '+round:'',time:/^\d{2}:\d{2}$/.test(rawTime)?rawTime:'',score:finished&&g1!==null&&g2!==null?[g1,g2]:null};
+      return validFixture(m)?m:null;
+    }
+    async function fetchText(url){
+      const response=await fetch(url,{cache:'no-store',headers:{'Accept':'text/plain, text/csv, application/json'}});
+      if(!response.ok)throw Error('HTTP '+response.status);
+      return await response.text();
+    }
+    async function fetchMatchday(league,season,force){
+      const folder=MATCHDAY_FOLDERS[league];if(!folder)throw Error('Championnat inconnu');
+      const year=new Date().getFullYear();
+      const seasonTag=league==='MLS'?String(year):season.slice(2,4)+season.slice(5,7);
+      const stamp=force?Date.now():new Date().toISOString().slice(0,13);
+      const root=`${MATCHDAY_ROOT}data/${folder}/`;
+      const files=await Promise.allSettled([
+        fetchText(`${root}results_${seasonTag}.csv?v=${stamp}`),
+        fetchText(`${root}fixtures_${seasonTag}.csv?v=${stamp}`)
+      ]);
+      if(files.every(f=>f.status==='rejected'))throw Error('résultats et calendrier indisponibles');
+      const results=files[0].status==='fulfilled'?parseCSV(files[0].value).map(x=>sourceToMatch(x,true)).filter(x=>x&&resultOf(x)):[];
+      const fixtures=files[1].status==='fulfilled'?parseCSV(files[1].value).map(x=>sourceToMatch(x,false)).filter(Boolean):[];
+      if(!results.length&&!fixtures.length)throw Error('aucun résultat ni calendrier disponible');
+      // Ne pas doubler une rencontre si les deux CSV la contiennent.
+      const unique=new Map();
+      for(const m of [...fixtures,...results])unique.set(`${m.date}|${m.team1.toLocaleLowerCase()}|${m.team2.toLocaleLowerCase()}`,m);
+      return {matches:[...unique.values()].sort((a,b)=>a.date.localeCompare(b.date)),source:'Open Matchday',warning:files.some(f=>f.status==='rejected')?' ⚠ Une partie des fichiers du fournisseur est indisponible.':''};
+    }
+    async function fetchOpenfootball(league,season,force){
+      const code=LEAGUE_CODES[league];if(!code)throw Error('aucune source de secours pour cette compétition');
+      const stamp=force?Date.now():new Date().toISOString().slice(0,10);
+      const url=`https://raw.githubusercontent.com/openfootball/football.json/master/${season}/${code}.json?v=${stamp}`;
+      const response=await fetch(url,{cache:'no-store'});
+      if(!response.ok)throw Error('HTTP '+response.status);
+      const json=await response.json();
+      if(!Array.isArray(json.matches))throw Error('format de données imprévu');
+      const matches=json.matches.filter(validFixture).sort((a,b)=>a.date.localeCompare(b.date));
+      if(!matches.length)throw Error('aucun match disponible');
+      return {matches,source:'OpenFootball (secours)',warning:' ⚠ Source de secours potentiellement moins récente.'};
+    }
     let matchFeed=[];
     let leagueSeason='';
     let loadCounter=0;
@@ -304,7 +385,7 @@
       const stats=historicalStats(m);
       if(stats){
         $('xgh').value=stats.a.toFixed(2);$('xga').value=stats.b.toFixed(2);
-        $('auto-help').textContent=`${m.round||'Journée non indiquée'} · ${asDay(m.date)}${m.time?' à '+m.time:''} · Base : ${stats.count} résultats antérieurs · ${stats.hPlayed} matchs à domicile / ${stats.aPlayed} à l’extérieur. BTTS sur 5 matchs : ${m.team1} ${stats.homeFormBTTS??'–'} %, ${m.team2} ${stats.awayFormBTTS??'–'} %.`;
+        $('auto-help').textContent=`${m.round||'Journée non indiquée'} · ${asDay(m.date)}${m.time?' à '+m.time:''} · Base : ${stats.count} résultats antérieurs · ${stats.hPlayed} matchs à domicile / ${stats.aPlayed} à l’extérieur. BTTS sur 5 matchs : ${m.team1} ${stats.homeFormBTTS??'–'} %, ${m.team2} ${stats.awayFormBTTS??'–'} %.${stats.hPlayed<4||stats.aPlayed<4?' ⚠ Faible échantillon domicile/extérieur : estimation fragile.':''}`;
         if(autoRender){
           try{render(getForm(),{scroll:false});$('error').textContent='';}
           catch(e){$('error').textContent=e.message;}
@@ -329,34 +410,34 @@
       populateFixture(selection[Number(select.value)]);
     }
     async function loadLeague(force=false){
-      const league=$('league').value,code=LEAGUE_CODES[league],requestId=++loadCounter;
+      const league=$('league').value,requestId=++loadCounter;
       const season=currentSeason();leagueSeason=season;
-      $('season-label').textContent=season.replace('-','/');
+      $('season-label').textContent=league==='MLS'?String(new Date().getFullYear()):season.replace('-','/');
       $('auto-match').disabled=true;
       $('auto-match').replaceChildren(new Option('Téléchargement des matchs…',''));
       $('results').classList.remove('show');
       $('mode-badge').textContent='● Chargement…';
-      status('Connexion à la source ouverte : '+league+'…');
-      if(!code){setManual('Cette compétition ne dispose pas encore d’une source intégrée dans cette version.');return;}
+      status('Recherche des résultats récents pour '+league+'…');
       try{
-        const url=`https://raw.githubusercontent.com/openfootball/football.json/master/${season}/${code}.json?v=${force?Date.now():new Date().toISOString().slice(0,10)}`;
-        const response=await fetch(url,{cache:'no-store'});
-        if(!response.ok)throw Error('source indisponible (HTTP '+response.status+')');
-        const json=await response.json();
+        let feed;
+        try{feed=await fetchMatchday(league,season,force);}
+        catch(primaryError){
+          feed=await fetchOpenfootball(league,season,force);
+          feed.warning+=` Source principale non accessible (${primaryError.message}).`;
+        }
         if(requestId!==loadCounter)return;
-        if(!Array.isArray(json.matches))throw Error('format de données imprévu');
-        matchFeed=json.matches.filter(validFixture).sort((a,b)=>a.date.localeCompare(b.date));
-        if(!matchFeed.length){setManual('Le fournisseur ne publie aucun match pour '+league+' en '+season+'.');return;}
-        const played=matchFeed.filter(resultOf),latest=played.length?played[played.length-1].date:null;
+        matchFeed=feed.matches;
+        const played=matchFeed.filter(resultOf);
+        const latest=played.length?played.reduce((d,m)=>m.date>d?m.date:d,''):null;
         const lagDays=latest?Math.floor((new Date(localIsoToday()+'T12:00:00')-new Date(latest+'T12:00:00'))/86400000):null;
         const stale=lagDays===null||lagDays>12;
-        const last=latest?`Dernier score fourni : ${asDay(latest)}.`:'Aucun résultat fourni pour cette saison.';
-        $('mode-badge').textContent='● Calendrier automatique';
-        status(`${league} · ${matchFeed.length} matchs connus, ${played.length} résultats renseignés. ${last}${stale?' ⚠ Source possiblement en retard : ne pas interpréter comme des résultats en direct.':''} Source : OpenFootball.`,stale?'warn':'ok');
+        const last=latest?`Dernier score publié : ${asDay(latest)} (${lagDays} jour${lagDays>1?'s':''} avant aujourd'hui).`:'Aucun résultat connu pour cette saison.';
+        $('mode-badge').textContent=stale?'● Résultats à vérifier':'● Données chargées';
+        status(`${league} · ${played.length} scores et ${matchFeed.filter(m=>!resultOf(m)).length} rencontres sans résultat. ${last} Source : ${feed.source}.${feed.warning}${stale?' ⚠ Données anciennes ou absentes : analyse à vérifier avant tout pari.':''}`,stale||feed.warning?'warn':'ok');
         populateSelect();
       }catch(err){
         if(requestId!==loadCounter)return;
-        setManual(`Impossible de charger ${league} (${err.message}). Vérifie Internet ou réessaie. Les autres championnats peuvent rester disponibles.`);
+        setManual(`Impossible de charger ${league} (${err.message}). Vérifie Internet ou réessaie. Aucun score n'est inventé.`);
       }
     }
     $('league').addEventListener('change',()=>loadLeague());
