@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#ffffff">
   <meta name="description" content="Foot-stats : analyse football 1X2, nuls, BTTS, Over/Under 2,5 avec un modèle de Poisson. Calendriers et résultats depuis des données publiques actualisables en ligne, sans clé API.">
-  <title>Foot-stats — Analyses football</title>
+  <title>Foot-stats — Journées et compositions</title>
   <style>
     :root{color-scheme:light;--ink:#17223b;--muted:#68758b;--line:#e3e9f0;--bg:#f4f7fb;--blue:#255ad8;--light:#eaf0ff;--green:#117853;--pale:#e9f8f1;--amber:#8d550d;--amberbg:#fff7e8;--white:#fff}
     *{box-sizing:border-box}
@@ -47,6 +47,24 @@
     .auto-status a{color:inherit}
     .auto-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px}
     .auto-row .action{min-height:38px;padding:8px 12px;font-size:12px}
+    .day-card{grid-column:1/-1}
+    .day-toolbar{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:end;margin-bottom:12px}
+    .day-toolbar .field{margin:0;flex:1;min-width:150px;max-width:310px}
+    .table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);border-radius:12px}
+    .day-table{width:100%;border-collapse:collapse;font-size:12px;white-space:nowrap;min-width:660px}
+    .day-table th,.day-table td{padding:10px 8px;border-bottom:1px solid #e7edf4;text-align:center;font-variant-numeric:tabular-nums}
+    .day-table th{position:sticky;top:0;background:#edf2fa;color:#374663}
+    .day-table th:first-child,.day-table td:first-child{text-align:left;white-space:normal;min-width:175px;max-width:240px}
+    .day-table tr:last-child td{border-bottom:0}
+    .day-table td:first-child b{display:block}
+    .day-table td:first-child small{color:var(--muted);font-size:10px}
+    .day-table tr.finish{background:#f8f9fb;color:#667488}
+    .day-table tr.no-model{background:#fffcf7}
+    .cell-winning{font-weight:800;background:#eef3ff;color:#1743ab}
+    .quality{font-weight:700;color:var(--amber)}
+    .quality.medium{color:#166445}
+    .lineup-card{grid-column:1/-1}
+    .impact-note{margin-top:10px;color:#73511c;background:#fff9ee;border:1px solid #eddfbd;border-radius:10px;padding:10px 12px;font-size:12px}
     .results{display:none}
     .results.show{display:block}
     .matchtitle{margin:0 0 6px;font-size:21px;overflow-wrap:anywhere}
@@ -90,8 +108,8 @@
 <body>
   <header><div class="wrap"><div class="brand"><div class="logo" aria-hidden="true">⚽</div><div><h1>Foot-stats</h1><p>Analyse football · résultats et calendrier en ligne</p></div></div></div></header>
   <main class="wrap">
-    <div class="toprow"><h2>Analyses football</h2><span class="tag" id="mode-badge">● Chargement…</span></div>
-    <div class="notice"><strong>Mode automatique gratuit :</strong> à chaque ouverture, Foot-stats recharge les résultats et calendriers publics (Open Matchday, puis OpenFootball en secours). Les mises à jour dépendent de ces fournisseurs et peuvent être <strong>en retard ou incomplètes</strong>. Les buts attendus sont <strong>estimés à partir des scores</strong>, pas des xG mesurés. Ni cotes en direct, ni compositions, ni garanties de résultat.</div>
+    <div class="toprow"><h2>Analyses football par journée</h2><span class="tag" id="mode-badge">● Chargement…</span></div>
+    <div class="notice"><strong>Mode automatique gratuit :</strong> à chaque ouverture, Foot-stats recharge les résultats et calendriers publics (Open Matchday, puis OpenFootball en secours). Les mises à jour dépendent de ces fournisseurs et peuvent être <strong>en retard ou incomplètes</strong>. Les buts attendus sont <strong>estimés à partir des scores</strong>, pas des xG mesurés. Ni cotes en direct ni compositions récupérées automatiquement ; les corrections de composition sont des hypothèses manuelles.</div>
     <div class="layout">
       <section class="card" aria-labelledby="match-h"><h3 id="match-h">1. Choisir le match</h3>
         <div class="field"><label for="league">Championnat</label><select id="league">
@@ -106,14 +124,34 @@
           <p class="hint">Ces champs se remplissent si des résultats sont disponibles. Tu peux les modifier manuellement. Modèle simplifié : nuls et BTTS ne sont pas des certitudes.</p>
         </div>
       </section>
-      <section class="card" aria-labelledby="odds-h"><h3 id="odds-h">2. Cotes du bookmaker <span class="small">(facultatif)</span></h3>
+      <section class="card day-card" aria-labelledby="day-h"><h3 id="day-h">2. Toute la journée en un seul tableau</h3>
+        <div class="day-toolbar"><div class="field"><label for="day-select">Choisir la journée</label><select id="day-select" disabled><option>Chargement…</option></select></div><button class="action secondary" type="button" id="refresh-day">↻ Recalculer le tableau</button></div>
+        <div id="day-status" class="small" role="status">Les tendances utilisent seulement les résultats publiés avant chaque match.</div>
+        <p class="hint">Glisse le tableau vers la gauche pour voir toutes les colonnes. Appuie sur « Voir » pour modifier une analyse. Les compositions ne sont pas appliquées automatiquement à toute la journée.</p>
+        <div class="table-scroll"><table class="day-table"><thead><tr><th>Match</th><th>1</th><th>X</th><th>2</th><th>BTTS</th><th>+2,5</th><th>Échantillon</th><th>Détail</th></tr></thead><tbody id="day-body"><tr><td colspan="8">Chargement…</td></tr></tbody></table></div>
+        <p class="footnote">« Échantillon » décrit la base de résultats, pas un taux de réussite. Les chiffres sont des tendances Poisson estimées à partir des scores : pas de validation de pari, ni de correction automatique pour les absents.</p>
+      </section>
+      <section class="card lineup-card" aria-labelledby="lineup-h"><h3 id="lineup-h">3. Compositions et absents <span class="small">(facultatif)</span></h3>
+        <div class="field"><label for="lineup-status">Type d'information</label><select id="lineup-status"><option value="unknown">Compositions non vérifiées</option><option value="probable">Compositions probables vérifiées par toi</option><option value="official">Compositions officielles vérifiées par toi</option></select></div>
+        <div class="two">
+          <div class="field"><label for="lineup-home">Absents / changement domicile</label><input id="lineup-home" maxlength="180" placeholder="Ex. avant-centre absent"></div>
+          <div class="field"><label for="lineup-away">Absents / changement extérieur</label><input id="lineup-away" maxlength="180" placeholder="Ex. défenseur suspendu"></div>
+        </div>
+        <div class="soft"><div class="subheading">Impact estimé sur les buts prévus</div>
+          <div class="two"><div class="field" style="margin-bottom:0"><label for="impact-home">Domicile (%)</label><input id="impact-home" type="number" inputmode="numeric" min="-30" max="30" step="5" value="0"></div>
+          <div class="field" style="margin-bottom:0"><label for="impact-away">Extérieur (%)</label><input id="impact-away" type="number" inputmode="numeric" min="-30" max="30" step="5" value="0"></div></div>
+          <p class="hint">0 = pas d'effet, −10 = 10 % de buts attendus en moins, +10 = 10 % de buts attendus en plus. À estimer toi-même selon les joueurs, postes, remplaçants et forme.</p>
+        </div>
+        <p class="impact-note">⚠ Les noms saisis ne modifient pas automatiquement les probabilités. Seuls les pourcentages ci-dessus les ajustent. Aucun titulaire, blessé ou suspendu n'est inventé ni récupéré par cette version.</p>
+      </section>
+      <section class="card" aria-labelledby="odds-h"><h3 id="odds-h">4. Cotes du bookmaker <span class="small">(facultatif)</span></h3>
         <div class="three"><div class="field"><label for="odd1">1 — Domicile</label><input id="odd1" type="number" min="1.01" step="0.01" inputmode="decimal" placeholder="Ex. 2.10"></div><div class="field"><label for="oddx">X — Nul</label><input id="oddx" type="number" min="1.01" step="0.01" inputmode="decimal" placeholder="Ex. 3.30"></div><div class="field"><label for="odd2">2 — Extérieur</label><input id="odd2" type="number" min="1.01" step="0.01" inputmode="decimal" placeholder="Ex. 3.50"></div></div>
         <p class="small">Les cotes se saisissent toujours manuellement : pas de bookmaker connecté ni de cotes en direct.</p>
         <div class="actions"><button class="action" id="calculate" type="button">Calculer les tendances</button><button class="action ghost" id="reset" type="button">Effacer les champs</button></div>
         <p id="error" class="error" role="alert"></p>
       </section>
       <section class="card results" id="results" aria-live="polite" aria-labelledby="results-h">
-        <h3 id="results-h">3. Estimations Poisson</h3>
+        <h3 id="results-h">5. Estimations Poisson</h3>
         <h2 class="matchtitle" id="fixture"></h2><p id="fixture-subtitle" class="subtitle"></p>
         <div class="result-grid"><div id="cell1" class="result-cell"><strong id="p1">–</strong><span>1 · Domicile</span></div><div id="cellx" class="result-cell"><strong id="px">–</strong><span>X · Match nul</span></div><div id="cell2" class="result-cell"><strong id="p2">–</strong><span>2 · Extérieur</span></div></div>
         <div class="bar" role="img" aria-label="Répartition des probabilités"><div id="bar1" class="bar-home"></div><div id="barx" class="bar-draw"></div><div id="bar2" class="bar-away"></div></div>
@@ -123,7 +161,7 @@
         <div class="trend"><b id="trend-title"></b><div id="trend-text" class="small"></div></div>
         <div id="odds-results" hidden><h3 style="margin-top:21px">Comparaison avec tes cotes</h3><div id="odds-lines"></div><p class="footnote">L'espérance théorique (« EV ») compare les cotes saisies à un modèle simplifié. Un EV positif ne garantit pas un pari rentable : une estimation de xG erronée peut fausser tout le résultat.</p></div>
         <div class="actions" style="margin-top:18px"><button id="save" class="action secondary" type="button">Enregistrer cette analyse</button><button id="copy" class="action ghost" type="button">Copier le résumé</button></div><p id="feedback" class="small" role="status"></p>
-        <p class="footnote">Méthode : Poisson indépendant, moyennes domicile/extérieur corrigées par la forme de la saison et lissées (effectifs limités). Sans vrais xG, blessures ni compositions. Une tendance n'est pas un pari validé.</p>
+        <p class="footnote">Méthode : Poisson indépendant, moyennes domicile/extérieur corrigées par la forme de la saison et lissées (effectifs limités). Sans vrais xG ni récupération automatique des compositions. Les impacts de compo sont manuels et non validés. Une tendance n'est pas un pari validé.</p>
       </section>
     </div>
     <section class="card" aria-labelledby="history-h"><div class="toprow" style="margin:0 0 13px"><h3 id="history-h" style="margin:0">Mes analyses enregistrées</h3><button id="clear-history" class="mini danger" type="button">Tout effacer</button></div><div class="history" id="history"><p class="small">Aucune analyse enregistrée pour le moment.</p></div><p class="footnote">Les analyses sont enregistrées uniquement dans le navigateur de ce téléphone. Elles ne se synchronisent pas automatiquement.</p></section>
@@ -163,16 +201,23 @@
       const odds={};for(const [k,id] of [['p1','odd1'],['px','oddx'],['p2','odd2']]){
         const v=cleanNumber(id);if(v!==null){if(!Number.isFinite(v)||v<=1||v>1000)throw Error('Les cotes doivent être supérieures à 1,00.');odds[k]=v}
       }
-      return {league:$('league').value,home,away,a,b,odds,method:window.currentAutoMatch?'Valeurs préremplies depuis des résultats (modifiables)':'Valeurs manuelles'};
+      const impactHome=cleanNumber('impact-home'),impactAway=cleanNumber('impact-away');
+      if(impactHome===null||impactAway===null||![impactHome,impactAway].every(v=>Number.isFinite(v)&&v>=-30&&v<=30))throw Error('Indique un impact de composition entre −30 et +30 % pour chaque équipe.');
+      const lineupStatus=$('lineup-status').value;
+      const lineupHome=$('lineup-home').value.trim(),lineupAway=$('lineup-away').value.trim();
+      const adjustedA=Math.max(0.1,Math.min(5,a*(1+impactHome/100)));
+      const adjustedB=Math.max(0.1,Math.min(5,b*(1+impactAway/100)));
+      return {league:$('league').value,home,away,a:adjustedA,b:adjustedB,baseA:a,baseB:b,impactHome,impactAway,lineupStatus,lineupHome,lineupAway,odds,method:window.currentAutoMatch?'Base issue des résultats (modifiée si compo renseignée)':'Base saisie manuellement'};
     }
     function resultText(data,r){
-      return `Foot-stats — ${data.league}\n${data.home} - ${data.away}\nEstimations de buts : ${plain(data.a)} / ${plain(data.b)}\n1: ${pct(r.p1)} | X: ${pct(r.px)} | 2: ${pct(r.p2)}\nBTTS: ${pct(r.btts)} | Over 2,5: ${pct(r.over)} | Under 2,5: ${pct(r.under)}\nDouble chance ${r.double.name}: ${pct(r.double.p)}\nScores fréquents du modèle : ${r.scores.map(s=>`${s.i}-${s.j} (${pct(s.p)})`).join(' ; ')}\n${data.method||'Modèle Poisson indicatif'}. Une tendance n'est pas un pari validé.`;
+      return `Foot-stats — ${data.league}\n${data.home} - ${data.away}\nEstimations de buts : ${plain(data.a)} / ${plain(data.b)}\nCompositions : ${data.lineupStatus||'unknown'} · Impacts saisis ${data.impactHome??0}% / ${data.impactAway??0}% (estimation subjective) · Domicile : ${data.lineupHome||'non précisé'} · Extérieur : ${data.lineupAway||'non précisé'}\n1: ${pct(r.p1)} | X: ${pct(r.px)} | 2: ${pct(r.p2)}\nBTTS: ${pct(r.btts)} | Over 2,5: ${pct(r.over)} | Under 2,5: ${pct(r.under)}\nDouble chance ${r.double.name}: ${pct(r.double.p)}\nScores fréquents du modèle : ${r.scores.map(s=>`${s.i}-${s.j} (${pct(s.p)})`).join(' ; ')}\n${data.method||'Modèle Poisson indicatif'}. Une tendance n'est pas un pari validé.`;
     }
     function render(data,opts={}){
       const r=model(data.a,data.b);lastAnalysis={data,r};
       $('results').classList.add('show');
       $('fixture').textContent=`${data.home} – ${data.away}`;
-      $('fixture-subtitle').textContent=`${data.league} · Buts modélisés : ${plain(data.a)} domicile / ${plain(data.b)} extérieur · ${data.method||'Données manuelles'}`;
+      const compLabels={unknown:'compos non vérifiées',probable:'compos probables déclarées',official:'compos officielles déclarées'};
+      $('fixture-subtitle').textContent=`${data.league} · Buts modélisés : ${plain(data.a)} domicile / ${plain(data.b)} extérieur · ${compLabels[data.lineupStatus]||'Compos non vérifiées'} · Correction déclarée : ${data.impactHome??0}% / ${data.impactAway??0}% · ${data.method||'Données manuelles'}`;
       for(const [id,k] of [['p1','p1'],['px','px'],['p2','p2']])$(id).textContent=pct(r[k]);
       const winner=[['cell1',r.p1],['cellx',r.px],['cell2',r.p2]].sort((x,y)=>y[1]-x[1])[0][0];
       for(const id of ['cell1','cellx','cell2'])$(id).classList.toggle('best',id===winner);
@@ -200,8 +245,9 @@
       $('feedback').textContent='';
       if(opts.scroll!==false)$('results').scrollIntoView({behavior:'smooth',block:'start'});
     }
+    function clearLineup(){for(const id of ['lineup-home','lineup-away'])$(id).value='';$('lineup-status').value='unknown';$('impact-home').value=0;$('impact-away').value=0;}
     function reset(){
-      $('home').value='';$('away').value='';$('xgh').value='';$('xga').value='';window.currentAutoMatch=null;
+      $('home').value='';$('away').value='';$('xgh').value='';$('xga').value='';window.currentAutoMatch=null;clearLineup();
       for(const id of ['odd1','oddx','odd2'])$(id).value='';
       $('error').textContent='';$('results').classList.remove('show');lastAnalysis=null;
       window.scrollTo({top:0,behavior:'smooth'});
@@ -216,7 +262,8 @@
         const detail=document.createElement('span');detail.textContent=`${item.league} · ${item.day||''} · ${plain(item.a)} / ${plain(item.b)} buts prévus`;
         info.append(name,detail);
         const open=document.createElement('button');open.type='button';open.className='mini';open.textContent='Ouvrir';open.addEventListener('click',()=>{
-          $('league').value=item.league;$('home').value=item.home;$('away').value=item.away;$('xgh').value=item.a;$('xga').value=item.b;
+          $('league').value=item.league;$('home').value=item.home;$('away').value=item.away;$('xgh').value=item.baseA??item.a;$('xga').value=item.baseB??item.b;
+          $('lineup-status').value=item.lineupStatus??'unknown';$('lineup-home').value=item.lineupHome??'';$('lineup-away').value=item.lineupAway??'';$('impact-home').value=item.impactHome??0;$('impact-away').value=item.impactAway??0;
           $('odd1').value=item.odds?.p1??'';$('oddx').value=item.odds?.px??'';$('odd2').value=item.odds?.p2??'';
           $('error').textContent='';render(item);
         });
@@ -349,7 +396,7 @@
     function validFixture(m){return m&&typeof m.date==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(m.date)&&typeof m.team1==='string'&&typeof m.team2==='string'&&m.team1!==m.team2;}
     function status(txt,mode=''){const el=$('data-status');el.textContent=txt;el.className='auto-status'+(mode?' '+mode:'');}
     function setManual(msg){
-      matchFeed=[];window.currentAutoMatch=null;
+      matchFeed=[];window.currentAutoMatch=null;refreshDayOptions();
       $('auto-match').replaceChildren(new Option('Saisie manuelle seulement', ''));
       $('auto-match').disabled=true;
       $('mode-badge').textContent='● Mode manuel';
@@ -380,6 +427,7 @@
     }
     function populateFixture(m,autoRender=true){
       if(!m)return;
+      if(!window.currentAutoMatch||window.currentAutoMatch.date!==m.date||window.currentAutoMatch.team1!==m.team1||window.currentAutoMatch.team2!==m.team2)clearLineup();
       window.currentAutoMatch=m;
       $('home').value=m.team1;$('away').value=m.team2;
       const stats=historicalStats(m);
@@ -395,6 +443,64 @@
         $('auto-help').textContent=`${m.round||'Journée non indiquée'} · ${asDay(m.date)}. Moins de 12 matchs antérieurs renseignés : pas assez de données pour calculer automatiquement. Tu peux saisir tes hypothèses.`;
       }
     }
+    function fixtureKey(m){return `${m.date}|${m.team1}|${m.team2}`;}
+    function formatDay(m){return m.time?asDay(m.date)+' · '+m.time:asDay(m.date);}
+    let selectableMatches=[];
+    function dayGroup(m){const r=roundNum(m);return r!==null?'J'+r:'Semaine du '+m.date.slice(0,7);}
+    function refreshDayOptions(){
+      const select=$('day-select');select.replaceChildren();
+      if(!matchFeed.length){select.add(new Option('Aucune journée', ''));select.disabled=true;renderDayTable();return;}
+      const groups=new Map();
+      for(const m of matchFeed){const key=dayGroup(m);if(!groups.has(key))groups.set(key,{key,dates:[]});groups.get(key).dates.push(m.date);}
+      const options=[...groups.values()].map(g=>({...g,min:g.dates.sort()[0],max:g.dates.at(-1)})).sort((a,b)=>a.min.localeCompare(b.min));
+      for(const g of options){select.add(new Option(g.key+(g.key.startsWith('J')?' — '+asDay(g.min):''),g.key));}
+      select.disabled=!options.length;
+      const today=localIsoToday();
+      const future=options.find(g=>g.max>=today);
+      select.value=(future||options.at(-1)).key;
+      renderDayTable();
+    }
+    function renderDayTable(){
+      const table=$('day-body');table.replaceChildren();
+      const key=$('day-select').value;
+      const games=matchFeed.filter(m=>dayGroup(m)===key).sort((a,b)=>a.date.localeCompare(b.date));
+      const latest=matchFeed.filter(resultOf).reduce((v,m)=>m.date>v?m.date:v,'');
+      const lag=latest?Math.floor((new Date(localIsoToday()+'T12:00:00')-new Date(latest+'T12:00:00'))/86400000):null;
+      const stale=lag===null||lag>12;
+      $('day-status').textContent=games.length?`${games.length} rencontres · ${latest?'Dernier résultat : '+asDay(latest):'Aucun résultat'}${stale?' · ⚠ Source ancienne : chiffres à vérifier':''} · Compositions non incluses automatiquement.`:'Aucun match pour cette journée.';
+      if(!games.length){const tr=document.createElement('tr'),td=document.createElement('td');td.colSpan=8;td.textContent='Aucun match pour cette journée.';tr.append(td);table.append(tr);return;}
+      for(const m of games){
+        const finished=!!resultOf(m),stat=historicalStats(m),tr=document.createElement('tr');
+        if(finished)tr.classList.add('finish');
+        if(!stat)tr.classList.add('no-model');
+        const matchTd=document.createElement('td');
+        const name=document.createElement('b');name.textContent=m.team1+' – '+m.team2;
+        const date=document.createElement('small');date.textContent=formatDay(m)+(finished?' · Score '+resultOf(m).join('–'):'');
+        matchTd.append(name,date);tr.append(matchTd);
+        if(finished){const td=document.createElement('td');td.colSpan=6;td.textContent='Match terminé — pas de prévision rétroactive';tr.append(td);}
+        else if(!stat){const td=document.createElement('td');td.colSpan=6;td.textContent='Données insuffisantes — pas de pronostic';tr.append(td);}
+        else{
+          const p=model(stat.a,stat.b), vals=[p.p1,p.px,p.p2,p.btts,p.over];
+          const max=Math.max(p.p1,p.px,p.p2);
+          for(let i=0;i<vals.length;i++){const td=document.createElement('td');td.textContent=Math.round(vals[i]*100)+' %';if(i<3&&vals[i]===max)td.className='cell-winning';tr.append(td);}
+          const td=document.createElement('td');
+          const little=stat.hPlayed<4||stat.aPlayed<4;
+          td.className='quality'+(!little&&!stale?' medium':'');
+          td.textContent=stale?'Anciennes':little?`${stat.hPlayed} dom. / ${stat.aPlayed} ext. · faible`:`${stat.hPlayed} dom. / ${stat.aPlayed} ext.`;
+          tr.append(td);
+        }
+        const see=document.createElement('td'),btn=document.createElement('button');btn.type='button';btn.className='mini';btn.textContent='Voir';
+        btn.addEventListener('click',()=>{
+          const select=$('auto-match'),index=selectableMatches.findIndex(x=>fixtureKey(x)===fixtureKey(m));
+          if(index>=0)select.value=String(index);
+          else {const opt=new Option(`${formatDay(m)} · ${m.team1} – ${m.team2}`,'extra');opt.dataset.fixture=fixtureKey(m);select.add(opt,0);select.value='extra';}
+          populateFixture(m);
+          $('match-h').scrollIntoView({behavior:'smooth',block:'start'});
+        });see.append(btn);tr.append(see);table.append(tr);
+      }
+    }
+    $('day-select').addEventListener('change',renderDayTable);
+    $('refresh-day').addEventListener('click',renderDayTable);
     function populateSelect(){
       const today=localIsoToday(),sorted=matchFeed.slice().sort((a,b)=>a.date.localeCompare(b.date)||String(a.time||'').localeCompare(String(b.time||'')));
       const future=sorted.filter(m=>!resultOf(m)&&m.date>=today);
@@ -404,7 +510,8 @@
       if(!selection.length){select.add(new Option('Aucun match publié',''));select.disabled=true;return;}
       selection.forEach((m,i)=>select.add(new Option(`${asDay(m.date)} · J${roundNum(m)??'?'} · ${m.team1} – ${m.team2}${resultOf(m)?' · terminé':''}`,String(i))));
       select.disabled=false;
-      select.onchange=()=>populateFixture(selection[Number(select.value)]);
+      selectableMatches=selection;
+      select.onchange=()=>{if(select.value==='extra')return;populateFixture(selection[Number(select.value)])};
       const nowRound=selection[0]?.round;const preferred=selection.findIndex(m=>m.round===nowRound);
       select.value=String(Math.max(0,preferred));
       populateFixture(selection[Number(select.value)]);
@@ -416,6 +523,8 @@
       $('auto-match').disabled=true;
       $('auto-match').replaceChildren(new Option('Téléchargement des matchs…',''));
       $('results').classList.remove('show');
+      $('day-body').innerHTML='<tr><td colspan="8">Chargement des journées…</td></tr>';
+      $('day-select').disabled=true;
       $('mode-badge').textContent='● Chargement…';
       status('Recherche des résultats récents pour '+league+'…');
       try{
@@ -434,7 +543,7 @@
         const last=latest?`Dernier score publié : ${asDay(latest)} (${lagDays} jour${lagDays>1?'s':''} avant aujourd'hui).`:'Aucun résultat connu pour cette saison.';
         $('mode-badge').textContent=stale?'● Résultats à vérifier':'● Données chargées';
         status(`${league} · ${played.length} scores et ${matchFeed.filter(m=>!resultOf(m)).length} rencontres sans résultat. ${last} Source : ${feed.source}.${feed.warning}${stale?' ⚠ Données anciennes ou absentes : analyse à vérifier avant tout pari.':''}`,stale||feed.warning?'warn':'ok');
-        populateSelect();
+        populateSelect();refreshDayOptions();
       }catch(err){
         if(requestId!==loadCounter)return;
         setManual(`Impossible de charger ${league} (${err.message}). Vérifie Internet ou réessaie. Aucun score n'est inventé.`);
