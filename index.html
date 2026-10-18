@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="description" content="Foot-stats : analyse football 1X2, nuls, BTTS, Over/Under 2,5 avec un modèle de Poisson. Version locale gratuite.">
+  <title>Foot-stats — Analyses football</title>
+  <style>
+    :root{color-scheme:light;--ink:#17223b;--muted:#68758b;--line:#e3e9f0;--bg:#f4f7fb;--blue:#255ad8;--light:#eaf0ff;--green:#117853;--pale:#e9f8f1;--amber:#8d550d;--amberbg:#fff7e8;--white:#fff}
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;font-size:15px;line-height:1.45}
+    button,input,select{font:inherit}
+    button{cursor:pointer}
+    .wrap{max-width:830px;margin:auto;padding:0 14px 50px}
+    header{background:#fff;border-bottom:1px solid var(--line);padding:19px 0 16px}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{display:grid;place-items:center;width:48px;height:48px;border-radius:15px;background:#162a54;color:#fff;font-size:25px}
+    .brand h1{margin:0;font-size:23px;letter-spacing:-.65px}
+    .brand p{margin:1px 0 0;color:var(--muted);font-size:12px}
+    .toprow{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:22px 0 13px;flex-wrap:wrap}
+    .toprow h2{font-size:21px;line-height:1.2;margin:0}
+    .tag{font-size:12px;border-radius:999px;padding:6px 10px;background:var(--amberbg);color:var(--amber);font-weight:700}
+    .notice{padding:12px 14px;border:1px solid #f1dfb7;background:#fffbf2;border-radius:13px;color:#73511c;font-size:13px;margin-bottom:15px}
+    .card{background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:0 5px 18px rgba(25,41,65,.04);padding:19px;margin-bottom:15px}
+    .card h3{margin:0 0 15px;font-size:17px;letter-spacing:-.2px}
+    .field{margin-bottom:14px}
+    label{display:block;font-weight:700;font-size:13px;margin-bottom:7px}
+    .hint{font-size:12px;color:var(--muted);font-weight:400;margin:4px 0 0}
+    input,select{display:block;width:100%;height:45px;background:#fff;border:1px solid #ccd6e2;border-radius:10px;padding:0 12px;color:var(--ink);outline:none}
+    input:focus,select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,90,216,.12)}
+    .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .three{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+    .soft{background:#f7f9fc;border-radius:12px;padding:13px;margin-bottom:14px}
+    .subheading{font-size:13px;font-weight:800;margin:2px 0 12px;color:#40516b}
+    .action{background:var(--blue);border:0;border-radius:11px;min-height:46px;color:#fff;padding:12px 17px;font-weight:800}
+    .action.secondary{background:#eef3fe;color:#244bad}
+    .action.ghost{background:#f1f4f8;color:var(--ink)}
+    .actions{display:flex;flex-wrap:wrap;gap:9px}
+    .actions .action{flex:1 1 170px}
+    .small{font-size:12px;color:var(--muted)}
+    .error{color:#a52a37;font-weight:700;font-size:13px;margin-top:9px;min-height:0}
+    .results{display:none}
+    .results.show{display:block}
+    .matchtitle{margin:0 0 6px;font-size:21px;overflow-wrap:anywhere}
+    .subtitle{font-size:12px;color:var(--muted);margin:0 0 16px}
+    .result-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:17px}
+    .result-cell{background:#f6f8fb;border-radius:12px;padding:13px 7px;text-align:center;border:1px solid #edf0f4}
+    .result-cell strong{display:block;font-size:25px;letter-spacing:-.4px}
+    .result-cell span{display:block;font-size:11px;color:var(--muted);line-height:1.3}
+    .result-cell.best{background:#e9f0ff;border-color:#b9cdfb}
+    .result-cell.best strong{color:#154abc}
+    .bar{display:flex;height:13px;overflow:hidden;border-radius:50px;background:#f0f2f4;margin-bottom:9px}
+    .bar>div{height:100%;transition:width .3s ease}
+    .bar-home{background:#2d65de}.bar-draw{background:#e0a13f}.bar-away{background:#6582b7}
+    .legend{display:flex;justify-content:space-between;gap:6px;font-size:11px;color:var(--muted);margin-bottom:16px}
+    .stats{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:15px 0}
+    .stat{padding:13px;background:#f8fafd;border-radius:12px;border:1px solid #edf1f5}
+    .stat b{font-size:23px;display:block}
+    .stat span{font-size:12px;color:var(--muted)}
+    .scoreline{display:flex;flex-wrap:wrap;gap:8px}
+    .scorepill{background:#f0f4fb;color:#224071;padding:9px 12px;border-radius:11px;font-size:13px;font-weight:700}
+    .scorepill span{font-weight:400;color:#5d708b}
+    .trend{margin:17px 0 4px;border-left:4px solid var(--blue);background:#f2f6ff;border-radius:0 11px 11px 0;padding:12px 14px}
+    .trend b{display:block;margin-bottom:3px}
+    .oddsrow{display:flex;justify-content:space-between;align-items:center;padding:10px 0;gap:8px;border-bottom:1px solid var(--line)}
+    .oddsrow:last-child{border-bottom:0}
+    .value-positive{color:var(--green);font-weight:800}
+    .value-negative{color:#a03939;font-weight:800}
+    .history{display:grid;gap:9px}
+    .historyitem{border:1px solid var(--line);border-radius:12px;padding:12px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+    .historyitem .details{flex:1;min-width:0;overflow-wrap:anywhere}
+    .historyitem .details b{display:block}
+    .historyitem .details span{display:block;color:var(--muted);font-size:12px}
+    .mini{padding:8px 10px;border:1px solid #d5dfeb;background:#fff;color:#254983;border-radius:8px;font-weight:700;font-size:12px}
+    .danger{color:#b03b49}
+    .footnote{font-size:12px;color:var(--muted);line-height:1.5;margin:14px 0 0}
+    footer{font-size:12px;text-align:center;color:var(--muted);padding:16px 0}
+    @media(max-width:390px){.wrap{padding-left:10px;padding-right:10px}.card{padding:14px}.result-cell strong{font-size:21px}.two{gap:9px}.three{gap:7px}.historyitem{flex-wrap:wrap}}
+    @media(min-width:650px){.layout{display:grid;grid-template-columns:1fr 1fr;gap:15px;align-items:start}.layout>.card{margin:0}.results{grid-column:1/-1}}
+  </style>
+</head>
+<body>
+  <header><div class="wrap"><div class="brand"><div class="logo" aria-hidden="true">⚽</div><div><h1>Foot-stats</h1><p>Analyse football · version gratuite</p></div></div></div></header>
+  <main class="wrap">
+    <div class="toprow"><h2>Analyse d'un match</h2><span class="tag">● Données manuelles</span></div>
+    <div class="notice"><strong>À savoir :</strong> cette première version calcule des probabilités à partir des données que tu saisis. Elle <strong>ne récupère pas encore</strong> automatiquement les matchs, xG ou cotes. Les chiffres préremplis sont uniquement des exemples.</div>
+    <div class="layout">
+      <section class="card" aria-labelledby="match-h"><h3 id="match-h">1. Choisir le match</h3>
+        <div class="field"><label for="league">Championnat</label><select id="league">
+          <option>Ligue 1</option><option>Ligue 2</option><option>Serie A</option><option>Serie B</option><option>Bundesliga</option><option>Bundesliga 2</option><option>La Liga</option><option>La Liga 2</option><option>Premier League</option><option>Championship</option><option>MLS</option>
+        </select></div>
+        <div class="two"><div class="field"><label for="home">Équipe à domicile</label><input id="home" autocomplete="off" placeholder="Ex. Marseille" maxlength="50"></div><div class="field"><label for="away">Équipe à l'extérieur</label><input id="away" autocomplete="off" placeholder="Ex. Lille" maxlength="50"></div></div>
+        <div class="soft"><div class="subheading">Buts attendus (xG estimés pour ce match)</div>
+          <div class="two"><div class="field" style="margin-bottom:0"><label for="xgh">Domicile</label><input id="xgh" type="number" min="0.1" max="5" step="0.05" inputmode="decimal" value="1.40"></div><div class="field" style="margin-bottom:0"><label for="xga">Extérieur</label><input id="xga" type="number" min="0.1" max="5" step="0.05" inputmode="decimal" value="1.10"></div></div>
+          <p class="hint">Remplace les exemples par tes estimations. Sans données réelles, les résultats ne constituent pas des prévisions fiables.</p>
+        </div>
+      </section>
+      <section class="card" aria-labelledby="odds-h"><h3 id="odds-h">2. Cotes du bookmaker <span class="small">(facultatif)</span></h3>
+        <div class="three"><div class="field"><label for="odd1">1 — Domicile</label><input id="odd1" type="number" min="1.01" step="0.01" inputmode="decimal" placeholder="Ex. 2.10"></div><div class="field"><label for="oddx">X — Nul</label><input id="oddx" type="number" min="1.01" step="0.01" inputmode="decimal" placeholder="Ex. 3.30"></div><div class="field"><label for="odd2">2 — Extérieur</label><input id="odd2" type="number" min="1.01" step="0.01" inputmode="decimal" placeholder="Ex. 3.50"></div></div>
+        <p class="small">Les cotes sont saisies par toi. Aucun bookmaker n'est connecté.</p>
+        <div class="actions"><button class="action" id="calculate" type="button">Calculer les tendances</button><button class="action ghost" id="reset" type="button">Effacer les champs</button></div>
+        <p id="error" class="error" role="alert"></p>
+      </section>
+      <section class="card results" id="results" aria-live="polite" aria-labelledby="results-h">
+        <h3 id="results-h">3. Résultats du modèle Poisson</h3>
+        <h2 class="matchtitle" id="fixture"></h2><p id="fixture-subtitle" class="subtitle"></p>
+        <div class="result-grid"><div id="cell1" class="result-cell"><strong id="p1">–</strong><span>1 · Domicile</span></div><div id="cellx" class="result-cell"><strong id="px">–</strong><span>X · Match nul</span></div><div id="cell2" class="result-cell"><strong id="p2">–</strong><span>2 · Extérieur</span></div></div>
+        <div class="bar" role="img" aria-label="Répartition des probabilités"><div id="bar1" class="bar-home"></div><div id="barx" class="bar-draw"></div><div id="bar2" class="bar-away"></div></div>
+        <div class="legend"><span>1 · Domicile</span><span>X · Nul</span><span>2 · Extérieur</span></div>
+        <div class="stats"><div class="stat"><b id="btts">–</b><span>BTTS · Les deux marquent</span></div><div class="stat"><b id="over">–</b><span>Over 2,5 buts</span></div><div class="stat"><b id="under">–</b><span>Under 2,5 buts</span></div><div class="stat"><b id="dc">–</b><span id="dc-label">Double chance</span></div></div>
+        <h3>Scores les plus probables</h3><div id="scores" class="scoreline"></div>
+        <div class="trend"><b id="trend-title"></b><div id="trend-text" class="small"></div></div>
+        <div id="odds-results" hidden><h3 style="margin-top:21px">Comparaison avec tes cotes</h3><div id="odds-lines"></div><p class="footnote">L'espérance théorique (« EV ») compare les cotes saisies à un modèle simplifié. Un EV positif ne garantit pas un pari rentable : une estimation de xG erronée peut fausser tout le résultat.</p></div>
+        <div class="actions" style="margin-top:18px"><button id="save" class="action secondary" type="button">Enregistrer cette analyse</button><button id="copy" class="action ghost" type="button">Copier le résumé</button></div><p id="feedback" class="small" role="status"></p>
+        <p class="footnote">Méthode : loi de Poisson indépendante pour les buts des deux équipes (sans correction des corrélations, blessures, composition, forme ni avantage domicile recalibré). Une tendance n'est pas un pari validé.</p>
+      </section>
+    </div>
+    <section class="card" aria-labelledby="history-h"><div class="toprow" style="margin:0 0 13px"><h3 id="history-h" style="margin:0">Mes analyses enregistrées</h3><button id="clear-history" class="mini danger" type="button">Tout effacer</button></div><div class="history" id="history"><p class="small">Aucune analyse enregistrée pour le moment.</p></div><p class="footnote">Les analyses sont enregistrées uniquement dans le navigateur de ce téléphone. Elles ne se synchronisent pas automatiquement.</p></section>
+    <footer>Foot-stats · Prototype local gratuit · Pas de données en direct</footer>
+  </main>
+  <script>
+    'use strict';
+    const $ = id => document.getElementById(id);
+    let lastAnalysis = null;
+    const storeKey = 'footstats_analyses_v1';
+    function readHistory(){try{const v=JSON.parse(localStorage.getItem(storeKey)||'[]');return Array.isArray(v)?v:[]}catch(e){return []}}
+    function writeHistory(items){try{localStorage.setItem(storeKey,JSON.stringify(items));return true}catch(e){return false}}
+    function cleanNumber(id){const raw=$(id).value.trim().replace(',','.');return raw===''?null:Number(raw)}
+    function poisson(k,lambda){let p=Math.exp(-lambda);for(let n=1;n<=k;n++)p*=lambda/n;return p}
+    function pct(n){return (n*100).toLocaleString('fr-FR',{maximumFractionDigits:1,minimumFractionDigits:1})+' %'}
+    function plain(n,digits=2){return n.toLocaleString('fr-FR',{minimumFractionDigits:digits,maximumFractionDigits:digits})}
+    function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+    function model(a,b){
+      const n=19;let p1=0,px=0,p2=0,sum=0;const scores=[];
+      for(let i=0;i<=n;i++)for(let j=0;j<=n;j++){
+        const p=poisson(i,a)*poisson(j,b);sum+=p;
+        if(i>j)p1+=p;else if(i===j)px+=p;else p2+=p;
+        scores.push({i,j,p});
+      }
+      p1/=sum;px/=sum;p2/=sum;
+      scores.sort((x,y)=>y.p-x.p);
+      const btts=(1-Math.exp(-a))*(1-Math.exp(-b));
+      const under=Math.exp(-(a+b))*(1+a+b+(a+b)**2/2);
+      const dcs=[{name:'1X',p:p1+px},{name:'X2',p:px+p2},{name:'12',p:p1+p2}].sort((x,y)=>y.p-x.p);
+      return {p1,px,p2,btts,over:1-under,under,scores:scores.slice(0,3),double:dcs[0]};
+    }
+    function getForm(){
+      const home=$('home').value.trim(),away=$('away').value.trim(),a=cleanNumber('xgh'),b=cleanNumber('xga');
+      if(!home||!away)throw Error('Renseigne les noms des deux équipes.');
+      if(home.toLocaleLowerCase('fr')===away.toLocaleLowerCase('fr'))throw Error('Choisis deux équipes différentes.');
+      if(a===null||b===null||!Number.isFinite(a)||!Number.isFinite(b)||a<0.1||a>5||b<0.1||b>5)throw Error('Indique des xG compris entre 0,10 et 5,00 pour chaque équipe.');
+      const odds={};for(const [k,id] of [['p1','odd1'],['px','oddx'],['p2','odd2']]){
+        const v=cleanNumber(id);if(v!==null){if(!Number.isFinite(v)||v<=1||v>1000)throw Error('Les cotes doivent être supérieures à 1,00.');odds[k]=v}
+      }
+      return {league:$('league').value,home,away,a,b,odds};
+    }
+    function resultText(data,r){
+      return `Foot-stats — ${data.league}\n${data.home} - ${data.away}\nEstimations de buts : ${plain(data.a)} / ${plain(data.b)}\n1: ${pct(r.p1)} | X: ${pct(r.px)} | 2: ${pct(r.p2)}\nBTTS: ${pct(r.btts)} | Over 2,5: ${pct(r.over)} | Under 2,5: ${pct(r.under)}\nDouble chance ${r.double.name}: ${pct(r.double.p)}\nScores fréquents du modèle : ${r.scores.map(s=>`${s.i}-${s.j} (${pct(s.p)})`).join(' ; ')}\nModèle Poisson basé sur des données saisies manuellement. Une tendance n'est pas un pari validé.`;
+    }
+    function render(data){
+      const r=model(data.a,data.b);lastAnalysis={data,r};
+      $('results').classList.add('show');
+      $('fixture').textContent=`${data.home} – ${data.away}`;
+      $('fixture-subtitle').textContent=`${data.league} · Estimation domicile ${plain(data.a)} xG · extérieur ${plain(data.b)} xG`;
+      for(const [id,k] of [['p1','p1'],['px','px'],['p2','p2']])$(id).textContent=pct(r[k]);
+      const winner=[['cell1',r.p1],['cellx',r.px],['cell2',r.p2]].sort((x,y)=>y[1]-x[1])[0][0];
+      for(const id of ['cell1','cellx','cell2'])$(id).classList.toggle('best',id===winner);
+      $('bar1').style.width=(r.p1*100)+'%';$('barx').style.width=(r.px*100)+'%';$('bar2').style.width=(r.p2*100)+'%';
+      $('btts').textContent=pct(r.btts);$('over').textContent=pct(r.over);$('under').textContent=pct(r.under);
+      $('dc').textContent=pct(r.double.p);$('dc-label').textContent='Double chance '+r.double.name;
+      $('scores').replaceChildren();
+      for(const s of r.scores){const pill=document.createElement('div');pill.className='scorepill';
+        const score=document.createTextNode(`${s.i} – ${s.j} `),tail=document.createElement('span');tail.textContent=pct(s.p);pill.append(score,tail);$('scores').append(pill)}
+      const best=[['1',r.p1],['X',r.px],['2',r.p2]].sort((a,b)=>b[1]-a[1]);
+      $('trend-title').textContent=`Tendance 1X2 : ${best[0][0]} (${pct(best[0][1])})`;
+      const gap=best[0][1]-best[1][1];
+      $('trend-text').textContent=gap<0.07?'La tendance 1X2 est très serrée. Prudence : les probabilités sont sensibles aux xG saisis.':'Cette issue arrive en tête du modèle, sans constituer un pronostic validé.';
+      $('odds-results').hidden=Object.keys(data.odds).length===0;
+      $('odds-lines').replaceChildren();
+      for(const [key,label] of [['p1','Victoire domicile (1)'],['px','Match nul (X)'],['p2','Victoire extérieur (2)']]){
+        if(data.odds[key]===undefined)continue;
+        const ev=r[key]*data.odds[key]-1;
+        const row=document.createElement('div');row.className='oddsrow';
+        const left=document.createElement('div');const bold=document.createElement('b');bold.textContent=label;left.append(bold);
+        const small=document.createElement('div');small.className='small';small.textContent=`Cote saisie ${plain(data.odds[key])} · cote juste modèle ${plain(1/r[key])}`;left.append(small);
+        const right=document.createElement('div');right.className=ev>0?'value-positive':'value-negative';right.textContent='EV '+(ev>0?'+':'')+pct(ev);
+        row.append(left,right);$('odds-lines').append(row);
+      }
+      $('feedback').textContent='';
+      $('results').scrollIntoView({behavior:'smooth',block:'start'});
+    }
+    function reset(){
+      $('home').value='';$('away').value='';$('xgh').value='1.40';$('xga').value='1.10';
+      for(const id of ['odd1','oddx','odd2'])$(id).value='';
+      $('error').textContent='';$('results').classList.remove('show');lastAnalysis=null;
+      window.scrollTo({top:0,behavior:'smooth'});
+    }
+    function showHistory(){
+      const list=readHistory(),target=$('history');target.replaceChildren();
+      if(!list.length){const p=document.createElement('p');p.className='small';p.textContent='Aucune analyse enregistrée pour le moment.';target.append(p);return}
+      list.forEach((item,i)=>{
+        const row=document.createElement('div');row.className='historyitem';
+        const info=document.createElement('div');info.className='details';
+        const name=document.createElement('b');name.textContent=item.home+' – '+item.away;
+        const detail=document.createElement('span');detail.textContent=`${item.league} · ${item.day||''} · ${plain(item.a)} / ${plain(item.b)} xG`;
+        info.append(name,detail);
+        const open=document.createElement('button');open.type='button';open.className='mini';open.textContent='Ouvrir';open.addEventListener('click',()=>{
+          $('league').value=item.league;$('home').value=item.home;$('away').value=item.away;$('xgh').value=item.a;$('xga').value=item.b;
+          $('odd1').value=item.odds?.p1??'';$('oddx').value=item.odds?.px??'';$('odd2').value=item.odds?.p2??'';
+          $('error').textContent='';render(item);
+        });
+        const del=document.createElement('button');del.type='button';del.className='mini danger';del.textContent='✕';del.setAttribute('aria-label','Supprimer cette analyse');del.addEventListener('click',()=>{const a=readHistory();a.splice(i,1);writeHistory(a);showHistory()});
+        row.append(info,open,del);target.append(row);
+      });
+    }
+    $('calculate').addEventListener('click',()=>{try{const data=getForm();$('error').textContent='';render(data)}catch(e){$('error').textContent=e.message}});
+    $('reset').addEventListener('click',reset);
+    $('save').addEventListener('click',()=>{
+      if(!lastAnalysis)return;
+      const data={...lastAnalysis.data,day:new Date().toLocaleDateString('fr-FR')};
+      const a=readHistory();a.unshift(data);a.splice(15);
+      $('feedback').textContent=writeHistory(a)?'✅ Analyse enregistrée dans ce navigateur.':'Impossible d’enregistrer sur ce navigateur.';
+      showHistory();
+    });
+    $('copy').addEventListener('click',async()=>{
+      if(!lastAnalysis)return;
+      const summary=resultText(lastAnalysis.data,lastAnalysis.r);
+      try{await navigator.clipboard.writeText(summary);$('feedback').textContent='✅ Résumé copié.'}
+      catch(e){$('feedback').textContent='Copie impossible dans ce navigateur. Essaie depuis le site GitHub Pages en HTTPS.'}
+    });
+    $('clear-history').addEventListener('click',()=>{
+      if(!readHistory().length)return;
+      if(confirm('Effacer toutes les analyses enregistrées sur ce téléphone ?')){writeHistory([]);showHistory()}
+    });
+    showHistory();
+  </script>
+</body>
+</html>
