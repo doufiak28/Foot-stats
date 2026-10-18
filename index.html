@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#ffffff">
-  <meta name="description" content="Foot-stats : analyse football 1X2, nuls, BTTS, Over/Under 2,5 avec un modèle de Poisson. Version locale gratuite.">
+  <meta name="description" content="Foot-stats : analyse football 1X2, nuls, BTTS, Over/Under 2,5 avec un modèle de Poisson. Mise à jour des calendriers et des scores par Internet, sans clé API.">
   <title>Foot-stats — Analyses football</title>
   <style>
     :root{color-scheme:light;--ink:#17223b;--muted:#68758b;--line:#e3e9f0;--bg:#f4f7fb;--blue:#255ad8;--light:#eaf0ff;--green:#117853;--pale:#e9f8f1;--amber:#8d550d;--amberbg:#fff7e8;--white:#fff}
@@ -40,6 +40,13 @@
     .actions .action{flex:1 1 170px}
     .small{font-size:12px;color:var(--muted)}
     .error{color:#a52a37;font-weight:700;font-size:13px;margin-top:9px;min-height:0}
+    .auto-status{border:1px solid var(--line);border-radius:12px;background:#f7f9fc;padding:12px;margin:10px 0 14px;font-size:13px}
+    .auto-status.warn{background:#fff7e8;border-color:#ecd5a1;color:#80500a}
+    .auto-status.ok{background:#e9f8f1;border-color:#c7ead8;color:#166445}
+    .auto-status.error{background:#fff0f0;border-color:#efc7c7;color:#9d2530}
+    .auto-status a{color:inherit}
+    .auto-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px}
+    .auto-row .action{min-height:38px;padding:8px 12px;font-size:12px}
     .results{display:none}
     .results.show{display:block}
     .matchtitle{margin:0 0 6px;font-size:21px;overflow-wrap:anywhere}
@@ -81,29 +88,32 @@
   </style>
 </head>
 <body>
-  <header><div class="wrap"><div class="brand"><div class="logo" aria-hidden="true">⚽</div><div><h1>Foot-stats</h1><p>Analyse football · version gratuite</p></div></div></div></header>
+  <header><div class="wrap"><div class="brand"><div class="logo" aria-hidden="true">⚽</div><div><h1>Foot-stats</h1><p>Analyse football · résultats et calendrier en ligne</p></div></div></div></header>
   <main class="wrap">
-    <div class="toprow"><h2>Analyse d'un match</h2><span class="tag">● Données manuelles</span></div>
-    <div class="notice"><strong>À savoir :</strong> cette première version calcule des probabilités à partir des données que tu saisis. Elle <strong>ne récupère pas encore</strong> automatiquement les matchs, xG ou cotes. Les chiffres préremplis sont uniquement des exemples.</div>
+    <div class="toprow"><h2>Analyses football</h2><span class="tag" id="mode-badge">● Chargement…</span></div>
+    <div class="notice"><strong>Mode automatique gratuit :</strong> à chaque ouverture, Foot-stats consulte les scores et calendriers publics (OpenFootball) disponibles. Les données peuvent être <strong>en retard ou incomplètes</strong>. Les buts attendus sont <strong>estimés à partir des scores</strong>, pas des xG mesurés. Ni cotes en direct, ni compositions, ni garanties de résultat.</div>
     <div class="layout">
       <section class="card" aria-labelledby="match-h"><h3 id="match-h">1. Choisir le match</h3>
         <div class="field"><label for="league">Championnat</label><select id="league">
           <option>Ligue 1</option><option>Ligue 2</option><option>Serie A</option><option>Serie B</option><option>Bundesliga</option><option>Bundesliga 2</option><option>La Liga</option><option>La Liga 2</option><option>Premier League</option><option>Championship</option><option>MLS</option>
         </select></div>
+        <div class="auto-status" id="data-status" role="status">Chargement des données…</div>
+        <div class="auto-row"><span class="subheading">Calendrier automatique · <span id="season-label">2026/27</span></span><button type="button" id="reload-data" class="action secondary">↻ Actualiser</button></div>
+        <div class="field"><label for="auto-match">Sélectionne un match du calendrier</label><select id="auto-match" disabled><option>Chargement…</option></select><p class="hint" id="auto-help">La liste se remplit si la source publie cette saison.</p></div>
         <div class="two"><div class="field"><label for="home">Équipe à domicile</label><input id="home" autocomplete="off" placeholder="Ex. Marseille" maxlength="50"></div><div class="field"><label for="away">Équipe à l'extérieur</label><input id="away" autocomplete="off" placeholder="Ex. Lille" maxlength="50"></div></div>
-        <div class="soft"><div class="subheading">Buts attendus (xG estimés pour ce match)</div>
-          <div class="two"><div class="field" style="margin-bottom:0"><label for="xgh">Domicile</label><input id="xgh" type="number" min="0.1" max="5" step="0.05" inputmode="decimal" value="1.40"></div><div class="field" style="margin-bottom:0"><label for="xga">Extérieur</label><input id="xga" type="number" min="0.1" max="5" step="0.05" inputmode="decimal" value="1.10"></div></div>
-          <p class="hint">Remplace les exemples par tes estimations. Sans données réelles, les résultats ne constituent pas des prévisions fiables.</p>
+        <div class="soft"><div class="subheading">Buts prévus par le modèle (pas des xG observés)</div>
+          <div class="two"><div class="field" style="margin-bottom:0"><label for="xgh">Domicile</label><input id="xgh" type="number" min="0.1" max="5" step="0.05" inputmode="decimal" placeholder="Ex. 1,40"></div><div class="field" style="margin-bottom:0"><label for="xga">Extérieur</label><input id="xga" type="number" min="0.1" max="5" step="0.05" inputmode="decimal" placeholder="Ex. 1,10"></div></div>
+          <p class="hint">Ces champs se remplissent si des résultats sont disponibles. Tu peux les modifier manuellement. Modèle simplifié : nuls et BTTS ne sont pas des certitudes.</p>
         </div>
       </section>
       <section class="card" aria-labelledby="odds-h"><h3 id="odds-h">2. Cotes du bookmaker <span class="small">(facultatif)</span></h3>
         <div class="three"><div class="field"><label for="odd1">1 — Domicile</label><input id="odd1" type="number" min="1.01" step="0.01" inputmode="decimal" placeholder="Ex. 2.10"></div><div class="field"><label for="oddx">X — Nul</label><input id="oddx" type="number" min="1.01" step="0.01" inputmode="decimal" placeholder="Ex. 3.30"></div><div class="field"><label for="odd2">2 — Extérieur</label><input id="odd2" type="number" min="1.01" step="0.01" inputmode="decimal" placeholder="Ex. 3.50"></div></div>
-        <p class="small">Les cotes sont saisies par toi. Aucun bookmaker n'est connecté.</p>
+        <p class="small">Les cotes se saisissent toujours manuellement : pas de bookmaker connecté ni de cotes en direct.</p>
         <div class="actions"><button class="action" id="calculate" type="button">Calculer les tendances</button><button class="action ghost" id="reset" type="button">Effacer les champs</button></div>
         <p id="error" class="error" role="alert"></p>
       </section>
       <section class="card results" id="results" aria-live="polite" aria-labelledby="results-h">
-        <h3 id="results-h">3. Résultats du modèle Poisson</h3>
+        <h3 id="results-h">3. Estimations Poisson</h3>
         <h2 class="matchtitle" id="fixture"></h2><p id="fixture-subtitle" class="subtitle"></p>
         <div class="result-grid"><div id="cell1" class="result-cell"><strong id="p1">–</strong><span>1 · Domicile</span></div><div id="cellx" class="result-cell"><strong id="px">–</strong><span>X · Match nul</span></div><div id="cell2" class="result-cell"><strong id="p2">–</strong><span>2 · Extérieur</span></div></div>
         <div class="bar" role="img" aria-label="Répartition des probabilités"><div id="bar1" class="bar-home"></div><div id="barx" class="bar-draw"></div><div id="bar2" class="bar-away"></div></div>
@@ -113,11 +123,11 @@
         <div class="trend"><b id="trend-title"></b><div id="trend-text" class="small"></div></div>
         <div id="odds-results" hidden><h3 style="margin-top:21px">Comparaison avec tes cotes</h3><div id="odds-lines"></div><p class="footnote">L'espérance théorique (« EV ») compare les cotes saisies à un modèle simplifié. Un EV positif ne garantit pas un pari rentable : une estimation de xG erronée peut fausser tout le résultat.</p></div>
         <div class="actions" style="margin-top:18px"><button id="save" class="action secondary" type="button">Enregistrer cette analyse</button><button id="copy" class="action ghost" type="button">Copier le résumé</button></div><p id="feedback" class="small" role="status"></p>
-        <p class="footnote">Méthode : loi de Poisson indépendante pour les buts des deux équipes (sans correction des corrélations, blessures, composition, forme ni avantage domicile recalibré). Une tendance n'est pas un pari validé.</p>
+        <p class="footnote">Méthode : Poisson indépendant, moyennes domicile/extérieur corrigées par la forme de la saison et lissées (effectifs limités). Sans vrais xG, blessures ni compositions. Une tendance n'est pas un pari validé.</p>
       </section>
     </div>
     <section class="card" aria-labelledby="history-h"><div class="toprow" style="margin:0 0 13px"><h3 id="history-h" style="margin:0">Mes analyses enregistrées</h3><button id="clear-history" class="mini danger" type="button">Tout effacer</button></div><div class="history" id="history"><p class="small">Aucune analyse enregistrée pour le moment.</p></div><p class="footnote">Les analyses sont enregistrées uniquement dans le navigateur de ce téléphone. Elles ne se synchronisent pas automatiquement.</p></section>
-    <footer>Foot-stats · Prototype local gratuit · Pas de données en direct</footer>
+    <footer>Foot-stats · Site gratuit, statistiques indicatives · Source : <a href="https://github.com/openfootball/football.json" target="_blank" rel="noopener">OpenFootball (domaine public)</a> · Données ni garanties ni temps réel</footer>
   </main>
   <script>
     'use strict';
@@ -153,16 +163,16 @@
       const odds={};for(const [k,id] of [['p1','odd1'],['px','oddx'],['p2','odd2']]){
         const v=cleanNumber(id);if(v!==null){if(!Number.isFinite(v)||v<=1||v>1000)throw Error('Les cotes doivent être supérieures à 1,00.');odds[k]=v}
       }
-      return {league:$('league').value,home,away,a,b,odds};
+      return {league:$('league').value,home,away,a,b,odds,method:window.currentAutoMatch?'Valeurs préremplies depuis des résultats (modifiables)':'Valeurs manuelles'};
     }
     function resultText(data,r){
-      return `Foot-stats — ${data.league}\n${data.home} - ${data.away}\nEstimations de buts : ${plain(data.a)} / ${plain(data.b)}\n1: ${pct(r.p1)} | X: ${pct(r.px)} | 2: ${pct(r.p2)}\nBTTS: ${pct(r.btts)} | Over 2,5: ${pct(r.over)} | Under 2,5: ${pct(r.under)}\nDouble chance ${r.double.name}: ${pct(r.double.p)}\nScores fréquents du modèle : ${r.scores.map(s=>`${s.i}-${s.j} (${pct(s.p)})`).join(' ; ')}\nModèle Poisson basé sur des données saisies manuellement. Une tendance n'est pas un pari validé.`;
+      return `Foot-stats — ${data.league}\n${data.home} - ${data.away}\nEstimations de buts : ${plain(data.a)} / ${plain(data.b)}\n1: ${pct(r.p1)} | X: ${pct(r.px)} | 2: ${pct(r.p2)}\nBTTS: ${pct(r.btts)} | Over 2,5: ${pct(r.over)} | Under 2,5: ${pct(r.under)}\nDouble chance ${r.double.name}: ${pct(r.double.p)}\nScores fréquents du modèle : ${r.scores.map(s=>`${s.i}-${s.j} (${pct(s.p)})`).join(' ; ')}\n${data.method||'Modèle Poisson indicatif'}. Une tendance n'est pas un pari validé.`;
     }
-    function render(data){
+    function render(data,opts={}){
       const r=model(data.a,data.b);lastAnalysis={data,r};
       $('results').classList.add('show');
       $('fixture').textContent=`${data.home} – ${data.away}`;
-      $('fixture-subtitle').textContent=`${data.league} · Estimation domicile ${plain(data.a)} xG · extérieur ${plain(data.b)} xG`;
+      $('fixture-subtitle').textContent=`${data.league} · Buts modélisés : ${plain(data.a)} domicile / ${plain(data.b)} extérieur · ${data.method||'Données manuelles'}`;
       for(const [id,k] of [['p1','p1'],['px','px'],['p2','p2']])$(id).textContent=pct(r[k]);
       const winner=[['cell1',r.p1],['cellx',r.px],['cell2',r.p2]].sort((x,y)=>y[1]-x[1])[0][0];
       for(const id of ['cell1','cellx','cell2'])$(id).classList.toggle('best',id===winner);
@@ -188,10 +198,10 @@
         row.append(left,right);$('odds-lines').append(row);
       }
       $('feedback').textContent='';
-      $('results').scrollIntoView({behavior:'smooth',block:'start'});
+      if(opts.scroll!==false)$('results').scrollIntoView({behavior:'smooth',block:'start'});
     }
     function reset(){
-      $('home').value='';$('away').value='';$('xgh').value='1.40';$('xga').value='1.10';
+      $('home').value='';$('away').value='';$('xgh').value='';$('xga').value='';window.currentAutoMatch=null;
       for(const id of ['odd1','oddx','odd2'])$(id).value='';
       $('error').textContent='';$('results').classList.remove('show');lastAnalysis=null;
       window.scrollTo({top:0,behavior:'smooth'});
@@ -203,7 +213,7 @@
         const row=document.createElement('div');row.className='historyitem';
         const info=document.createElement('div');info.className='details';
         const name=document.createElement('b');name.textContent=item.home+' – '+item.away;
-        const detail=document.createElement('span');detail.textContent=`${item.league} · ${item.day||''} · ${plain(item.a)} / ${plain(item.b)} xG`;
+        const detail=document.createElement('span');detail.textContent=`${item.league} · ${item.day||''} · ${plain(item.a)} / ${plain(item.b)} buts prévus`;
         info.append(name,detail);
         const open=document.createElement('button');open.type='button';open.className='mini';open.textContent='Ouvrir';open.addEventListener('click',()=>{
           $('league').value=item.league;$('home').value=item.home;$('away').value=item.away;$('xgh').value=item.a;$('xga').value=item.b;
@@ -234,6 +244,124 @@
       if(confirm('Effacer toutes les analyses enregistrées sur ce téléphone ?')){writeHistory([]);showHistory()}
     });
     showHistory();
+    // Chargement automatique : 10 championnats, sans API payante ni GitHub Actions.
+    // La source est un projet collaboratif ; des données manquantes/stales sont signalées.
+    const LEAGUE_CODES={
+      'Ligue 1':'fr.1','Ligue 2':'fr.2',
+      'Serie A':'it.1','Serie B':'it.2',
+      'Bundesliga':'de.1','Bundesliga 2':'de.2',
+      'La Liga':'es.1','La Liga 2':'es.2',
+      'Premier League':'en.1','Championship':'en.2'
+    };
+    let matchFeed=[];
+    let leagueSeason='';
+    let loadCounter=0;
+    window.currentAutoMatch=null;
+    function currentSeason(){
+      const now=new Date(),base=now.getFullYear()-(now.getMonth()<6?1:0);
+      return `${base}-${String((base+1)%100).padStart(2,'0')}`;
+    }
+    function resultOf(m){
+      const score=Array.isArray(m.score)?m.score:m.score?.ft;
+      return Array.isArray(score)&&score.length===2&&score.every(x=>Number.isInteger(x)&&x>=0&&x<=20)?score:null;
+    }
+    function validFixture(m){return m&&typeof m.date==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(m.date)&&typeof m.team1==='string'&&typeof m.team2==='string'&&m.team1!==m.team2;}
+    function status(txt,mode=''){const el=$('data-status');el.textContent=txt;el.className='auto-status'+(mode?' '+mode:'');}
+    function setManual(msg){
+      matchFeed=[];window.currentAutoMatch=null;
+      $('auto-match').replaceChildren(new Option('Saisie manuelle seulement', ''));
+      $('auto-match').disabled=true;
+      $('mode-badge').textContent='● Mode manuel';
+      $('auto-help').textContent='Tu peux toujours écrire les équipes et les buts estimés dans les champs.';
+      status(msg,'warn');
+    }
+    function asDay(s){const [y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d).toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit',year:'numeric'});}
+    function localIsoToday(){const d=new Date();return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-');}
+    function roundNum(m){const k=String(m.round||'').match(/\d+/);return k?Number(k[0]):null;}
+    function historicalStats(fixture){
+      const previous=matchFeed.filter(m=>m.date<fixture.date&&resultOf(m));
+      if(previous.length<12)return null;
+      const avgH=previous.reduce((a,m)=>a+resultOf(m)[0],0)/previous.length;
+      const avgA=previous.reduce((a,m)=>a+resultOf(m)[1],0)/previous.length;
+      if(avgH<0.15||avgA<0.15)return null;
+      const hGames=previous.filter(m=>m.team1===fixture.team1).slice(-6);
+      const aGames=previous.filter(m=>m.team2===fixture.team2).slice(-6);
+      const homeHistory=previous.filter(m=>m.team1===fixture.team1||m.team2===fixture.team1).slice(-5);
+      const awayHistory=previous.filter(m=>m.team1===fixture.team2||m.team2===fixture.team2).slice(-5);
+      // Mélange stabilisé : les équipes ayant peu de rencontres sont rapprochées de la moyenne ligue.
+      const blended=(games,index,baseline)=>(games.reduce((v,m)=>v+resultOf(m)[index],0)+baseline*5)/(games.length+5);
+      const hf=blended(hGames,0,avgH),hc=blended(hGames,1,avgA);
+      const af=blended(aGames,1,avgA),ac=blended(aGames,0,avgH);
+      const homeLambda=Math.max(0.2,Math.min(4.5,avgH*(hf/avgH)*(ac/avgH)));
+      const awayLambda=Math.max(0.2,Math.min(4.5,avgA*(af/avgA)*(hc/avgA)));
+      const bttsRecent=games=>games.filter(x=>{const s=resultOf(x);return s&&s[0]>0&&s[1]>0}).length;
+      return {a:homeLambda,b:awayLambda,count:previous.length,hPlayed:hGames.length,aPlayed:aGames.length,homeFormBTTS:homeHistory.length?Math.round(100*bttsRecent(homeHistory)/homeHistory.length):null,awayFormBTTS:awayHistory.length?Math.round(100*bttsRecent(awayHistory)/awayHistory.length):null};
+    }
+    function populateFixture(m,autoRender=true){
+      if(!m)return;
+      window.currentAutoMatch=m;
+      $('home').value=m.team1;$('away').value=m.team2;
+      const stats=historicalStats(m);
+      if(stats){
+        $('xgh').value=stats.a.toFixed(2);$('xga').value=stats.b.toFixed(2);
+        $('auto-help').textContent=`${m.round||'Journée non indiquée'} · ${asDay(m.date)}${m.time?' à '+m.time:''} · Base : ${stats.count} résultats antérieurs · ${stats.hPlayed} matchs à domicile / ${stats.aPlayed} à l’extérieur. BTTS sur 5 matchs : ${m.team1} ${stats.homeFormBTTS??'–'} %, ${m.team2} ${stats.awayFormBTTS??'–'} %.`;
+        if(autoRender){
+          try{render(getForm(),{scroll:false});$('error').textContent='';}
+          catch(e){$('error').textContent=e.message;}
+        }
+      }else{
+        $('xgh').value='';$('xga').value='';$('results').classList.remove('show');
+        $('auto-help').textContent=`${m.round||'Journée non indiquée'} · ${asDay(m.date)}. Moins de 12 matchs antérieurs renseignés : pas assez de données pour calculer automatiquement. Tu peux saisir tes hypothèses.`;
+      }
+    }
+    function populateSelect(){
+      const today=localIsoToday(),sorted=matchFeed.slice().sort((a,b)=>a.date.localeCompare(b.date)||String(a.time||'').localeCompare(String(b.time||'')));
+      const future=sorted.filter(m=>!resultOf(m)&&m.date>=today);
+      const unknownPast=sorted.filter(m=>!resultOf(m)&&m.date<today);
+      const selection=future.length?future.slice(0,120):unknownPast.length?unknownPast.slice(-80):sorted.slice(-80);
+      const select=$('auto-match');select.replaceChildren();
+      if(!selection.length){select.add(new Option('Aucun match publié',''));select.disabled=true;return;}
+      selection.forEach((m,i)=>select.add(new Option(`${asDay(m.date)} · J${roundNum(m)??'?'} · ${m.team1} – ${m.team2}${resultOf(m)?' · terminé':''}`,String(i))));
+      select.disabled=false;
+      select.onchange=()=>populateFixture(selection[Number(select.value)]);
+      const nowRound=selection[0]?.round;const preferred=selection.findIndex(m=>m.round===nowRound);
+      select.value=String(Math.max(0,preferred));
+      populateFixture(selection[Number(select.value)]);
+    }
+    async function loadLeague(force=false){
+      const league=$('league').value,code=LEAGUE_CODES[league],requestId=++loadCounter;
+      const season=currentSeason();leagueSeason=season;
+      $('season-label').textContent=season.replace('-','/');
+      $('auto-match').disabled=true;
+      $('auto-match').replaceChildren(new Option('Téléchargement des matchs…',''));
+      $('results').classList.remove('show');
+      $('mode-badge').textContent='● Chargement…';
+      status('Connexion à la source ouverte : '+league+'…');
+      if(!code){setManual('Cette compétition ne dispose pas encore d’une source intégrée dans cette version.');return;}
+      try{
+        const url=`https://raw.githubusercontent.com/openfootball/football.json/master/${season}/${code}.json?v=${force?Date.now():new Date().toISOString().slice(0,10)}`;
+        const response=await fetch(url,{cache:'no-store'});
+        if(!response.ok)throw Error('source indisponible (HTTP '+response.status+')');
+        const json=await response.json();
+        if(requestId!==loadCounter)return;
+        if(!Array.isArray(json.matches))throw Error('format de données imprévu');
+        matchFeed=json.matches.filter(validFixture).sort((a,b)=>a.date.localeCompare(b.date));
+        if(!matchFeed.length){setManual('Le fournisseur ne publie aucun match pour '+league+' en '+season+'.');return;}
+        const played=matchFeed.filter(resultOf),latest=played.length?played[played.length-1].date:null;
+        const lagDays=latest?Math.floor((new Date(localIsoToday()+'T12:00:00')-new Date(latest+'T12:00:00'))/86400000):null;
+        const stale=lagDays===null||lagDays>12;
+        const last=latest?`Dernier score fourni : ${asDay(latest)}.`:'Aucun résultat fourni pour cette saison.';
+        $('mode-badge').textContent='● Calendrier automatique';
+        status(`${league} · ${matchFeed.length} matchs connus, ${played.length} résultats renseignés. ${last}${stale?' ⚠ Source possiblement en retard : ne pas interpréter comme des résultats en direct.':''} Source : OpenFootball.`,stale?'warn':'ok');
+        populateSelect();
+      }catch(err){
+        if(requestId!==loadCounter)return;
+        setManual(`Impossible de charger ${league} (${err.message}). Vérifie Internet ou réessaie. Les autres championnats peuvent rester disponibles.`);
+      }
+    }
+    $('league').addEventListener('change',()=>loadLeague());
+    $('reload-data').addEventListener('click',()=>loadLeague(true));
+    loadLeague();
   </script>
 </body>
 </html>
