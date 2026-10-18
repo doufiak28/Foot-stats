@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#ffffff">
   <meta name="description" content="Foot-stats : analyse football 1X2, nuls, BTTS, Over/Under 2,5 avec un modèle de Poisson. Calendriers et résultats depuis des données publiques actualisables en ligne, sans clé API.">
-  <title>Foot-stats — Fiabilité sur 3 saisons</title>
+  <title>Foot-stats — Bilan, cotes historiques et ROI</title>
   <style>
     :root{color-scheme:light;--ink:#17223b;--muted:#68758b;--line:#e3e9f0;--bg:#f4f7fb;--blue:#255ad8;--light:#eaf0ff;--green:#117853;--pale:#e9f8f1;--amber:#8d550d;--amberbg:#fff7e8;--white:#fff}
     *{box-sizing:border-box}
@@ -78,6 +78,24 @@
     .archive-actions button{flex:1 1 180px}
     .archive-caption{font-size:12px;color:var(--muted);padding:8px 0}
     
+
+    .roi-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .roi-controls label{margin:0 0 6px}
+    .roi-controls .field{margin-bottom:2px}
+    .roi-buttons{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
+    .roi-buttons>*{flex:1 1 190px;text-align:center}
+    .file-label{display:block;background:#eff4ff;color:#214bb1;font-weight:800;padding:14px 12px;border-radius:11px;cursor:pointer;text-align:center;font-size:13px}
+    .file-label:focus-within{outline:2px solid #215bce}
+    .file-label input{display:block;position:absolute;opacity:0;width:1px;height:1px}
+    .roi-buttons a{display:block;padding:12px;border:1px solid #cbd8f3;border-radius:11px;color:#214bb1;text-decoration:none;background:#fff;font-weight:700;font-size:13px}
+    .roi-tbl{border-collapse:collapse;min-width:680px;width:100%;font-size:12px}
+    .roi-tbl th,.roi-tbl td{padding:10px 9px;border-bottom:1px solid #e5eaf2;text-align:right;font-variant-numeric:tabular-nums}
+    .roi-tbl th:first-child,.roi-tbl td:first-child{text-align:left;min-width:130px}
+    .roi-tbl th{color:#41536d;background:#edf2fa}
+    .roi-tbl tr:last-child td{border-bottom:none}
+    .roi-note{border-left:3px solid #e2b85b;background:#fffaf0;border-radius:0 10px 10px 0;padding:11px 13px;color:#76501d;font-size:12px;line-height:1.5;margin-top:13px}
+    .roi-status{white-space:pre-line}
+    @media(max-width:360px){.roi-controls{grid-template-columns:1fr}}
     .audit-note{font-size:12px;color:#68758b;margin-top:9px}
     .quality.low{color:#966018}
     .lineup-card{grid-column:1/-1}
@@ -164,7 +182,27 @@
         <div class="archive-explain">Les chiffres sont des <strong>scores de Brier</strong> (plus petits = meilleurs). Pour les trois derniers marchés, l'affichage indique le Brier du modèle. L’écart favorable = Brier référence moins Brier Foot-stats : positif signifie meilleur sur les matchs testés. Le classement utilise la saison <strong>2025/26</strong> comme période de confirmation et n’affiche un rang que si au moins 150 matchs sont testables sur cette saison et 300 sur les trois saisons, avec au moins deux saisons exploitables. Cela ne démontre pas la rentabilité des paris.</div>
         <p class="small">Archives publiques : <a href="https://github.com/openfootball/football.json" target="_blank" rel="noopener">OpenFootball / football.json</a> (domaine public). Le classement exclut la MLS : elle se joue sur une année civile et nécessite un historique distinct. La version actuelle du modèle reste fixe pendant le test ; il ne s’ajuste pas après avoir vu les résultats.</p>
       </section>
-      <section class="card lineup-card" aria-labelledby="lineup-h"><h3 id="lineup-h">5. Compositions et absents <span class="small">(facultatif)</span></h3>
+      <section class="card day-card" aria-labelledby="roi-h">
+        <h3 id="roi-h">5. Cotes historiques : réussite et ROI simulé</h3>
+        <p class="small">Tests de paris fictifs sur les <strong>vraies cotes publiées</strong> dans des CSV de Football-Data.co.uk. Le modèle ne voit que les résultats <strong>antérieurs</strong> à chaque match. Mise fixe : <strong>1 €</strong>. Aucun profit réel ni avantage garanti.</p>
+        <div class="roi-controls">
+          <div class="field"><label for="roi-league">Championnat</label><select id="roi-league"><option>Ligue 1</option><option>Ligue 2</option><option>Serie A</option><option>Serie B</option><option>Bundesliga</option><option>Bundesliga 2</option><option>La Liga</option><option>La Liga 2</option><option>Premier League</option><option>Championship</option></select></div>
+          <div class="field"><label for="roi-season">Saison terminée</label><select id="roi-season"><option value="2526">2025/26</option><option value="2425">2024/25</option><option value="2324">2023/24</option></select></div>
+          <div class="field"><label for="roi-edge">Marge EV théorique minimale</label><select id="roi-edge"><option value="0.05">+5 % (fixé à l’avance)</option><option value="0.03">+3 % (exploratoire)</option><option value="0.08">+8 % (exploratoire)</option></select></div>
+          <div class="field"><label for="roi-period">Période d’évaluation</label><select id="roi-period"><option value="2526">2025/26 · contrôle</option><option value="all">Toutes saisons importées · exploratoire</option></select></div>
+        </div>
+        <div class="roi-buttons">
+          <button type="button" id="roi-fetch" class="action">Charger les cotes en ligne</button>
+          <a id="roi-source" href="https://www.football-data.co.uk/mmz4281/2526/F1.csv" target="_blank" rel="noopener">Télécharger le CSV si nécessaire ↗</a>
+          <label class="file-label">Importer le CSV téléchargé <input type="file" id="roi-files" accept=".csv,text/csv" multiple></label>
+        </div>
+        <div class="auto-status roi-status" id="roi-status" role="status">Choisis ton championnat et ta saison. Essaie « Charger les cotes en ligne ». Si le site bloque l’accès depuis ton téléphone, télécharge le CSV puis utilise « Importer » (gratuit, sans compte). Tu peux importer plusieurs fichiers ; ils sont traités uniquement sur ton appareil.</div>
+        <div class="table-scroll"><table class="roi-tbl"><thead><tr><th>Marché</th><th>Paris fictifs</th><th>Gagnés</th><th>Réussite</th><th>Solde à 1 €</th><th>ROI</th><th>Modèle Brier</th><th>Cotes Brier</th></tr></thead><tbody id="roi-body"><tr><td colspan="8">Aucune cote historique chargée.</td></tr></tbody></table></div>
+        <p class="small" id="roi-details"></p>
+        <div class="roi-note"><strong>Lecture prudente :</strong> les cotes de clôture sont utilisées lorsqu’elles existent, sinon d’autres cotes du même fichier (signalées). On ne peut pas garantir leur disponibilité au moment où la prévision aurait été prise. Les frais, limites, variations de prix et autres contraintes de mise ne sont pas modélisés. Les résultats avec moins de 100 paris restent particulièrement fragiles. Les seuils changés après avoir vu les résultats ne constituent pas une validation indépendante. Si une cote manque, <strong>aucun gain n’est inventé</strong>. Les données sources demeurent sur le site du fournisseur.</div>
+        <p class="small">Source des cotes : <a href="https://www.football-data.co.uk/downloadm.php" target="_blank" rel="noopener">Football-Data.co.uk</a>. Un fichier CSV est nécessaire pour calculer un vrai bilan ROI. Les cotes utilisées ne sont pas des xG.</p>
+      </section>
+      <section class="card lineup-card" aria-labelledby="lineup-h"><h3 id="lineup-h">6. Compositions et absents <span class="small">(facultatif)</span></h3>
         <div class="field"><label for="lineup-status">Type d'information</label><select id="lineup-status"><option value="unknown">Compositions non vérifiées</option><option value="probable">Compositions probables vérifiées par toi</option><option value="official">Compositions officielles vérifiées par toi</option></select></div>
         <div class="two">
           <div class="field"><label for="lineup-home">Absents / changement domicile</label><input id="lineup-home" maxlength="180" placeholder="Ex. avant-centre absent"></div>
@@ -177,14 +215,14 @@
         </div>
         <p class="impact-note">⚠ Les noms saisis ne modifient pas automatiquement les probabilités. Seuls les pourcentages ci-dessus les ajustent. Aucun titulaire, blessé ou suspendu n'est inventé ni récupéré par cette version.</p>
       </section>
-      <section class="card" aria-labelledby="odds-h"><h3 id="odds-h">6. Cotes du bookmaker <span class="small">(facultatif)</span></h3>
+      <section class="card" aria-labelledby="odds-h"><h3 id="odds-h">7. Cotes du bookmaker <span class="small">(facultatif)</span></h3>
         <div class="three"><div class="field"><label for="odd1">1 — Domicile</label><input id="odd1" type="number" min="1.01" step="0.01" inputmode="decimal" placeholder="Ex. 2.10"></div><div class="field"><label for="oddx">X — Nul</label><input id="oddx" type="number" min="1.01" step="0.01" inputmode="decimal" placeholder="Ex. 3.30"></div><div class="field"><label for="odd2">2 — Extérieur</label><input id="odd2" type="number" min="1.01" step="0.01" inputmode="decimal" placeholder="Ex. 3.50"></div></div>
-        <p class="small">Les cotes se saisissent toujours manuellement : pas de bookmaker connecté ni de cotes en direct.</p>
+        <p class="small">Les cotes actuelles se saisissent toujours manuellement. Le bilan historique utilise séparément des archives de cotes ; aucune cote en direct.</p>
         <div class="actions"><button class="action" id="calculate" type="button">Calculer les tendances</button><button class="action ghost" id="reset" type="button">Effacer les champs</button></div>
         <p id="error" class="error" role="alert"></p>
       </section>
       <section class="card results" id="results" aria-live="polite" aria-labelledby="results-h">
-        <h3 id="results-h">6. Estimations Poisson</h3>
+        <h3 id="results-h">8. Estimations Poisson</h3>
         <h2 class="matchtitle" id="fixture"></h2><p id="fixture-subtitle" class="subtitle"></p>
         <div class="result-grid"><div id="cell1" class="result-cell"><strong id="p1">–</strong><span>1 · Domicile</span></div><div id="cellx" class="result-cell"><strong id="px">–</strong><span>X · Match nul</span></div><div id="cell2" class="result-cell"><strong id="p2">–</strong><span>2 · Extérieur</span></div></div>
         <div class="bar" role="img" aria-label="Répartition des probabilités"><div id="bar1" class="bar-home"></div><div id="barx" class="bar-draw"></div><div id="bar2" class="bar-away"></div></div>
@@ -637,6 +675,157 @@
     $('league').addEventListener('change',()=>loadLeague());
     $('reload-data').addEventListener('click',()=>loadLeague(true));
     loadLeague();
+
+    // ----- Cotes de matches terminés, source externe et/ou fichiers CSV importés.
+    // Les mesures ROI ne sont pas calculées si le fichier de cotes manque.
+    const ODDS_CODES={
+      'Ligue 1':'F1','Ligue 2':'F2','Serie A':'I1','Serie B':'I2',
+      'Bundesliga':'D1','Bundesliga 2':'D2','La Liga':'SP1','La Liga 2':'SP2',
+      'Premier League':'E0','Championship':'E1'
+    };
+    let roiArchives=new Map();
+    const roiNum=x=>{const t=String(x??'').trim().replace(',','.');return t!==''&&Number.isFinite(Number(t))?Number(t):null};
+    const roiPrice=x=>{const n=roiNum(x);return n!=null&&n>=1.01&&n<=100?n:null};
+    function oddsUrl(){return `https://www.football-data.co.uk/mmz4281/${$('roi-season').value}/${ODDS_CODES[$('roi-league').value]}.csv`}
+    function updateOddsLink(){const link=$('roi-source');link.href=oddsUrl();link.title=link.href}
+    $('roi-league').addEventListener('change',updateOddsLink);
+    $('roi-season').addEventListener('change',()=>{updateOddsLink();runROIBoard()});
+    $('roi-edge').addEventListener('change',runROIBoard);
+    $('roi-period').addEventListener('change',runROIBoard);
+    const seasonLabel=s=>({2324:'2023/24',2425:'2024/25',2526:'2025/26'})[s]||s;
+    const dateFromCSV=(s)=>{
+      const t=String(s??'').trim();
+      let mt=t.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{2,4})$/);
+      if(mt){let y=Number(mt[3]);if(y<100)y+=2000;return y>=2023&&y<=2026&&Number(mt[2])<=12&&Number(mt[1])<=31?`${y}-${String(mt[2]).padStart(2,'0')}-${String(mt[1]).padStart(2,'0')}`:null}
+      return /^20\d\d-\d\d-\d\d$/.test(t)?t:null;
+    };
+    function csvSeason(day){const y=Number(day.slice(0,4)),month=Number(day.slice(5,7));return `${String(month>=7?y:y-1).slice(2)}${String((month>=7?y:y-1)+1).slice(2)}`;}
+    function oddsGroup(r,keys,label){const values=keys.map(k=>roiPrice(r[k]));return values.every(x=>x!==null)?{values,label}:null}
+    function oddsExtract(r){
+      const x={};
+      x.one=oddsGroup(r,['B365CH','B365CD','B365CA'],'Bet365 clôture')||oddsGroup(r,['AvgCH','AvgCD','AvgCA'],'Moyenne clôture')||oddsGroup(r,['B365H','B365D','B365A'],'Bet365 pré-clôture')||oddsGroup(r,['AvgH','AvgD','AvgA'],'Moyenne pré-clôture');
+      x.over=oddsGroup(r,['B365C>2.5','B365C<2.5'],'Bet365 clôture')||oddsGroup(r,['AvgC>2.5','AvgC<2.5'],'Moyenne clôture')||oddsGroup(r,['B365>2.5','B365<2.5'],'Bet365 pré-clôture')||oddsGroup(r,['Avg>2.5','Avg<2.5'],'Moyenne pré-clôture');
+      x.btts=oddsGroup(r,['B365CBTSY','B365CBTSN'],'Bet365 clôture')||oddsGroup(r,['B365BTSY','B365BTSN'],'Bet365 pré-clôture')||oddsGroup(r,['AvgBTSY','AvgBTSN'],'Moyenne pré-clôture');
+      return x;
+    }
+    function parseOddsArchive(csv,strictCode=null){
+      const records=parseCSV(csv);if(!records.length)throw Error('CSV vide ou format non reconnu');
+      if(!Object.hasOwn(records[0],'FTHG')||!Object.hasOwn(records[0],'HomeTeam')||!Object.hasOwn(records[0],'Date'))throw Error('Le fichier n’a pas les colonnes Football-Data attendues');
+      let result=new Map(),skipped=0,valid=0;
+      for(const row of records){
+        const dt=dateFromCSV(row.Date);const h=scoreNum(row.FTHG),a=scoreNum(row.FTAG);
+        if(!dt||h===null||a===null||!row.HomeTeam||!row.AwayTeam){skipped++;continue;}
+        const code=String(row.Div||strictCode||'').toUpperCase();
+        if(!Object.values(ODDS_CODES).includes(code))continue;
+        const season=csvSeason(dt);
+        if(!['2324','2425','2526'].includes(season))continue;
+        const key=code+'|'+season;
+        if(!result.has(key))result.set(key,[]);
+        result.get(key).push({date:dt,team1:row.HomeTeam,team2:row.AwayTeam,score:[h,a],prices:oddsExtract(row),raw:row});
+        valid++;
+      }
+      if(!valid)throw Error('Aucun match terminé des saisons 2023–2026 trouvé. Vérifie la compétition et le CSV.');
+      return {result,valid,skipped};
+    }
+    function setROIStatus(text,warn=false){const e=$('roi-status');e.textContent=text;e.className='auto-status roi-status '+(warn?'warn':'ok')}
+    function roiSummary(text){$('roi-details').textContent=text}
+    function addCSVData(csv,source,strictCode=null){
+      const parsed=parseOddsArchive(csv,strictCode);
+      for(const [key,matches] of parsed.result){
+        const seen=new Map((roiArchives.get(key)||[]).map(m=>[`${m.date}|${m.team1}|${m.team2}`,m]));
+        for(const m of matches)seen.set(`${m.date}|${m.team1}|${m.team2}`,m);
+        roiArchives.set(key,[...seen.values()].sort((a,b)=>a.date.localeCompare(b.date)));
+      }
+      return `${source} : ${parsed.valid} matchs terminés, ${parsed.result.size} championnat(s)/saison(s).`;
+    }
+    function roiBrier(p,y){return(p-y)**2}
+    function backtestOddsSeason(matches,edge){
+      const completed=matches.filter(m=>resultOf(m)).sort((a,b)=>a.date.localeCompare(b.date));
+      const types=['1X2','Nul','BTTS Oui','Over 2,5'];
+      const out=Object.fromEntries(types.map(k=>[k,{bets:0,wins:0,pnl:0,modelSum:0,marketSum:0,modelCount:0,marketCount:0,available:0,sources:{}}]));
+      let tested=0;
+      for(const m of completed){
+        const st=historicalStats(m,completed);if(!st)continue;
+        tested++;
+        const p=model(st.a,st.b),result=resultOf(m),outcome=result[0]>result[1]?0:result[0]===result[1]?1:2;
+        const guesses={
+          '1X2':{prob:[p.p1,p.px,p.p2],truth:[+(outcome===0),+(outcome===1),+(outcome===2)],odds:m.prices.one},
+          'Nul':{prob:[p.px],truth:[+(outcome===1)],odds:m.prices.one?{values:[m.prices.one.values[1]],full:m.prices.one.values,label:m.prices.one.label}:null},
+          'BTTS Oui':{prob:[p.btts],truth:[+(result[0]>0&&result[1]>0)],odds:m.prices.btts},
+          'Over 2,5':{prob:[p.over],truth:[+(result[0]+result[1]>2)],odds:m.prices.over}
+        };
+        for(const [type,g] of Object.entries(guesses)){
+          const row=out[type];row.modelSum+=g.truth.reduce((s,y,i)=>s+roiBrier(g.prob[i],y),0)/g.truth.length;row.modelCount++;
+          if(!g.odds)continue;
+          const implied=(type==='Nul'?g.odds.full||[]:g.odds.values).map(v=>1/v),norm=implied.reduce((a,b)=>a+b,0);
+          if(type==='Nul'&&implied.length!==3)continue;
+          if(type!=='Nul'&&type!=='1X2'&&implied.length!==2)continue;
+          const reference=type==='Nul'?[implied[1]/norm]:type==='1X2'?implied.map(v=>v/norm):[implied[0]/norm];
+          row.marketSum+=g.truth.reduce((s,y,i)=>s+roiBrier(reference[i],y),0)/g.truth.length;row.marketCount++;
+          row.available++;row.sources[g.odds.label]=(row.sources[g.odds.label]||0)+1;
+          // Au maximum une sélection par rencontre et par marché.
+          const candidates=g.prob.map((prob,i)=>({i,ev:prob*g.odds.values[i]-1,price:g.odds.values[i],hit:g.truth[i]===1})).filter(o=>o.price>=1.2&&o.price<=20);
+          if(!candidates.length)continue;
+          candidates.sort((a,b)=>b.ev-a.ev);
+          const best=candidates[0];if(best.ev<edge)continue;
+          row.bets++;if(best.hit)row.wins++;
+          row.pnl+=best.hit?best.price-1:-1;
+        }
+      }
+      return {tested,total:completed.length,rows:out};
+    }
+    function mergeROI(results){
+      const all=Object.fromEntries(['1X2','Nul','BTTS Oui','Over 2,5'].map(t=>[t,{bets:0,wins:0,pnl:0,modelSum:0,marketSum:0,modelCount:0,marketCount:0,available:0,sources:{}}]));
+      let tested=0,total=0;
+      for(const r of results){tested+=r.tested;total+=r.total;for(const [k,v] of Object.entries(r.rows)){
+        const dst=all[k];for(const n of ['bets','wins','pnl','modelSum','marketSum','modelCount','marketCount','available'])dst[n]+=v[n];
+        for(const [key,x] of Object.entries(v.sources))dst.sources[key]=(dst.sources[key]||0)+x;
+      }}
+      return {tested,total,rows:all};
+    }
+    function runROIBoard(){
+      const code=ODDS_CODES[$('roi-league').value],control=$('roi-period').value,season=$('roi-season').value;
+      const matches=control==='all'?['2324','2425','2526'].map(s=>roiArchives.get(code+'|'+s)).filter(Boolean):[roiArchives.get(code+'|'+season)].filter(Boolean);
+      const tbody=$('roi-body');tbody.replaceChildren();
+      if(!matches.length){const tr=document.createElement('tr'),td=document.createElement('td');td.colSpan=8;td.textContent='Aucune donnée importée pour ce championnat / cette période.';tr.append(td);tbody.append(tr);roiSummary('Aucun montant calculé tant que les vraies cotes ne sont pas disponibles.');return;}
+      const edge=Number($('roi-edge').value),r=mergeROI(matches.map(m=>backtestOddsSeason(m,edge)));
+      for(const [label,s] of Object.entries(r.rows)){
+        const tr=document.createElement('tr');
+        const add=x=>{const t=document.createElement('td');t.textContent=x;tr.append(t)};
+        add(label);add(String(s.bets));add(String(s.wins));
+        add(s.bets?(100*s.wins/s.bets).toFixed(1).replace('.',',')+' %':'—');
+        add(s.bets?(s.pnl>=0?'+':'')+s.pnl.toFixed(2).replace('.',',')+' €':'—');
+        add(s.bets?(100*s.pnl/s.bets).toFixed(1).replace('.',',')+' %':'—');
+        add(s.modelCount?metricFmt(s.modelSum/s.modelCount):'—');
+        add(s.marketCount?metricFmt(s.marketSum/s.marketCount):'—');
+        tbody.append(tr);
+      }
+      const counts=Object.entries(r.rows).map(([k,s])=>k+' : '+s.available+' cotes complètes / '+s.bets+' sélections').join(' · ');
+      const kinds=new Set(Object.values(r.rows).flatMap(s=>Object.keys(s.sources)));
+      roiSummary(`Matchs modélisables : ${r.tested}/${r.total}. ${counts}. Types de cotes utilisés : ${[...kinds].join(', ')||'aucun'}. Un ROI positif sur un échantillon réduit n’établit pas une stratégie rentable.`);
+    }
+    $('roi-files').addEventListener('change',async e=>{
+      const files=[...e.target.files];if(!files.length)return;
+      let messages=[],errors=[];
+      for(const f of files){try{const codeFromName=String(f.name).match(/^(E0|E1|F1|F2|D1|D2|I1|I2|SP1|SP2)\.csv$/i)?.[1]?.toUpperCase()||null;messages.push(addCSVData(await f.text(),f.name,codeFromName));}catch(err){errors.push(f.name+': '+err.message)}}
+      runROIBoard();setROIStatus(messages.join('\n')+(errors.length?'\nFichiers ignorés : '+errors.join(' ; '):''),!!errors.length);
+      e.target.value='';
+    });
+    $('roi-fetch').addEventListener('click',async()=>{
+      const btn=$('roi-fetch');btn.disabled=true;
+      setROIStatus('Tentative de chargement de '+oddsUrl()+'…',false);
+      try{
+        const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),12000);
+        let csv;
+        try{const response=await fetch(oddsUrl(),{cache:'no-store',signal:controller.signal});
+          if(!response.ok)throw Error('HTTP '+response.status);
+          csv=await response.text();
+        }finally{clearTimeout(timer)}
+        const message=addCSVData(csv,seasonLabel($('roi-season').value),ODDS_CODES[$('roi-league').value]);
+        setROIStatus(message+'\nCotes historiques importées : bilan calculé ci-dessous.');runROIBoard();
+      }catch(e){setROIStatus('Chargement direct indisponible : '+e.message+'. C’est souvent une restriction CORS de Football-Data sur GitHub Pages. Appuie sur « Télécharger le CSV » puis « Importer le CSV téléchargé » ; aucun chiffre de rentabilité n’a été inventé.',true)}
+      finally{btn.disabled=false}
+    });
     // Bilan 3 saisons : tests walk-forward par saison, sans données d'après-match.
     // 2025/26 est traité comme période de confirmation NON utilisée pour ajuster les paramètres.
     const ARCHIVE_SEASONS=['2023-24','2024-25','2025-26'];
