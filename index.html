@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#ffffff">
   <meta name="description" content="Foot-stats : analyse football 1X2, nuls, BTTS, Over/Under 2,5 avec un modèle de Poisson. Calendriers et résultats depuis des données publiques actualisables en ligne, sans clé API.">
-  <title>Foot-stats — Forme et force des adversaires</title>
+  <title>Foot-stats hybride — Forme et force des adversaires</title>
   <style>
     :root{color-scheme:light;--ink:#17223b;--muted:#68758b;--line:#e3e9f0;--bg:#f4f7fb;--blue:#255ad8;--light:#eaf0ff;--green:#117853;--pale:#e9f8f1;--amber:#8d550d;--amberbg:#fff7e8;--white:#fff}
     *{box-sizing:border-box}
@@ -247,7 +247,7 @@
           <span class="value-chip">Écart modèle / marché ≥ 7 points</span>
           <span class="value-chip">≥ 90 matchs en ligue</span>
           <span class="value-chip">≥ 5 matchs domicile et extérieur</span>
-          <p class="small">La probabilité « ajustée » mélange à parts égales Poisson et la probabilité implicite des cotes <strong>sans marge</strong>. L'EV ajustée est calculée à la cote publiée. Le filtre refuse les matchs peu documentés et les signaux trop incertains, mais peut aussi écarter des paris gagnants.</p>
+          <p class="small">Le filtre de paris historique reste distinct du nouvel affichage combiné : sa probabilité « ajustée » mélange à parts égales Poisson et la probabilité implicite des cotes <strong>sans marge</strong>. L'EV ajustée est calculée à la cote publiée. Le filtre refuse les matchs peu documentés et les signaux trop incertains, mais peut aussi écarter des paris gagnants.</p>
         </div>
         <div id="value-status" class="auto-status value-status" role="status">Importe un CSV dans la rubrique 5 : les comparaisons apparaîtront automatiquement ici.</div>
         <div class="table-scroll"><table class="value-compare"><thead><tr><th>Marché / méthode</th><th>Paris</th><th>Réussite</th><th>Solde 1 €</th><th>ROI</th><th>Brier sélection</th></tr></thead><tbody id="value-results"><tr><td colspan="6">Aucun fichier de cotes importé.</td></tr></tbody></table></div>
@@ -288,12 +288,12 @@
       </section>
       <section class="card" aria-labelledby="odds-h"><h3 id="odds-h">9. Cotes du bookmaker <span class="small">(facultatif)</span></h3>
         <div class="three"><div class="field"><label for="odd1">1 — Domicile</label><input id="odd1" type="number" min="1.01" step="0.01" inputmode="decimal" placeholder="Ex. 2.10"></div><div class="field"><label for="oddx">X — Nul</label><input id="oddx" type="number" min="1.01" step="0.01" inputmode="decimal" placeholder="Ex. 3.30"></div><div class="field"><label for="odd2">2 — Extérieur</label><input id="odd2" type="number" min="1.01" step="0.01" inputmode="decimal" placeholder="Ex. 3.50"></div></div>
-        <p class="small">Saisis les 3 cotes 1X2 pour comparer les probabilités du modèle à celles du marché <strong>sans marge</strong>. Les cotes ne modifient pas automatiquement le modèle : elles servent de contrôle indépendant. Aucun flux de cotes en direct.</p>
+        <p class="small">Avec les <strong>3 cotes du même bookmaker au même moment</strong>, la rubrique 10 affiche une estimation 1X2 expérimentale combinant Poisson enrichi et marché sans marge. Le Poisson seul reste visible pour comparaison. Sans les 3 cotes, aucun ajustement marché. Aucun flux de cotes en direct.</p>
         <div class="actions"><button class="action" id="calculate" type="button">Calculer les tendances</button><button class="action ghost" id="reset" type="button">Effacer les champs</button></div>
         <p id="error" class="error" role="alert"></p>
       </section>
       <section class="card results" id="results" aria-live="polite" aria-labelledby="results-h">
-        <h3 id="results-h">10. Estimations Poisson</h3>
+        <h3 id="results-h">10. Estimations Poisson + marché</h3>
         <h2 class="matchtitle" id="fixture"></h2><p id="fixture-subtitle" class="subtitle"></p>
         <div class="result-grid"><div id="cell1" class="result-cell"><strong id="p1">–</strong><span>1 · Domicile</span></div><div id="cellx" class="result-cell"><strong id="px">–</strong><span>X · Match nul</span></div><div id="cell2" class="result-cell"><strong id="p2">–</strong><span>2 · Extérieur</span></div></div>
         <div class="bar" role="img" aria-label="Répartition des probabilités"><div id="bar1" class="bar-home"></div><div id="barx" class="bar-draw"></div><div id="bar2" class="bar-away"></div></div>
@@ -301,14 +301,15 @@
         <div class="stats"><div class="stat"><b id="btts">–</b><span>BTTS · Les deux marquent</span></div><div class="stat"><b id="over">–</b><span>Over 2,5 buts</span></div><div class="stat"><b id="under">–</b><span>Under 2,5 buts</span></div><div class="stat"><b id="dc">–</b><span id="dc-label">Double chance</span></div></div>
         <h3>Scores les plus probables</h3><div id="scores" class="scoreline"></div>
         <div class="trend"><b id="trend-title"></b><div id="trend-text" class="small"></div></div>
-        <div id="market-comparison" class="market-compare value-box" hidden aria-live="polite"><strong>Modèle contre marché (marge retirée)</strong><div id="market-breakdown"></div><div id="market-warning" class="market-warning"></div></div>
+        <div id="hybrid-info" class="value-box small" aria-live="polite">Sans 3 cotes valides : probabilités calculées à partir des résultats et de la forme uniquement.</div>
+        <div id="market-comparison" class="market-compare value-box" hidden aria-live="polite"><strong>Poisson, marché et estimation combinée (1X2)</strong><div id="market-breakdown"></div><div id="market-warning" class="market-warning"></div></div>
         <div id="odds-results" hidden><h3 style="margin-top:21px">Comparaison avec tes cotes</h3><div id="odds-lines"></div><p class="footnote">L’espérance théorique (« EV ») compare les cotes saisies à un modèle simplifié. Un EV positif n’est PAS une value bet validée : aucun avantage ne peut être affirmé sans contrôle sur les cotes et résultats historiques.</p></div>
         <div class="actions" style="margin-top:18px"><button id="save" class="action secondary" type="button">Enregistrer cette analyse</button><button id="copy" class="action ghost" type="button">Copier le résumé</button></div><p id="feedback" class="small" role="status"></p>
-        <p class="footnote">Méthode : Poisson indépendant avec moyennes domicile/extérieur lissées, correction expérimentale plafonnée pour la forme récente (5 matchs) et la force des adversaires via les résultats antérieurs seulement. Le test chronologique compare la nouvelle version à l'ancienne. Sans vrais xG, sans compositions ni cotes récupérées automatiquement. Les impacts de compo sont manuels et non validés. Une tendance n'est pas un pari validé.</p>
+        <p class="footnote">Méthode : Poisson indépendant lissé + forme récente (5 matchs) et force des adversaires. Si 3 cotes du même bookmaker sont renseignées, le 1X2 est réajusté vers le marché sans marge : 25 % en présence d'un historique étoffé, sinon 40 % (hypothèses expérimentales à tester). BTTS, Over/Under et scores restent issus de Poisson. Les absences et impacts sont manuels, sans récupération automatique ; H2H consultatifs. Sans vrais xG mesurés. L'historique ou les cotes peuvent être incomplets. Aucune rentabilité démontrée.</p>
       </section>
     </div>
     <section class="card" aria-labelledby="history-h"><div class="toprow" style="margin:0 0 13px"><h3 id="history-h" style="margin:0">Mes analyses enregistrées</h3><button id="clear-history" class="mini danger" type="button">Tout effacer</button></div><div class="history" id="history"><p class="small">Aucune analyse enregistrée pour le moment.</p></div><p class="footnote">Les analyses sont enregistrées uniquement dans le navigateur de ce téléphone. Elles ne se synchronisent pas automatiquement.</p></section>
-    <footer>Foot-stats · Site gratuit, statistiques indicatives · Sources : <a href="https://github.com/oladeeayo/open-matchday" target="_blank" rel="noopener">Open Matchday</a> et <a href="https://github.com/openfootball/football.json" target="_blank" rel="noopener">OpenFootball (secours)</a> · Résultats ni garantis ni en direct · Usage personnel</footer>
+    <footer>Foot-stats · Version hybride 19/10/2026 · Site gratuit, statistiques indicatives · Sources : <a href="https://github.com/oladeeayo/open-matchday" target="_blank" rel="noopener">Open Matchday</a> et <a href="https://github.com/openfootball/football.json" target="_blank" rel="noopener">OpenFootball (secours)</a> · Résultats ni garantis ni en direct · Usage personnel</footer>
   </main>
   <script>
     'use strict';
@@ -336,6 +337,22 @@
       const dcs=[{name:'1X',p:p1+px},{name:'X2',p:px+p2},{name:'12',p:p1+p2}].sort((x,y)=>y.p-x.p);
       return {p1,px,p2,btts,over:1-under,under,scores:scores.slice(0,3),double:dcs[0]};
     }
+    // Les probabilités 1X2 sont rétrécies vers le consensus d'un seul marché à 3 cotes.
+    // Poids PRÉDÉFINIS, non calibrés : voir test Brier historique ci-dessous.
+    function hybridPrediction(base,odds,st){
+      const keys=['p1','px','p2'];
+      const absent={result:base,used:false,weight:0,market:null,margin:null,reason:''};
+      if(!keys.every(k=>Number.isFinite(odds?.[k])&&odds[k]>1))return {...absent,reason:'3 cotes nécessaires'};
+      const raw=keys.map(k=>1/odds[k]),total=raw.reduce((a,b)=>a+b,0),margin=total-1;
+      // Une marge anormale indique souvent des cotes de sources différentes ou des erreurs.
+      if(margin<-.03||margin>.20)return {...absent,margin,reason:'marge incohérente, cotes à vérifier'};
+      const market=raw.map(n=>n/total);
+      const sufficient=st&&st.count>=90&&st.hPlayed>=6&&st.aPlayed>=6;
+      const weight=sufficient?.25:.40;
+      const p=keys.map((k,i)=>(1-weight)*base[k]+weight*market[i]);
+      const double=[{name:'1X',p:p[0]+p[1]},{name:'X2',p:p[1]+p[2]},{name:'12',p:p[0]+p[2]}].sort((a,b)=>b.p-a.p)[0];
+      return {result:{...base,p1:p[0],px:p[1],p2:p[2],double},used:true,weight,market,margin,reason:''};
+    }
     function getForm(){
       const home=$('home').value.trim(),away=$('away').value.trim(),a=cleanNumber('xgh'),b=cleanNumber('xga');
       if(!home||!away)throw Error('Renseigne les noms des deux équipes.');
@@ -350,17 +367,22 @@
       const lineupHome=$('lineup-home').value.trim(),lineupAway=$('lineup-away').value.trim();
       const adjustedA=Math.max(0.1,Math.min(5,a*(1+impactHome/100)));
       const adjustedB=Math.max(0.1,Math.min(5,b*(1+impactAway/100)));
-      return {league:$('league').value,home,away,a:adjustedA,b:adjustedB,baseA:a,baseB:b,impactHome,impactAway,lineupStatus,lineupHome,lineupAway,odds,method:window.currentAutoMatch?'Résultats historiques + forme 5 matchs + adversaires (compo ajustée si saisie)':'Base saisie manuellement'};
+      const historic=window.currentAutoMatch&&window.currentAutoMatch.team1===home&&window.currentAutoMatch.team2===away?historicalStats(window.currentAutoMatch):null;
+      const sample=historic?{count:historic.count,hPlayed:historic.hPlayed,aPlayed:historic.aPlayed}:null;
+      return {league:$('league').value,home,away,a:adjustedA,b:adjustedB,baseA:a,baseB:b,impactHome,impactAway,lineupStatus,lineupHome,lineupAway,odds,sample,method:window.currentAutoMatch?'Résultats historiques + forme 5 matchs + adversaires (compo ajustée si saisie)':'Base saisie manuellement'};
     }
     function resultText(data,r){
-      return `Foot-stats — ${data.league}\n${data.home} - ${data.away}\nEstimations de buts : ${plain(data.a)} / ${plain(data.b)}\nCompositions : ${data.lineupStatus||'unknown'} · Impacts saisis ${data.impactHome??0}% / ${data.impactAway??0}% (estimation subjective) · Domicile : ${data.lineupHome||'non précisé'} · Extérieur : ${data.lineupAway||'non précisé'}\n1: ${pct(r.p1)} | X: ${pct(r.px)} | 2: ${pct(r.p2)}\nBTTS: ${pct(r.btts)} | Over 2,5: ${pct(r.over)} | Under 2,5: ${pct(r.under)}\nDouble chance ${r.double.name}: ${pct(r.double.p)}\nScores fréquents du modèle : ${r.scores.map(s=>`${s.i}-${s.j} (${pct(s.p)})`).join(' ; ')}\n${data.method||'Modèle Poisson indicatif'}. Une tendance n'est pas un pari validé.`;
+      const base=model(data.a,data.b),mixed=hybridPrediction(base,data.odds,data.sample);
+      return `Foot-stats — ${data.league}\n${data.home} - ${data.away}\nButs : ${plain(data.a)} / ${plain(data.b)}\nCompos : ${data.lineupStatus||'unknown'} · impact manuel ${data.impactHome??0}% / ${data.impactAway??0}%\n1X2 ${mixed.used?'combiné Poisson + cotes':'Poisson seul'} : 1 ${pct(r.p1)} | X ${pct(r.px)} | 2 ${pct(r.p2)}\nPoisson 1X2 seul : ${pct(base.p1)} / ${pct(base.px)} / ${pct(base.p2)}\nBTTS Poisson : ${pct(r.btts)} | Over 2,5 : ${pct(r.over)} | Under 2,5 : ${pct(r.under)}\nDouble chance ${r.double.name} : ${pct(r.double.p)}\nScores Poisson : ${r.scores.map(x=>`${x.i}-${x.j} (${pct(x.p)})`).join(' ; ')}\n${data.method||'Modèle indicatif'}. Probabilités expérimentales, pas de pari validé.`;
     }
     function render(data,opts={}){
-      const r=model(data.a,data.b);lastAnalysis={data,r};
+      const poissonOnly=model(data.a,data.b);
+      const mixed=hybridPrediction(poissonOnly,data.odds,data.sample);
+      const r=mixed.result;lastAnalysis={data,r};
       $('results').classList.add('show');
       $('fixture').textContent=`${data.home} – ${data.away}`;
       const compLabels={unknown:'compos non vérifiées',probable:'compos probables déclarées',official:'compos officielles déclarées'};
-      $('fixture-subtitle').textContent=`${data.league} · Buts modélisés : ${plain(data.a)} domicile / ${plain(data.b)} extérieur · ${compLabels[data.lineupStatus]||'Compos non vérifiées'} · Correction déclarée : ${data.impactHome??0}% / ${data.impactAway??0}% · ${data.method||'Données manuelles'}`;
+      $('fixture-subtitle').textContent=`${data.league} · Buts modélisés : ${plain(data.a)} domicile / ${plain(data.b)} extérieur · ${mixed.used?'1X2 combiné':'1X2 Poisson seul'} · ${compLabels[data.lineupStatus]||'Compos non vérifiées'} · Correction déclarée : ${data.impactHome??0}% / ${data.impactAway??0}% · ${data.method||'Données manuelles'}`;
       for(const [id,k] of [['p1','p1'],['px','px'],['p2','p2']])$(id).textContent=pct(r[k]);
       const winner=[['cell1',r.p1],['cellx',r.px],['cell2',r.p2]].sort((x,y)=>y[1]-x[1])[0][0];
       for(const id of ['cell1','cellx','cell2'])$(id).classList.toggle('best',id===winner);
@@ -371,11 +393,17 @@
       for(const s of r.scores){const pill=document.createElement('div');pill.className='scorepill';
         const score=document.createTextNode(`${s.i} – ${s.j} `),tail=document.createElement('span');tail.textContent=pct(s.p);pill.append(score,tail);$('scores').append(pill)}
       const best=[['1',r.p1],['X',r.px],['2',r.p2]].sort((a,b)=>b[1]-a[1]);
-      $('trend-title').textContent=`Tendance 1X2 : ${best[0][0]} (${pct(best[0][1])})`;
+      $('trend-title').textContent=`Tendance 1X2 ${mixed.used?'combinée':'Poisson'} : ${best[0][0]} (${pct(best[0][1])})`;
       const gap=best[0][1]-best[1][1];
       const st=window.currentAutoMatch&&fixtureKey(window.currentAutoMatch)===fixtureKey({date:window.currentAutoMatch.date,team1:data.home,team2:data.away})?historicalStats(window.currentAutoMatch):null;
       const limited=window.currentAutoMatch?modelCaution(st,currentLagDays===null||currentLagDays>12):'Analyse manuelle : aucun contrôle de fiabilité automatique.';
-      $('trend-text').textContent=(gap<0.08?'Tendance 1X2 serrée. ':'')+limited+' Une tendance n’est pas un pari validé.';
+      const rawBest=[['1',poissonOnly.p1],['X',poissonOnly.px],['2',poissonOnly.p2]].sort((a,b)=>b[1]-a[1])[0];
+      const reversed=mixed.used&&rawBest[0]!==best[0][0];
+      $('trend-text').textContent=(gap<0.08?'Tendance 1X2 serrée. ':'')+(reversed?'⚠ Le favori change après prise en compte des cotes. ':'')+limited+' Une tendance n’est pas un pari validé.';
+      const note=$('hybrid-info');
+      note.textContent=mixed.used?
+        `Prévision expérimentale : ${pct(1-mixed.weight)} Poisson ${data.sample?'(forme et adversaires)':'(buts saisis manuellement)'} + ${pct(mixed.weight)} marché sans marge. Poisson seul : 1 ${pct(poissonOnly.p1)} · X ${pct(poissonOnly.px)} · 2 ${pct(poissonOnly.p2)}. Marge totale saisie : ${pct(mixed.margin)}. Les absences ne jouent que si tu renseignes les impacts ; les scores, BTTS et Over/Under restent issus de Poisson. Aucun avantage prouvé.`:
+        `Poisson seul : 1 ${pct(poissonOnly.p1)} · X ${pct(poissonOnly.px)} · 2 ${pct(poissonOnly.p2)}. ${mixed.reason||''}. Les blessures ne sont pas synchronisées. ${data.sample?'La forme récente est intégrée à la prévision automatique.':'En saisie manuelle, les buts attendus ne sont pas automatiquement corrigés par la forme.'}`;
       // Retirer la marge uniquement si les 3 cotes viennent d'un même marché.
       const marketBox=$('market-comparison'), marketLines=$('market-breakdown'),marketWarning=$('market-warning');
       const fullOdds=['p1','px','p2'].every(k=>data.odds[k]!==undefined);
@@ -383,14 +411,14 @@
       marketLines.replaceChildren();
       if(fullOdds){
         const implied=['p1','px','p2'].map(k=>1/data.odds[k]),sum=implied.reduce((a,b)=>a+b,0);
-        const market=implied.map(v=>v/sum),our=[r.p1,r.px,r.p2];
+        const market=implied.map(v=>v/sum),our=[poissonOnly.p1,poissonOnly.px,poissonOnly.p2];
         const table=document.createElement('table');table.className='mc-table';
         const head=table.createTHead().insertRow();
-        for(const h of ['Issue','Modèle','Marché sans marge','Écart']){const th=document.createElement('th');th.textContent=h;head.append(th);}
+        for(const h of ['Issue','Poisson','Marché','Combiné']){const th=document.createElement('th');th.textContent=h;head.append(th);}
         const body=table.createTBody();
         ['1','X','2'].forEach((label,i)=>{
-          const row=body.insertRow(),gap=(our[i]-market[i])*100;
-          for(const v of [label,pct(our[i]),pct(market[i]),(gap>=0?'+':'')+plain(gap,1)+' pts']){
+          const row=body.insertRow();
+          for(const v of [label,pct(our[i]),pct(market[i]),mixed.used?pct([r.p1,r.px,r.p2][i]):'—']){
             const td=row.insertCell();td.textContent=v;
           }
         });
@@ -400,7 +428,7 @@
         const contradictory=imax(our)!==imax(market);
         const maxDelta=Math.max(...our.map((v,i)=>Math.abs(v-market[i])));
         marketWarning.textContent=`Marge implicite totale : ${plain(margin,1)} %. `+
-          (contradictory||maxDelta>=.12?'⚠ Forte divergence ou favori différent : vérifier les dernières informations d’effectif, les compositions probables et la source des cotes. Aucun pari validé.':
+          (!mixed.used?'⚠ Aucune combinaison appliquée : cotes incohérentes, vérifier leur origine. ':contradictory||maxDelta>=.12?'⚠ Forte divergence ou favori différent : vérifier les dernières informations d’effectif, les compositions probables et la source des cotes. Aucun pari validé.':
             'Le marché et le modèle ne sont pas fortement opposés, mais cela ne valide aucun pari.')+
           ' Les données des blessures ne sont pas récupérées automatiquement.';
       }
@@ -411,7 +439,7 @@
         const ev=r[key]*data.odds[key]-1;
         const row=document.createElement('div');row.className='oddsrow';
         const left=document.createElement('div');const bold=document.createElement('b');bold.textContent=label;left.append(bold);
-        const small=document.createElement('div');small.className='small';small.textContent=`Cote saisie ${plain(data.odds[key])} · cote juste modèle ${plain(1/r[key])}`;left.append(small);
+        const small=document.createElement('div');small.className='small';small.textContent=`Cote saisie ${plain(data.odds[key])} · cote juste ${mixed.used?'combinée':'Poisson'} ${plain(1/r[key])}`;left.append(small);
         const right=document.createElement('div');right.className='quality';right.textContent='EV théorique '+(ev>0?'+':'')+pct(ev);
         row.append(left,right);$('odds-lines').append(row);
       }
@@ -419,7 +447,7 @@
       if(Object.keys(data.odds).length){
         const info=document.createElement('div');info.className='value-box';
         if(['p1','px','p2'].every(k=>data.odds[k]!==undefined)){
-          const prices=[data.odds.p1,data.odds.px,data.odds.p2],p=[r.p1,r.px,r.p2];
+          const prices=[data.odds.p1,data.odds.px,data.odds.p2],p=[poissonOnly.p1,poissonOnly.px,poissonOnly.p2];
           const imp=prices.map(x=>1/x),norm=imp.reduce((a,b)=>a+b,0),stNow=window.currentAutoMatch?historicalStats(window.currentAutoMatch):null;
           const possibilities=['1','X','2'].map((name,i)=>{
             const adj=0.5*p[i]+0.5*(imp[i]/norm);
@@ -1054,13 +1082,25 @@
     function vfBacktest(matches,edge){
       const result=Object.fromEntries(VF_MARKETS.map(s=>[s,{old:vfEmpty(),careful:vfEmpty()}]));
       const brackets=VF_BRACKETS.map(x=>({...x,metric:vfEmpty()}));
-      let tested=0,unquoted=0;
+      let tested=0,unquoted=0;const comparison={n:0,poisson:0,market:0,hybrid:0};
       // Chronological model: historicalStats uses strictly earlier dates.
       const ordered=[...matches].filter(resultOf).sort((a,b)=>a.date.localeCompare(b.date));
       for(const m of ordered){
         const st=historicalStats(m,ordered);if(!st)continue;
         tested++;
         const p=model(st.a,st.b);
+        if(m.prices.one?.values?.length===3){
+          const odds=Object.fromEntries(['p1','px','p2'].map((k,i)=>[k,m.prices.one.values[i]]));
+          const mix=hybridPrediction(p,odds,st);
+          if(mix.used){
+            const obs=[Number(m.score[0]>m.score[1]),Number(m.score[0]===m.score[1]),Number(m.score[0]<m.score[1])];
+            const metrics=arr=>arr.reduce((sum,x,i)=>sum+(x-obs[i])**2,0)/3;
+            comparison.n++;
+            comparison.poisson+=metrics([p.p1,p.px,p.p2]);
+            comparison.market+=metrics(mix.market);
+            comparison.hybrid+=metrics([mix.result.p1,mix.result.px,mix.result.p2]);
+          }
+        }
         for(const market of VF_MARKETS){
           const g=vfMarket(m,p,market);
           if(!g){if(market==='1X2')unquoted++;continue;}
@@ -1076,7 +1116,7 @@
           if(picked.prudBet)vfAdd(dest.careful,picked.prudBet);
         }
       }
-      return {result,brackets,tested,unquoted};
+      return {result,brackets,tested,unquoted,comparison};
     }
     const vfFmtMoney=x=>(x>=0?'+':'')+x.toFixed(2).replace('.',',')+' €';
     const vfFmtRoi=s=>s.bets?(100*s.pnl/s.bets).toFixed(1).replace('.',',')+' %':'—';
@@ -1100,9 +1140,9 @@
       const edge=Number($('roi-edge').value),data=matches.map(m=>vfBacktest(m,edge));
       const byMarket=Object.fromEntries(VF_MARKETS.map(s=>[s,{old:vfEmpty(),careful:vfEmpty()}]));
       const buckets=VF_BRACKETS.map(x=>({...x,metric:vfEmpty()}));
-      let tested=0,missing=0;
+      let tested=0,missing=0;const compare={n:0,poisson:0,market:0,hybrid:0};
       for(const d of data){
-        tested+=d.tested;missing+=d.unquoted;
+        tested+=d.tested;missing+=d.unquoted;for(const k of Object.keys(compare))compare[k]+=d.comparison[k];
         for(const name of VF_MARKETS){vfSummarizeStats(byMarket[name].old,d.result[name].old);vfSummarizeStats(byMarket[name].careful,d.result[name].careful);}
         for(let i=0;i<buckets.length;i++)vfSummarizeStats(buckets[i].metric,d.brackets[i].metric);
       }
@@ -1124,7 +1164,8 @@
       message.className='auto-status value-status warn';
       message.textContent=`${tested} matchs modélisables · ${missing} sans cotes 1X2. 1X2 : ${old.bets} sélections avec la méthode actuelle et ${pr.bets} avec le filtre prudent. `+
         (pr.bets<100?'⚠ Moins de 100 sélections prudentes : impossible d’en tirer un verdict. ':'')+
-        'Comparaison exploratoire seulement : ces saisons étaient déjà connues lors du choix du filtre. Aucun avantage futur démontré.';
+        (compare.n?`Comparaison 1X2 Brier (${compare.n} matchs ayant 3 cotes) : Poisson ${metricFmt(compare.poisson/compare.n)}, marché ${metricFmt(compare.market/compare.n)}, combiné ${metricFmt(compare.hybrid/compare.n)}. Plus petit = mieux. `:'Pas de match avec 3 cotes pour tester la combinaison. ')+
+        'Comparaison exploratoire seulement : cotes parfois de clôture, paramètres non validés sur une saison jamais consultée. Aucun avantage futur démontré.';
     }
 
     // Bilan 3 saisons : tests walk-forward par saison, sans données d'après-match.
