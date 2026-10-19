@@ -1162,6 +1162,11 @@
         'as monaco':'monaco','angers sco':'angers','rc strasbourg alsace':'strasbourg',
         'real madrid cf':'real madrid','fc barcelona':'barcelona','atletico madrid':'atletico de madrid'
       };
+      // Harmonisation Bundesliga : les archives historiques et le calendrier actif
+      // utilisent parfois des variantes comme "Borussia M'gladbach" ou "TSG 1899 Hoffenheim".
+      // Une correspondance d'identité d'équipe est nécessaire avant d'afficher 0 H2H.
+      if (/(?:^| )(?:monchengladbach|moenchengladbach|m gladbach|gladbach)(?: |$)/.test(raw)) return 'monchengladbach';
+      if (/(?:^| )hoffenheim(?: |$)/.test(raw)) return 'hoffenheim';
       return alias[raw] || raw.replace(/^(?:fc|cf) /,'').replace(/ (?:fc|cf)$/,'');
     };
     const h2hSamePair=(m,fx)=>{
