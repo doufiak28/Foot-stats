@@ -240,7 +240,7 @@
         <p class="value-ledger"><strong>À retenir :</strong> une amélioration de ROI historique ne prouve pas que le filtre fonctionnera à l'avenir. Les critères ont été définis <em>après</em> l'inspection de plusieurs saisons ; il faut donc les considérer comme une hypothèse et les évaluer sans les modifier sur des matchs futurs. Les cotes de clôture ne correspondent pas nécessairement à des cotes disponibles au moment de parier. Aucun pari conseillé automatiquement.</p>
       </section>
       <section class="card day-card" aria-labelledby="h2h-h" id="face-a-face">
-        <h3 id="h2h-h">7. Face-à-face (H2H) — test de fiabilité</h3>
+        <h3 id="h2h-h">7. Face-à-face (H2H) — test de fiabilité <span style="font-size:12px;color:#587195;font-weight:600;white-space:nowrap">Correction v2</span></h3>
         <p class="small">Confrontations jouées <strong>avant</strong> le match dans le championnat sélectionné, sur les archives disponibles. Les matchs de coupe et les compétitions européennes ne sont pas inclus. Les effectifs changent d'une saison à l'autre.</p>
         <div class="actions" style="margin-bottom:13px">
           <button type="button" id="h2h-load" class="action secondary">Charger les H2H des 3 saisons</button>
@@ -249,7 +249,7 @@
         <div class="auto-status" id="h2h-status" role="status">Sélectionne un match en rubrique 1, puis charge l'historique si besoin. Les prévisions classiques et les paris restent inchangés.</div>
         <div id="h2h-pair" class="value-box"><strong>Confrontations avant le match</strong><p class="small" id="h2h-pair-sub">Aucun match sélectionné pour le moment.</p>
           <div class="three" id="h2h-figures" style="margin:12px 0"><div class="mini-tile"><strong>—</strong><small>Nuls</small></div><div class="mini-tile"><strong>—</strong><small>BTTS</small></div><div class="mini-tile"><strong>—</strong><small>Over 2,5</small></div></div>
-          <div id="h2h-probs" class="small"></div><div id="h2h-matches" class="small" style="margin-top:11px"></div>
+          <div id="h2h-probs" class="small"></div><div id="h2h-diagnostic" class="small" style="margin-top:10px;color:#576579"></div><div id="h2h-matches" class="small" style="margin-top:11px"></div>
         </div>
         <h4 style="margin:18px 0 9px">Test chronologique : H2H ajoute-t-il vraiment quelque chose ?</h4>
         <p class="small">Comparaison sur les <strong>mêmes matchs</strong> disposant d'au moins deux confrontations précédentes. Le coefficient H2H est volontairement faible (maximum 10 % avant lissage). Les deux modèles utilisent uniquement les résultats antérieurs à la date du match.</p>
@@ -1165,7 +1165,7 @@
       // Harmonisation Bundesliga : les archives historiques et le calendrier actif
       // utilisent parfois des variantes comme "Borussia M'gladbach" ou "TSG 1899 Hoffenheim".
       // Une correspondance d'identité d'équipe est nécessaire avant d'afficher 0 H2H.
-      if (/(?:^| )(?:monchengladbach|moenchengladbach|m gladbach|gladbach)(?: |$)/.test(raw)) return 'monchengladbach';
+      if (/(?:^| )(?:monchengladbach|moenchengladbach|m gladbach|mgladbach|gladbach)(?: |$)/.test(raw)) return 'monchengladbach';
       if (/(?:^| )hoffenheim(?: |$)/.test(raw)) return 'hoffenheim';
       return alias[raw] || raw.replace(/^(?:fc|cf) /,'').replace(/ (?:fc|cf)$/,'');
     };
@@ -1218,17 +1218,28 @@
     function h2hStatus(text,warn=false){const el=$('h2h-status');el.textContent=text;el.className='auto-status'+(warn?' warn':' ok')}
     function h2hCurrent(){
       const fx=window.currentAutoMatch;
-      const short=$('h2h-pair-sub'),stats=$('h2h-figures'),probs=$('h2h-probs'),matches=$('h2h-matches');
-      if(!fx){short.textContent='Choisis une rencontre du calendrier en rubrique 1.';probs.textContent='';matches.textContent='';return;}
+      const short=$('h2h-pair-sub'),stats=$('h2h-figures'),probs=$('h2h-probs'),matches=$('h2h-matches'),diag=$('h2h-diagnostic');
+      if(!fx){short.textContent='Choisis une rencontre du calendrier en rubrique 1.';probs.textContent='';matches.textContent='';diag.textContent='';return;}
       const historical=h2hHistorical.get($('league').value);
-      const prior=h2hPriorMatches(fx,h2hPool($('league').value));
+      const wholeHistory=h2hPool($('league').value);
+      const prior=h2hPriorMatches(fx,wholeHistory);
       const h=h2hObservations(fx,prior);
+      // Diagnostic explicite : le match sélectionné peut utiliser une autre écriture
+      // des noms que le CSV actuel. On ne présente pas 0 comme un fait sportif.
+      const homeKey=canonicalTeam(fx.team1),awayKey=canonicalTeam(fx.team2);
+      const older=wholeHistory.filter(m=>m.date<fx.date&&resultOf(m));
+      const involved=(key)=>older.filter(m=>canonicalTeam(m.team1)===key||canonicalTeam(m.team2)===key);
+      const homeArchive=involved(homeKey),awayArchive=involved(awayKey);
+      const sample=(arr,key)=>[...new Set(arr.map(m=>canonicalTeam(m.team1)===key?m.team1:m.team2))].slice(0,3).join(' / ')||'aucun';
+      diag.textContent=historical?
+        ('Contrôle archives : '+historical.size+' saison(s) disponibles ; '+fx.team1+' : '+homeArchive.length+' matchs reconnus ('+sample(homeArchive,homeKey)+') ; '+fx.team2+' : '+awayArchive.length+' matchs reconnus ('+sample(awayArchive,awayKey)+').'):
+        'Archives des saisons précédentes non chargées. Appuie sur « Charger les H2H des 3 saisons ».';
       short.textContent=fx.team1+' – '+fx.team2+' · '+asDay(fx.date)+' · '+h.n+' confrontation(s) connue(s) dans les 4 dernières années'+(historical?' (archives chargées)':' (saison en cours uniquement si disponible)')+'.';
       const values=[['Nuls',h.wx],['BTTS',h.btts],['Over 2,5',h.over]];
       stats.replaceChildren();
       for(const [label,v] of values){const tile=document.createElement('div');tile.className='mini-tile';const b=document.createElement('strong');b.textContent=h.n?pct(v/h.n):'—';const small=document.createElement('small');small.textContent=label+' · '+v+'/'+h.n;tile.append(b,small);stats.append(tile);}
       matches.replaceChildren();
-      if(!h.n){matches.textContent='Aucune confrontation vérifiable avant cette date dans les données chargées. Aucun H2H inventé.';probs.textContent='Les prévisions Poisson et le filtre Value restent inchangés.';return;}
+      if(!h.n){matches.textContent=historical?'Aucun H2H rapproché : vérifier les noms d’équipes et la couverture des archives dans « Contrôle archives » ci-dessus. Ce zéro n’est PAS une preuve qu’elles ne se sont jamais affrontées.':'Aucun H2H chargé. Appuie sur « Charger les H2H des 3 saisons ».';probs.textContent='Les prévisions Poisson et le filtre Value restent inchangés.';return;}
       const l=document.createElement('div');l.textContent='Historique (plus récent en premier) :';l.style.fontWeight='700';matches.append(l);
       for(const m of h.shown){const p=document.createElement('div');p.style.padding='3px 0';p.textContent=asDay(m.date)+' · '+m.home+' '+m.score+' '+m.away;matches.append(p)}
       const st=historicalStats(fx);
