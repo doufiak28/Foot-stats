@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#ffffff">
   <meta name="description" content="Foot-stats : analyse football 1X2, nuls, BTTS, Over/Under 2,5 avec un modèle de Poisson. Calendriers et résultats depuis des données publiques actualisables en ligne, sans clé API.">
-  <title>Foot-stats — Bilan, cotes historiques et ROI</title>
+  <title>Foot-stats — Forme récente, absences et H2H</title>
   <style>
     :root{color-scheme:light;--ink:#17223b;--muted:#68758b;--line:#e3e9f0;--bg:#f4f7fb;--blue:#255ad8;--light:#eaf0ff;--green:#117853;--pale:#e9f8f1;--amber:#8d550d;--amberbg:#fff7e8;--white:#fff}
     *{box-sizing:border-box}
@@ -96,8 +96,30 @@
     .roi-note{border-left:3px solid #e2b85b;background:#fffaf0;border-radius:0 10px 10px 0;padding:11px 13px;color:#76501d;font-size:12px;line-height:1.5;margin-top:13px}
     .roi-status{white-space:pre-line}
     @media(max-width:360px){.roi-controls{grid-template-columns:1fr}}
+
+    /* Diagnostic value — compact pour écran de téléphone */
+    .value-box{background:#f6f9ff;border:1px solid #dce6fa;border-radius:13px;padding:13px;margin:13px 0}
+    .value-compare{min-width:665px;width:100%;border-collapse:collapse;font-size:12px}
+    .value-compare th,.value-compare td{padding:10px 9px;border-bottom:1px solid #e5eaf2;text-align:right;font-variant-numeric:tabular-nums}
+    .value-compare th{background:#edf2fa;color:#41536d}
+    .value-compare td:first-child,.value-compare th:first-child{text-align:left;min-width:112px}
+    .value-compare tr:last-child td{border:0}
+    .mini-tile{background:#f7f9fc;border:1px solid var(--line);border-radius:11px;padding:11px}
+    .mini-tile strong{font-size:17px;display:block}
+    .mini-tile small{color:#65758b}
+    .value-nodata{font-size:13px;color:#79521e}
+    .value-ledger{background:#fff8eb;border-left:3px solid #e9bb5d;padding:11px 13px;border-radius:0 10px 10px 0;font-size:12px;margin-top:14px}
+    .value-chip{display:inline-block;font-size:11px;padding:4px 9px;border-radius:10px;background:#eef3fb;color:#35547b;font-weight:700;margin:4px 4px 0 0}
+    .value-good{color:#166445;font-weight:700}
+    .value-bad{color:#aa3636;font-weight:700}
+    .value-status{white-space:pre-line}
     .audit-note{font-size:12px;color:#68758b;margin-top:9px}
     .quality.low{color:#966018}
+    .context-panel{border:1px solid #dfe8f5;background:#f8faff;border-radius:12px;padding:13px;margin:14px 0 0}
+    .context-panel h4{margin:0 0 8px;font-size:14px;color:#223b6c}
+    .context-line{font-size:12px;color:#3c5270;margin:5px 0;line-height:1.55}
+    .h2h-item{font-size:12px;border-top:1px solid #e3e9f5;padding:8px 0;color:#3c5270}
+    .h2h-item:last-child{padding-bottom:0}
     .lineup-card{grid-column:1/-1}
     .impact-note{margin-top:10px;color:#73511c;background:#fff9ee;border:1px solid #eddfbd;border-radius:10px;padding:10px 12px;font-size:12px}
     .results{display:none}
@@ -144,7 +166,7 @@
   <header><div class="wrap"><div class="brand"><div class="logo" aria-hidden="true">⚽</div><div><h1>Foot-stats</h1><p>Analyse football · résultats et calendrier en ligne</p></div></div></div></header>
   <main class="wrap">
     <div class="toprow"><h2>Analyses football par journée</h2><span class="tag" id="mode-badge">● Chargement…</span></div>
-    <div class="notice"><strong>Mode automatique gratuit :</strong> à chaque ouverture, Foot-stats recharge les résultats et calendriers publics (Open Matchday, puis OpenFootball en secours). Les mises à jour dépendent de ces fournisseurs et peuvent être <strong>en retard ou incomplètes</strong>. Les buts attendus sont <strong>estimés à partir des scores</strong>, pas des xG mesurés. La fiabilité est contrôlée par un test chronologique sur les matchs terminés, mais un bon historique ne garantit aucun résultat futur. Ni cotes en direct ni compositions récupérées automatiquement ; les corrections de composition sont des hypothèses manuelles.</div>
+    <div class="notice"><strong>Mode automatique gratuit :</strong> à chaque ouverture, Foot-stats recharge les résultats et calendriers publics (Open Matchday, puis OpenFootball en secours). Les mises à jour dépendent de ces fournisseurs et peuvent être <strong>en retard ou incomplètes</strong>. Les buts attendus sont <strong>estimés à partir des scores</strong>, pas des xG mesurés. La forme récente est calculée uniquement sur les 5 matchs antérieurs et pondère modérément les buts prévus ; les face-à-face sont consultables sans modifier la prévision (leur valeur prédictive n’est pas établie). La fiabilité se vérifie par test chronologique ; un bon historique ne garantit aucun résultat futur. Ni cotes en direct, ni compositions/blessures récupérées automatiquement : les impacts des absences sont des hypothèses manuelles.</div>
     <div class="layout">
       <section class="card" aria-labelledby="match-h"><h3 id="match-h">1. Choisir le match</h3>
         <div class="field"><label for="league">Championnat</label><select id="league">
@@ -156,23 +178,31 @@
         <div class="two"><div class="field"><label for="home">Équipe à domicile</label><input id="home" autocomplete="off" placeholder="Ex. Marseille" maxlength="50"></div><div class="field"><label for="away">Équipe à l'extérieur</label><input id="away" autocomplete="off" placeholder="Ex. Lille" maxlength="50"></div></div>
         <div class="soft"><div class="subheading">Buts prévus par le modèle (pas des xG observés)</div>
           <div class="two"><div class="field" style="margin-bottom:0"><label for="xgh">Domicile</label><input id="xgh" type="number" min="0.1" max="5" step="0.05" inputmode="decimal" placeholder="Ex. 1,40"></div><div class="field" style="margin-bottom:0"><label for="xga">Extérieur</label><input id="xga" type="number" min="0.1" max="5" step="0.05" inputmode="decimal" placeholder="Ex. 1,10"></div></div>
-          <p class="hint">Ces champs se remplissent si des résultats sont disponibles. Tu peux les modifier manuellement. Modèle simplifié : nuls et BTTS ne sont pas des certitudes.</p>
+          <p class="hint">Ces champs se remplissent si des résultats sont disponibles, après calcul de la forme récente. Tu peux les modifier manuellement. Ce sont des buts estimés à partir des scores, pas des xG mesurés.</p>
+        </div>
+        <div class="context-panel" aria-labelledby="context-title">
+          <h4 id="context-title">📈 Forme récente &amp; face-à-face</h4>
+          <div class="context-line" id="recent-form" role="status">Choisis un match du calendrier pour afficher la forme des 5 dernières rencontres.</div>
+          <h4 style="margin-top:13px">🤝 Confrontations passées (H2H)</h4>
+          <div class="context-line" id="h2h-status" role="status">Les anciennes rencontres seront recherchées quand tu choisis un match.</div>
+          <div id="h2h-list"></div>
+          <p class="hint">Uniquement les rencontres antérieures au match choisi. Les H2H ne changent pas les probabilités : ils sont trop peu nombreux pour justifier une pondération fiable. Disponibilité variable selon les archives.</p>
         </div>
       </section>
       <section class="card day-card" aria-labelledby="day-h"><h3 id="day-h">2. Toute la journée en un seul tableau</h3>
         <div class="day-toolbar"><div class="field"><label for="day-select">Choisir la journée</label><select id="day-select" disabled><option>Chargement…</option></select></div><button class="action secondary" type="button" id="refresh-day">↻ Recalculer le tableau</button></div>
         <div id="day-status" class="small" role="status">Les tendances utilisent seulement les résultats publiés avant chaque match.</div>
-        <p class="hint">Glisse le tableau vers la gauche pour voir toutes les colonnes. Appuie sur « Voir » pour modifier une analyse. Les compositions ne sont pas appliquées automatiquement à toute la journée.</p>
+        <p class="hint">Glisse le tableau vers la gauche pour voir toutes les colonnes. Appuie sur « Voir » pour modifier une analyse. La forme récente est incluse automatiquement dans les probabilités ; absences et face-à-face ne sont pas appliqués à toute la journée.</p>
         <div class="table-scroll"><table class="day-table"><thead><tr><th>Match</th><th>1</th><th>X</th><th>2</th><th>BTTS</th><th>+2,5</th><th>Échantillon</th><th>Détail</th></tr></thead><tbody id="day-body"><tr><td colspan="8">Chargement…</td></tr></tbody></table></div>
-        <p class="footnote">« Échantillon » décrit la base de résultats, pas un taux de réussite. Les chiffres sont des tendances Poisson estimées à partir des scores : pas de validation de pari, ni de correction automatique pour les absents.</p>
+        <p class="footnote">« Échantillon » décrit la base de résultats, pas un taux de réussite. Le modèle Poisson inclut une légère correction de forme récente, toujours calculée avec des résultats antérieurs. Aucune absence n’est devinée automatiquement.</p>
       </section>
       <section class="card day-card" aria-labelledby="audit-h"><h3 id="audit-h">3. Vérifier la fiabilité actuelle</h3>
         <div class="audit-panel" id="audit-result" role="status">Calcul du bilan des prévisions passées…</div>
-        <p class="audit-note">Test chronologique : chaque match est prévu à partir des <strong>résultats de dates antérieures uniquement</strong>. On compare l'erreur de Foot-stats à celle d'un modèle de référence utilisant seulement les fréquences de victoires, nuls et défaites de la ligue. « Brier » : plus petit = mieux. Avant 50 matchs testables, aucun verdict de fiabilité n'est donné. Ce contrôle n'utilise ni cotes ni xG.</p>
+        <p class="audit-note">Test chronologique : chaque match est prévu à partir des <strong>résultats de dates antérieures uniquement</strong>. Compare aussi le modèle avec et sans correction de forme récente. On compare l'erreur de Foot-stats à celle d'un modèle de référence utilisant seulement les fréquences de victoires, nuls et défaites de la ligue. « Brier » : plus petit = mieux. Avant 50 matchs testables, aucun verdict de fiabilité n'est donné. Ce contrôle n'utilise ni cotes ni xG.</p>
       </section>
       <section class="card day-card" aria-labelledby="archive-h">
         <h3 id="archive-h">4. Bilan historique sur 3 saisons</h3>
-        <p class="small">Saisons terminées 2023/24, 2024/25 et 2025/26. Chaque match est simulé <strong>avant son coup d’envoi</strong> à partir des résultats antérieurs de <strong>la même saison</strong>. Une saison manquante est signalée, jamais inventée. Sans compositions, xG mesurés ni cotes historiques.</p>
+        <p class="small">Saisons terminées 2023/24, 2024/25 et 2025/26. Chaque match est simulé <strong>avant son coup d’envoi</strong> à partir des résultats antérieurs de <strong>la même saison</strong>. Une saison manquante est signalée, jamais inventée. La correction de forme récente est incluse dans ce test. Les absences saisies manuellement et les face-à-face ne sont PAS inclus dans les tests. Sans xG mesurés ni cotes historiques.</p>
         <div class="archive-actions">
           <button type="button" class="action secondary" id="archive-one">Tester le championnat sélectionné</button>
           <button type="button" class="action" id="archive-all">Comparer les 10 championnats</button>
@@ -184,7 +214,7 @@
       </section>
       <section class="card day-card" aria-labelledby="roi-h">
         <h3 id="roi-h">5. Cotes historiques : réussite et ROI simulé</h3>
-        <p class="small">Tests de paris fictifs sur les <strong>vraies cotes publiées</strong> dans des CSV de Football-Data.co.uk. Le modèle ne voit que les résultats <strong>antérieurs</strong> à chaque match. Mise fixe : <strong>1 €</strong>. Aucun profit réel ni avantage garanti.</p>
+        <p class="small">Tests de paris fictifs sur les <strong>vraies cotes publiées</strong> dans des CSV de Football-Data.co.uk. Le modèle, y compris la forme récente, ne voit que les résultats <strong>antérieurs</strong> à chaque match. Mise fixe : <strong>1 €</strong>. Aucun profit réel ni avantage garanti.</p>
         <div class="roi-controls">
           <div class="field"><label for="roi-league">Championnat</label><select id="roi-league"><option>Ligue 1</option><option>Ligue 2</option><option>Serie A</option><option>Serie B</option><option>Bundesliga</option><option>Bundesliga 2</option><option>La Liga</option><option>La Liga 2</option><option>Premier League</option><option>Championship</option></select></div>
           <div class="field"><label for="roi-season">Saison terminée</label><select id="roi-season"><option value="2526">2025/26</option><option value="2425">2024/25</option><option value="2324">2023/24</option></select></div>
@@ -202,7 +232,27 @@
         <div class="roi-note"><strong>Lecture prudente :</strong> les cotes de clôture sont utilisées lorsqu’elles existent, sinon d’autres cotes du même fichier (signalées). On ne peut pas garantir leur disponibilité au moment où la prévision aurait été prise. Les frais, limites, variations de prix et autres contraintes de mise ne sont pas modélisés. Les résultats avec moins de 100 paris restent particulièrement fragiles. Les seuils changés après avoir vu les résultats ne constituent pas une validation indépendante. Si une cote manque, <strong>aucun gain n’est inventé</strong>. Les données sources demeurent sur le site du fournisseur.</div>
         <p class="small">Source des cotes : <a href="https://www.football-data.co.uk/downloadm.php" target="_blank" rel="noopener">Football-Data.co.uk</a>. Un fichier CSV est nécessaire pour calculer un vrai bilan ROI. Les cotes utilisées ne sont pas des xG.</p>
       </section>
-      <section class="card lineup-card" aria-labelledby="lineup-h"><h3 id="lineup-h">6. Compositions et absents <span class="small">(facultatif)</span></h3>
+
+      <section class="card day-card" aria-labelledby="value-h" id="value-filter">
+        <h3 id="value-h">6. Détecter les faux « value bets »</h3>
+        <p class="small">Comparaison des mêmes matchs et des <strong>mêmes cotes historiques</strong> avec deux sélections : l'ancien filtre et un filtre prudent <strong>expérimental</strong>. Les historiques déjà consultés ne sont pas une validation indépendante.</p>
+        <div class="value-box">
+          <div class="subheading">Règles du filtre prudent (non optimisées sur ces résultats)</div>
+          <span class="value-chip">Cote 1,50–5,00</span>
+          <span class="value-chip">EV ajustée ≥ +12 %</span>
+          <span class="value-chip">Écart modèle / marché ≥ 7 points</span>
+          <span class="value-chip">≥ 90 matchs en ligue</span>
+          <span class="value-chip">≥ 5 matchs domicile et extérieur</span>
+          <p class="small">La probabilité « ajustée » mélange à parts égales Poisson et la probabilité implicite des cotes <strong>sans marge</strong>. L'EV ajustée est calculée à la cote publiée. Le filtre refuse les matchs peu documentés et les signaux trop incertains, mais peut aussi écarter des paris gagnants.</p>
+        </div>
+        <div id="value-status" class="auto-status value-status" role="status">Importe un CSV dans la rubrique 5 : les comparaisons apparaîtront automatiquement ici.</div>
+        <div class="table-scroll"><table class="value-compare"><thead><tr><th>Marché / méthode</th><th>Paris</th><th>Réussite</th><th>Solde 1 €</th><th>ROI</th><th>Brier sélection</th></tr></thead><tbody id="value-results"><tr><td colspan="6">Aucun fichier de cotes importé.</td></tr></tbody></table></div>
+        <h4 style="margin:22px 0 10px">1X2 : où apparaissent les faux signaux ?</h4>
+        <p class="small">Répartition des <strong>sélections de l'ancien filtre</strong> par tranche de cote : lorsque le nombre de paris est faible, l'écart entre réussite attendue et réelle est instable. Glisse le tableau vers la gauche.</p>
+        <div class="table-scroll"><table class="value-compare"><thead><tr><th>Cote</th><th>Paris</th><th>Réussite</th><th>Probabilité Poisson</th><th>Marché sans marge</th><th>ROI</th></tr></thead><tbody id="value-brackets"><tr><td colspan="6">En attente de données.</td></tr></tbody></table></div>
+        <p class="value-ledger"><strong>À retenir :</strong> une amélioration de ROI historique ne prouve pas que le filtre fonctionnera à l'avenir. Les critères ont été définis <em>après</em> l'inspection de plusieurs saisons ; il faut donc les considérer comme une hypothèse et les évaluer sans les modifier sur des matchs futurs. Les cotes de clôture ne correspondent pas nécessairement à des cotes disponibles au moment de parier. Aucun pari conseillé automatiquement.</p>
+      </section>
+      <section class="card lineup-card" aria-labelledby="lineup-h"><h3 id="lineup-h">7. Compositions et absents <span class="small">(facultatif)</span></h3>
         <div class="field"><label for="lineup-status">Type d'information</label><select id="lineup-status"><option value="unknown">Compositions non vérifiées</option><option value="probable">Compositions probables vérifiées par toi</option><option value="official">Compositions officielles vérifiées par toi</option></select></div>
         <div class="two">
           <div class="field"><label for="lineup-home">Absents / changement domicile</label><input id="lineup-home" maxlength="180" placeholder="Ex. avant-centre absent"></div>
@@ -213,16 +263,16 @@
           <div class="field" style="margin-bottom:0"><label for="impact-away">Extérieur (%)</label><input id="impact-away" type="number" inputmode="numeric" min="-30" max="30" step="5" value="0"></div></div>
           <p class="hint">0 = pas d'effet, −10 = 10 % de buts attendus en moins, +10 = 10 % de buts attendus en plus. À estimer toi-même selon les joueurs, postes, remplaçants et forme.</p>
         </div>
-        <p class="impact-note">⚠ Les noms saisis ne modifient pas automatiquement les probabilités. Seuls les pourcentages ci-dessus les ajustent. Aucun titulaire, blessé ou suspendu n'est inventé ni récupéré par cette version.</p>
+        <p class="impact-note">⚠ Renseigne les absences connues AVANT le coup d’envoi. Les noms seuls ne modifient pas les probabilités : seuls les pourcentages les ajustent. Aucun joueur blessé, suspendu ou titulaire n’est inventé. Ces ajustements manuels ne sont pas validés par le backtest.</p>
       </section>
-      <section class="card" aria-labelledby="odds-h"><h3 id="odds-h">7. Cotes du bookmaker <span class="small">(facultatif)</span></h3>
+      <section class="card" aria-labelledby="odds-h"><h3 id="odds-h">8. Cotes du bookmaker <span class="small">(facultatif)</span></h3>
         <div class="three"><div class="field"><label for="odd1">1 — Domicile</label><input id="odd1" type="number" min="1.01" step="0.01" inputmode="decimal" placeholder="Ex. 2.10"></div><div class="field"><label for="oddx">X — Nul</label><input id="oddx" type="number" min="1.01" step="0.01" inputmode="decimal" placeholder="Ex. 3.30"></div><div class="field"><label for="odd2">2 — Extérieur</label><input id="odd2" type="number" min="1.01" step="0.01" inputmode="decimal" placeholder="Ex. 3.50"></div></div>
         <p class="small">Les cotes actuelles se saisissent toujours manuellement. Le bilan historique utilise séparément des archives de cotes ; aucune cote en direct.</p>
         <div class="actions"><button class="action" id="calculate" type="button">Calculer les tendances</button><button class="action ghost" id="reset" type="button">Effacer les champs</button></div>
         <p id="error" class="error" role="alert"></p>
       </section>
       <section class="card results" id="results" aria-live="polite" aria-labelledby="results-h">
-        <h3 id="results-h">8. Estimations Poisson</h3>
+        <h3 id="results-h">9. Estimations Poisson</h3>
         <h2 class="matchtitle" id="fixture"></h2><p id="fixture-subtitle" class="subtitle"></p>
         <div class="result-grid"><div id="cell1" class="result-cell"><strong id="p1">–</strong><span>1 · Domicile</span></div><div id="cellx" class="result-cell"><strong id="px">–</strong><span>X · Match nul</span></div><div id="cell2" class="result-cell"><strong id="p2">–</strong><span>2 · Extérieur</span></div></div>
         <div class="bar" role="img" aria-label="Répartition des probabilités"><div id="bar1" class="bar-home"></div><div id="barx" class="bar-draw"></div><div id="bar2" class="bar-away"></div></div>
@@ -230,16 +280,18 @@
         <div class="stats"><div class="stat"><b id="btts">–</b><span>BTTS · Les deux marquent</span></div><div class="stat"><b id="over">–</b><span>Over 2,5 buts</span></div><div class="stat"><b id="under">–</b><span>Under 2,5 buts</span></div><div class="stat"><b id="dc">–</b><span id="dc-label">Double chance</span></div></div>
         <h3>Scores les plus probables</h3><div id="scores" class="scoreline"></div>
         <div class="trend"><b id="trend-title"></b><div id="trend-text" class="small"></div></div>
-        <div id="odds-results" hidden><h3 style="margin-top:21px">Comparaison avec tes cotes</h3><div id="odds-lines"></div><p class="footnote">L’espérance théorique (« EV ») compare les cotes saisies à un modèle simplifié. Un EV positif n’est PAS une value bet validée : aucun avantage ne peut être affirmé sans contrôle sur les cotes et résultats historiques.</p></div>
+        <div id="odds-results" hidden><h3 style="margin-top:21px">Comparaison avec tes cotes</h3><p id="retro-odds-warning" class="impact-note" hidden>⚠ Match terminé : les cotes saisies après le match ne permettent pas de valider un pari pré-match. Utilise le backtest chronologique avec des cotes historiques.</p><div id="odds-lines"></div><p class="footnote">L’espérance théorique (« EV ») compare les cotes saisies à un modèle simplifié. Un EV positif n’est PAS une value bet validée : aucun avantage ne peut être affirmé sans contrôle sur les cotes et résultats historiques.</p></div>
         <div class="actions" style="margin-top:18px"><button id="save" class="action secondary" type="button">Enregistrer cette analyse</button><button id="copy" class="action ghost" type="button">Copier le résumé</button></div><p id="feedback" class="small" role="status"></p>
-        <p class="footnote">Méthode : Poisson indépendant, moyennes domicile/extérieur lissées vers la moyenne de ligue pour atténuer les petits échantillons. Les prévisions sont testées dans l’ordre chronologique. Sans vrais xG ni récupération automatique des compositions. Les impacts de compo sont manuels et non validés. Une tendance n'est pas un pari validé.</p>
+        <p class="footnote">Méthode : Poisson indépendant, moyennes domicile/extérieur lissées et légère correction de forme sur 5 matchs antérieurs (amplitude plafonnée à 10 % de buts prévus). La méthode est testée chronologiquement, pas prouvée rentable. H2H affichés à titre indicatif ; absences et compositions à vérifier manuellement, impacts non validés. Sans xG mesurés. Une tendance n'est pas un pari validé.</p>
       </section>
     </div>
     <section class="card" aria-labelledby="history-h"><div class="toprow" style="margin:0 0 13px"><h3 id="history-h" style="margin:0">Mes analyses enregistrées</h3><button id="clear-history" class="mini danger" type="button">Tout effacer</button></div><div class="history" id="history"><p class="small">Aucune analyse enregistrée pour le moment.</p></div><p class="footnote">Les analyses sont enregistrées uniquement dans le navigateur de ce téléphone. Elles ne se synchronisent pas automatiquement.</p></section>
-    <footer>Foot-stats · Site gratuit, statistiques indicatives · Sources : <a href="https://github.com/oladeeayo/open-matchday" target="_blank" rel="noopener">Open Matchday</a> et <a href="https://github.com/openfootball/football.json" target="_blank" rel="noopener">OpenFootball (secours)</a> · Résultats ni garantis ni en direct · Usage personnel</footer>
+    <footer>Foot-stats · Version forme récente + H2H · Site gratuit, statistiques indicatives · Sources : <a href="https://github.com/oladeeayo/open-matchday" target="_blank" rel="noopener">Open Matchday</a> et <a href="https://github.com/openfootball/football.json" target="_blank" rel="noopener">OpenFootball (secours)</a> · Résultats ni garantis ni en direct · Usage personnel</footer>
   </main>
   <script>
     'use strict';
+    // Foot-stats mise à jour 19/10/2026 : forme automatique (5 derniers), H2H historiques
+    // informatifs, absences/compositions manuelles. Aucun accès automatique aux blessés.
     const $ = id => document.getElementById(id);
     let lastAnalysis = null;
     const storeKey = 'footstats_analyses_v1';
@@ -268,7 +320,7 @@
       const home=$('home').value.trim(),away=$('away').value.trim(),a=cleanNumber('xgh'),b=cleanNumber('xga');
       if(!home||!away)throw Error('Renseigne les noms des deux équipes.');
       if(home.toLocaleLowerCase('fr')===away.toLocaleLowerCase('fr'))throw Error('Choisis deux équipes différentes.');
-      if(a===null||b===null||!Number.isFinite(a)||!Number.isFinite(b)||a<0.1||a>5||b<0.1||b>5)throw Error('Indique des xG compris entre 0,10 et 5,00 pour chaque équipe.');
+      if(a===null||b===null||!Number.isFinite(a)||!Number.isFinite(b)||a<0.1||a>5||b<0.1||b>5)throw Error('Indique des buts prévus compris entre 0,10 et 5,00 pour chaque équipe.');
       const odds={};for(const [k,id] of [['p1','odd1'],['px','oddx'],['p2','odd2']]){
         const v=cleanNumber(id);if(v!==null){if(!Number.isFinite(v)||v<=1||v>1000)throw Error('Les cotes doivent être supérieures à 1,00.');odds[k]=v}
       }
@@ -303,8 +355,9 @@
       const gap=best[0][1]-best[1][1];
       const st=window.currentAutoMatch&&fixtureKey(window.currentAutoMatch)===fixtureKey({date:window.currentAutoMatch.date,team1:data.home,team2:data.away})?historicalStats(window.currentAutoMatch):null;
       const limited=window.currentAutoMatch?modelCaution(st,currentLagDays===null||currentLagDays>12):'Analyse manuelle : aucun contrôle de fiabilité automatique.';
-      $('trend-text').textContent=(gap<0.08?'Tendance 1X2 serrée. ':'')+limited+' Une tendance n’est pas un pari validé.';
+      $('trend-text').textContent=(gap<0.08?'Tendance 1X2 serrée. ':'')+limited+(st?' Correction automatique de forme : '+(st.formPct>0?'+':'')+st.formPct.toFixed(1).replace('.',',')+' % sur les buts domicile (effet opposé à l’extérieur).':'')+' Une tendance n’est pas un pari validé.';
       $('odds-results').hidden=Object.keys(data.odds).length===0;
+      $('retro-odds-warning').hidden=!(window.currentAutoMatch && resultOf(window.currentAutoMatch));
       $('odds-lines').replaceChildren();
       for(const [key,label] of [['p1','Victoire domicile (1)'],['px','Match nul (X)'],['p2','Victoire extérieur (2)']]){
         if(data.odds[key]===undefined)continue;
@@ -315,11 +368,32 @@
         const right=document.createElement('div');right.className='quality';right.textContent='EV théorique '+(ev>0?'+':'')+pct(ev);
         row.append(left,right);$('odds-lines').append(row);
       }
+
+      if(Object.keys(data.odds).length){
+        const info=document.createElement('div');info.className='value-box';
+        if(['p1','px','p2'].every(k=>data.odds[k]!==undefined)){
+          const prices=[data.odds.p1,data.odds.px,data.odds.p2],p=[r.p1,r.px,r.p2];
+          const imp=prices.map(x=>1/x),norm=imp.reduce((a,b)=>a+b,0),stNow=window.currentAutoMatch?historicalStats(window.currentAutoMatch):null;
+          const possibilities=['1','X','2'].map((name,i)=>{
+            const adj=0.5*p[i]+0.5*(imp[i]/norm);
+            return {name,odds:prices[i],ev:adj*prices[i]-1,delta:p[i]-imp[i]/norm};
+          }).filter(x=>x.odds>=1.5&&x.odds<=5&&x.ev>=0.12&&x.delta>=0.07);
+          const eligible=stNow&&stNow.count>=90&&stNow.hPlayed>=5&&stNow.aPlayed>=5;
+          info.textContent=eligible&&possibilities.length?
+            `Filtre prudent : ${possibilities.map(x=>x.name).join(', ')} franchit les seuils théoriques (EV ajustée ≥ +12 %). Ceci n'est PAS un pari validé.`:
+            `Filtre prudent : aucun pari 1X2 validé${!eligible?' (données historiques suffisantes non confirmées)':''}. Un EV brut positif ne suffit pas.`;
+        }else info.textContent='Filtre prudent indisponible : renseigne les trois cotes 1, X et 2 pour comparer avec le marché sans marge.';
+        $('odds-lines').append(info);
+      }
       $('feedback').textContent='';
       if(opts.scroll!==false)$('results').scrollIntoView({behavior:'smooth',block:'start'});
     }
     function clearLineup(){for(const id of ['lineup-home','lineup-away'])$(id).value='';$('lineup-status').value='unknown';$('impact-home').value=0;$('impact-away').value=0;}
     function reset(){
+      ++h2hRequestId;
+      $('recent-form').textContent='Choisis un match du calendrier pour afficher sa forme récente.';
+      $('h2h-status').textContent='Choisis un match pour afficher les confrontations passées.';
+      $('h2h-list').replaceChildren();
       $('home').value='';$('away').value='';$('xgh').value='';$('xga').value='';window.currentAutoMatch=null;clearLineup();
       for(const id of ['odd1','oddx','odd2'])$(id).value='';
       $('error').textContent='';$('results').classList.remove('show');lastAnalysis=null;
@@ -470,6 +544,9 @@
     function validFixture(m){return m&&typeof m.date==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(m.date)&&typeof m.team1==='string'&&typeof m.team2==='string'&&m.team1!==m.team2;}
     function status(txt,mode=''){const el=$('data-status');el.textContent=txt;el.className='auto-status'+(mode?' '+mode:'');}
     function setManual(msg){
+      ++h2hRequestId;
+      $('recent-form').textContent='Forme automatique indisponible sans résultats historiques.';
+      $('h2h-status').textContent='Archives indisponibles en mode manuel.';$('h2h-list').replaceChildren();
       matchFeed=[];window.currentAutoMatch=null;currentLagDays=null;refreshDayOptions();showAudit();
       $('auto-match').replaceChildren(new Option('Saisie manuelle seulement', ''));
       $('auto-match').disabled=true;
@@ -480,11 +557,29 @@
     function asDay(s){const [y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d).toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit',year:'numeric'});}
     function localIsoToday(){const d=new Date();return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-');}
     function roundNum(m){const k=String(m.round||'').match(/\d+/);return k?Number(k[0]):null;}
-    // Modèle volontairement conservateur : historique uniquement AVANT la date
-    // du coup d'envoi et retrait progressif du poids du prior de ligue.
-    // Pas de données des rencontres de la même journée, même si elles ont déjà été jouées.
+    // Modèle à la date du match : strictement les résultats des dates antérieures.
+    // La forme récente vient des 5 dernières rencontres toutes compétitions du flux
+    // courant (ici championnat uniquement), jamais de résultats futurs.
     const PRIOR_GAMES=8;
     const MIN_LEAGUE_MATCHES=36;
+    const FORM_WINDOW=5;
+    const MAX_FORM_SHIFT=0.10; // ±10 % max sur chaque lambda ; heuristique à tester.
+    const clamp=(value,min,max)=>Math.max(min,Math.min(max,value));
+    function teamRecentForm(team,previous){
+      const last=previous.filter(m=>m.team1===team||m.team2===team)
+        .sort((a,b)=>a.date.localeCompare(b.date)).slice(-FORM_WINDOW);
+      const record={n:last.length,w:0,d:0,l:0,gf:0,ga:0,sequence:''};
+      for(const m of last){
+        const score=resultOf(m);if(!score)continue;
+        const h=m.team1===team,forGoals=h?score[0]:score[1],against=h?score[1]:score[0];
+        record.gf+=forGoals;record.ga+=against;
+        if(forGoals>against){record.w++;record.sequence+='V'}
+        else if(forGoals===against){record.d++;record.sequence+='N'}
+        else {record.l++;record.sequence+='D'}
+      }
+      record.ppg=record.n?(3*record.w+record.d)/record.n:null;
+      return record;
+    }
     function historicalStats(fixture,feed=matchFeed){
       const previous=feed.filter(m=>m.date<fixture.date&&resultOf(m));
       if(previous.length<MIN_LEAGUE_MATCHES)return null;
@@ -497,15 +592,24 @@
       const aAll=previous.filter(m=>m.team1===fixture.team2||m.team2===fixture.team2);
       if(hGames.length<2||aGames.length<2||hAll.length<4||aAll.length<4)return null;
       const homeHistory=hAll.slice(-5),awayHistory=aAll.slice(-5);
-      // Lissage symétrique : une équipe avec 2 matchs à domicile ne peut pas
-      // produire un coefficient extrême à elle seule.
       const blended=(games,index,baseline)=>(games.reduce((v,m)=>v+resultOf(m)[index],0)+baseline*PRIOR_GAMES)/(games.length+PRIOR_GAMES);
       const hf=blended(hGames,0,avgH),hc=blended(hGames,1,avgA);
       const af=blended(aGames,1,avgA),ac=blended(aGames,0,avgH);
-      const homeLambda=Math.max(0.35,Math.min(3.8,hf*ac/avgH));
-      const awayLambda=Math.max(0.35,Math.min(3.8,af*hc/avgA));
+      const rawA=clamp(hf*ac/avgH,0.35,3.8);
+      const rawB=clamp(af*hc/avgA,0.35,3.8);
+      const homeRecent=teamRecentForm(fixture.team1,previous);
+      const awayRecent=teamRecentForm(fixture.team2,previous);
+      // Petit effet de forme, limité et dégressif si moins de 5 matchs.
+      // Paramètre expérimental fixe, non optimisé après inspection des résultats.
+      const coverage=Math.min(homeRecent.n,awayRecent.n,FORM_WINDOW)/FORM_WINDOW;
+      const formShift=clamp(((homeRecent.ppg??1.5)-(awayRecent.ppg??1.5))/3 * 0.12*coverage,-MAX_FORM_SHIFT,MAX_FORM_SHIFT);
+      const homeLambda=clamp(rawA*(1+formShift),0.35,3.8);
+      const awayLambda=clamp(rawB*(1-formShift),0.35,3.8);
       const bttsRecent=games=>games.filter(x=>{const s=resultOf(x);return s&&s[0]>0&&s[1]>0}).length;
-      return {a:homeLambda,b:awayLambda,count:previous.length,hPlayed:hGames.length,aPlayed:aGames.length,hTotal:hAll.length,aTotal:aAll.length,homeFormBTTS:homeHistory.length?Math.round(100*bttsRecent(homeHistory)/homeHistory.length):null,awayFormBTTS:awayHistory.length?Math.round(100*bttsRecent(awayHistory)/awayHistory.length):null};
+      return {a:homeLambda,b:awayLambda,rawA,rawB,formPct:formShift*100,homeRecent,awayRecent,
+        count:previous.length,hPlayed:hGames.length,aPlayed:aGames.length,hTotal:hAll.length,aTotal:aAll.length,
+        homeFormBTTS:homeHistory.length?Math.round(100*bttsRecent(homeHistory)/homeHistory.length):null,
+        awayFormBTTS:awayHistory.length?Math.round(100*bttsRecent(awayHistory)/awayHistory.length):null};
     }
     function modelCaution(stats,stale=false){
       if(!stats)return 'Historique insuffisant : pas de prévision automatique.';
@@ -515,7 +619,7 @@
     }
     function auditModel(){
       const completed=matchFeed.filter(m=>resultOf(m)&&m.date<=localIsoToday()).sort((a,b)=>a.date.localeCompare(b.date));
-      let count=0,score=0,baselineScore=0,drawScore=0,baselineDraw=0,bttsScore=0,baselineBtts=0;
+      let count=0,score=0,withoutForm=0,baselineScore=0,drawScore=0,baselineDraw=0,bttsScore=0,baselineBtts=0;
       for(const m of completed){
         const st=historicalStats(m);
         if(!st)continue;
@@ -526,6 +630,8 @@
         const bt=(scored.filter(s=>s[0]>0&&s[1]>0).length+1)/(earlier.length+2);
         const [gh,ga]=resultOf(m),actual=[Number(gh>ga),Number(gh===ga),Number(gh<ga)];
         const p=model(st.a,st.b),probs=[p.p1,p.px,p.p2];
+        const raw=model(st.rawA,st.rawB),oldProb=[raw.p1,raw.px,raw.p2];
+        withoutForm+=oldProb.reduce((v,x,i)=>v+(x-actual[i])**2,0)/3;
         score+=probs.reduce((v,x,i)=>v+(x-actual[i])**2,0)/3;
         baselineScore+=freq.reduce((v,x,i)=>v+(x-actual[i])**2,0)/3;
         drawScore+=(p.px-actual[1])**2;
@@ -535,17 +641,71 @@
         baselineBtts+=(bt-event)**2;
         count++;
       }
-      return {count,avg:count?score/count:null,reference:count?baselineScore/count:null,draw:count?drawScore/count:null,drawRef:count?baselineDraw/count:null,btts:count?bttsScore/count:null,bttsRef:count?baselineBtts/count:null};
+      return {count,avg:count?score/count:null,withoutForm:count?withoutForm/count:null,reference:count?baselineScore/count:null,draw:count?drawScore/count:null,drawRef:count?baselineDraw/count:null,btts:count?bttsScore/count:null,bttsRef:count?baselineBtts/count:null};
     }
     function showAudit(){
       const el=$('audit-result'),r=auditModel();
       if(!r.count){el.textContent='Aucun match évaluable pour l’instant : il faut suffisamment de résultats antérieurs pour établir une prévision indépendante. Aucune fiabilité ne peut être annoncée.';return;}
       const f=x=>x.toLocaleString('fr-FR',{maximumFractionDigits:3,minimumFractionDigits:3});
-      const report=`${r.count} matchs évalués dans l’ordre chronologique. Erreur Brier 1X2 : Foot-stats ${f(r.avg)} / Référence ${f(r.reference)}. Nuls : ${f(r.draw)} / ${f(r.drawRef)}. BTTS : ${f(r.btts)} / ${f(r.bttsRef)}.`;
+      const report=`${r.count} matchs évalués dans l’ordre chronologique. Erreur Brier 1X2 : Poisson + forme ${f(r.avg)} / Poisson sans forme ${f(r.withoutForm)} / Référence ligue ${f(r.reference)}. Nuls : ${f(r.draw)} / ${f(r.drawRef)}. BTTS : ${f(r.btts)} / ${f(r.bttsRef)}.`;
       const verdict=r.count<50?' ⏳ Échantillon trop réduit pour juger la fiabilité.'
         :r.avg+0.005<r.reference?' Le modèle fait mieux que la référence sur cet historique ; résultat à confirmer sur d’autres saisons.'
         :' ⚠ Le modèle ne surpasse pas clairement la référence sur cet historique.';
-      el.textContent=report+verdict+' Aucun taux de rentabilité n’est mesuré sans cotes historiques.';
+      el.textContent=report+verdict+(r.count>=50?(r.avg<r.withoutForm?' Sur cet échantillon, la forme réduit légèrement l’erreur 1X2.':' Sur cet échantillon, la forme ne réduit pas l’erreur 1X2.'):'')+' Aucun taux de rentabilité n’est mesuré sans cotes historiques.';
+    }
+    // Alias simples entre fournisseurs (ex.: Borussia M'gladbach / Mönchengladbach).
+    function normTeam(name){
+      let s=String(name||'').toLocaleLowerCase('fr').normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+        .replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim();
+      const alias={
+        'borussia monchengladbach':'monchengladbach','bor monchengladbach':'monchengladbach',
+        'bor m gladbach':'monchengladbach','borussia m gladbach':'monchengladbach',
+        'b monchengladbach':'monchengladbach','m gladbach':'monchengladbach',
+        'tsg 1899 hoffenheim':'hoffenheim','tsg hoffenheim':'hoffenheim',
+        '1899 hoffenheim':'hoffenheim'
+      };
+      return alias[s]||s;
+    }
+    let h2hRequestId=0;
+    async function updateH2H(fixture){
+      const request=++h2hRequestId,league=$('league').value;
+      const statusBox=$('h2h-status'),list=$('h2h-list');list.replaceChildren();
+      statusBox.textContent='Recherche des confrontations antérieures…';
+      const seasons=LEAGUE_CODES[league]?ARCHIVE_SEASONS.filter(s=>s<leagueSeason):[];
+      const pastArchives=await Promise.allSettled(seasons.map(season=>archiveLoad(league,season)));
+      if(request!==h2hRequestId||window.currentAutoMatch!==fixture)return;
+      const home=normTeam(fixture.team1),away=normTeam(fixture.team2),matches=new Map();
+      for(const m of [...matchFeed,...pastArchives.flatMap(x=>x.status==='fulfilled'?x.value:[])]){
+        if(!resultOf(m)||m.date>=fixture.date)continue; // Jamais le match analysé ou après.
+        const a=normTeam(m.team1),b=normTeam(m.team2);
+        if(!((a===home&&b===away)||(a===away&&b===home)))continue;
+        matches.set(m.date+'|'+a+'|'+b,m);
+      }
+      const games=[...matches.values()].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,5);
+      if(!games.length){
+        statusBox.textContent='Aucun face-à-face antérieur trouvé dans les données disponibles.'+
+          (pastArchives.some(x=>x.status==='rejected')?' Certaines archives ne sont pas accessibles.':'');
+        return;
+      }
+      let wins=0,draws=0,losses=0;
+      for(const m of games){
+        const score=resultOf(m),homeIsFirst=normTeam(m.team1)===home;
+        const gf=homeIsFirst?score[0]:score[1],ga=homeIsFirst?score[1]:score[0];
+        if(gf>ga)wins++;else if(gf===ga)draws++;else losses++;
+        const line=document.createElement('div');line.className='h2h-item';
+        line.textContent=`${asDay(m.date)} · ${m.team1} ${score[0]}–${score[1]} ${m.team2}`;
+        list.append(line);
+      }
+      statusBox.textContent=`${games.length} confrontation(s) antérieure(s) trouvée(s) · bilan ${fixture.team1} : ${wins} V, ${draws} N, ${losses} D.`+
+        (pastArchives.some(x=>x.status==='rejected')?' ⚠ Archives partielles.':'');
+    }
+    function showRecentForm(fixture,st){
+      const el=$('recent-form');
+      if(!st){el.textContent='Résultats antérieurs insuffisants : forme récente non calculable.';return;}
+      const desc=(name,r)=>`${name} : ${r.w} V · ${r.d} N · ${r.l} D sur ${r.n} matchs`+
+        ` (${r.ppg?.toFixed(2).replace('.',',')??'–'} pt/match ; ${r.gf} buts pour, ${r.ga} contre).`;
+      el.textContent=desc(fixture.team1,st.homeRecent)+' '+desc(fixture.team2,st.awayRecent)+
+        ` Correction de forme appliquée : ${st.formPct>=0?'+':''}${st.formPct.toFixed(1).replace('.',',')} % sur les buts prévus domicile, effet opposé sur ceux de l'extérieur (maximum ±10 %).`;
     }
     function populateFixture(m,autoRender=true){
       if(!m)return;
@@ -553,16 +713,18 @@
       window.currentAutoMatch=m;
       $('home').value=m.team1;$('away').value=m.team2;
       const stats=historicalStats(m);
+      showRecentForm(m,stats);
+      updateH2H(m).catch(()=>{if(window.currentAutoMatch===m)$('h2h-status').textContent='Archives H2H temporairement indisponibles.'});
       if(stats){
         $('xgh').value=stats.a.toFixed(2);$('xga').value=stats.b.toFixed(2);
-        $('auto-help').textContent=`${m.round||'Journée non indiquée'} · ${asDay(m.date)}${m.time?' à '+m.time:''} · Base : ${stats.count} résultats antérieurs · ${stats.hPlayed} matchs à domicile / ${stats.aPlayed} à l’extérieur. BTTS sur 5 matchs : ${m.team1} ${stats.homeFormBTTS??'–'} %, ${m.team2} ${stats.awayFormBTTS??'–'} %. ⚠ ${modelCaution(stats,false)}`;
+        $('auto-help').textContent=`${m.round||'Journée non indiquée'} · ${asDay(m.date)}${m.time?' à '+m.time:''} · Base : ${stats.count} résultats antérieurs · ${stats.hPlayed} matchs à domicile / ${stats.aPlayed} à l’extérieur. BTTS sur 5 matchs : ${m.team1} ${stats.homeFormBTTS??'–'} %, ${m.team2} ${stats.awayFormBTTS??'–'} %. ${resultOf(m)?'⚠ Match terminé : analyse rétrospective. ':''}⚠ ${modelCaution(stats,false)}`;
         if(autoRender){
           try{render(getForm(),{scroll:false});$('error').textContent='';}
           catch(e){$('error').textContent=e.message;}
         }
       }else{
         $('xgh').value='';$('xga').value='';$('results').classList.remove('show');
-        $('auto-help').textContent=`${m.round||'Journée non indiquée'} · ${asDay(m.date)}. Résultats antérieurs ou matchs domicile/extérieur insuffisants : pas de tendance automatique.  Tu peux saisir tes hypothèses.`;
+        $('auto-help').textContent=`${m.round||'Journée non indiquée'} · ${asDay(m.date)}. Résultats antérieurs ou matchs domicile/extérieur insuffisants : pas de tendance automatique. Tu peux saisir tes hypothèses.`;
       }
     }
     function fixtureKey(m){return `${m.date}|${m.team1}|${m.team2}`;}
@@ -640,6 +802,9 @@
     }
     async function loadLeague(force=false){
       const league=$('league').value,requestId=++loadCounter;
+      ++h2hRequestId; $('h2h-list').replaceChildren();
+      $('recent-form').textContent='Chargement des statistiques…';
+      $('h2h-status').textContent='En attente du match sélectionné.';
       const season=currentSeason();leagueSeason=season;
       $('season-label').textContent=league==='MLS'?String(new Date().getFullYear()):season.replace('-','/');
       $('auto-match').disabled=true;
@@ -787,7 +952,7 @@
       const code=ODDS_CODES[$('roi-league').value],control=$('roi-period').value,season=$('roi-season').value;
       const matches=control==='all'?['2324','2425','2526'].map(s=>roiArchives.get(code+'|'+s)).filter(Boolean):[roiArchives.get(code+'|'+season)].filter(Boolean);
       const tbody=$('roi-body');tbody.replaceChildren();
-      if(!matches.length){const tr=document.createElement('tr'),td=document.createElement('td');td.colSpan=8;td.textContent='Aucune donnée importée pour ce championnat / cette période.';tr.append(td);tbody.append(tr);roiSummary('Aucun montant calculé tant que les vraies cotes ne sont pas disponibles.');return;}
+      if(!matches.length){const tr=document.createElement('tr'),td=document.createElement('td');td.colSpan=8;td.textContent='Aucune donnée importée pour ce championnat / cette période.';tr.append(td);tbody.append(tr);roiSummary('Aucun montant calculé tant que les vraies cotes ne sont pas disponibles.');runValueAnalysis();return;}
       const edge=Number($('roi-edge').value),r=mergeROI(matches.map(m=>backtestOddsSeason(m,edge)));
       for(const [label,s] of Object.entries(r.rows)){
         const tr=document.createElement('tr');
@@ -803,6 +968,7 @@
       const counts=Object.entries(r.rows).map(([k,s])=>k+' : '+s.available+' cotes complètes / '+s.bets+' sélections').join(' · ');
       const kinds=new Set(Object.values(r.rows).flatMap(s=>Object.keys(s.sources)));
       roiSummary(`Matchs modélisables : ${r.tested}/${r.total}. ${counts}. Types de cotes utilisés : ${[...kinds].join(', ')||'aucun'}. Un ROI positif sur un échantillon réduit n’établit pas une stratégie rentable.`);
+      runValueAnalysis();
     }
     $('roi-files').addEventListener('change',async e=>{
       const files=[...e.target.files];if(!files.length)return;
@@ -826,6 +992,128 @@
       }catch(e){setROIStatus('Chargement direct indisponible : '+e.message+'. C’est souvent une restriction CORS de Football-Data sur GitHub Pages. Appuie sur « Télécharger le CSV » puis « Importer le CSV téléchargé » ; aucun chiffre de rentabilité n’a été inventé.',true)}
       finally{btn.disabled=false}
     });
+
+    // ======== EXPLORATION DU FILTRE VALUE, SANS APPRENTISSAGE SUR LE TEST ========
+    const VF_MARKETS=['1X2','Nul','Over 2,5'];
+    const VF_BRACKETS=[
+      {name:'1,20–1,49',lo:1.2,hi:1.5}, {name:'1,50–1,99',lo:1.5,hi:2},
+      {name:'2,00–2,99',lo:2,hi:3}, {name:'3,00–4,99',lo:3,hi:5},
+      {name:'5,00–9,99',lo:5,hi:10}, {name:'10,00–20,00',lo:10,hi:20.001}
+    ];
+    function vfEmpty(){return {bets:0,wins:0,pnl:0,pSum:0,marketSum:0,brierSum:0};}
+    function vfAdd(into,bet){
+      into.bets++;into.wins+=Number(bet.win);into.pnl+=bet.win?bet.odds-1:-1;
+      into.pSum+=bet.p;into.marketSum+=bet.pmarket;into.brierSum+=(bet.p-Number(bet.win))**2;
+    }
+    function vfMarket(m,p,outcome){
+      if(outcome==='1X2'&&m.prices.one){
+        const group=m.prices.one;return {raw:[p.p1,p.px,p.p2],prices:group.values,truth:[m.score[0]>m.score[1],m.score[0]===m.score[1],m.score[0]<m.score[1]]};
+      }
+      if(outcome==='Nul'&&m.prices.one){
+        return {raw:[p.px],prices:[m.prices.one.values[1]],full:m.prices.one.values,truth:[m.score[0]===m.score[1]]};
+      }
+      if(outcome==='Over 2,5'&&m.prices.over){
+        return {raw:[p.over],prices:[m.prices.over.values[0]],full:m.prices.over.values,truth:[m.score[0]+m.score[1]>2]};
+      }
+      return null;
+    }
+    // 50 % modèle et 50 % probabilité bookmaker sans marge : simple garde-fou, pas une calibration démontrée.
+    function vfEvaluateMarket(g,st,originalEdge){
+      const allOdds=g.full||g.prices;
+      if(allOdds.length<2||allOdds.some(o=>!Number.isFinite(o)||o<=1))return null;
+      const implied=allOdds.map(o=>1/o),bookSum=implied.reduce((s,x)=>s+x,0);
+      if(!Number.isFinite(bookSum)||bookSum<=0)return null;
+      const base=g.raw.map((p,i)=>{
+        const marketIndex=g.full?(g.full.length===3?1:0):i;
+        const market=implied[marketIndex]/bookSum,odds=g.prices[i];
+        const blended=0.5*p+0.5*market;
+        return {i,odds,p,pmarket:market,padj:blended,ev:p*odds-1,evAdj:blended*odds-1,win:!!g.truth[i]};
+      }).filter(x=>x.odds>=1.2&&x.odds<=20);
+      if(!base.length)return null;
+      const original=[...base].sort((a,b)=>b.ev-a.ev)[0];
+      const origBet=original.ev>=originalEdge?original:null;
+      // Un seul candidat est choisi pour chaque marché et chaque rencontre.
+      const cautious=[...base].filter(x=>x.odds>=1.5&&x.odds<=5&&x.p-x.pmarket>=0.07&&x.evAdj>=0.12)
+        .sort((a,b)=>b.evAdj-a.evAdj)[0];
+      const prudBet=st.count>=90&&st.hPlayed>=5&&st.aPlayed>=5?(cautious||null):null;
+      return {origBet,prudBet};
+    }
+    function vfBacktest(matches,edge){
+      const result=Object.fromEntries(VF_MARKETS.map(s=>[s,{old:vfEmpty(),careful:vfEmpty()}]));
+      const brackets=VF_BRACKETS.map(x=>({...x,metric:vfEmpty()}));
+      let tested=0,unquoted=0;
+      // Chronological model: historicalStats uses strictly earlier dates.
+      const ordered=[...matches].filter(resultOf).sort((a,b)=>a.date.localeCompare(b.date));
+      for(const m of ordered){
+        const st=historicalStats(m,ordered);if(!st)continue;
+        tested++;
+        const p=model(st.a,st.b);
+        for(const market of VF_MARKETS){
+          const g=vfMarket(m,p,market);
+          if(!g){if(market==='1X2')unquoted++;continue;}
+          const picked=vfEvaluateMarket(g,st,edge);if(!picked)continue;
+          const dest=result[market];
+          if(picked.origBet){
+            vfAdd(dest.old,picked.origBet);
+            if(market==='1X2'){
+              const b=brackets.find(x=>picked.origBet.odds>=x.lo&&picked.origBet.odds<x.hi);
+              if(b)vfAdd(b.metric,picked.origBet);
+            }
+          }
+          if(picked.prudBet)vfAdd(dest.careful,picked.prudBet);
+        }
+      }
+      return {result,brackets,tested,unquoted};
+    }
+    const vfFmtMoney=x=>(x>=0?'+':'')+x.toFixed(2).replace('.',',')+' €';
+    const vfFmtRoi=s=>s.bets?(100*s.pnl/s.bets).toFixed(1).replace('.',',')+' %':'—';
+    const vfFmtPct=(s,field)=>s.bets?(100*s[field]/s.bets).toFixed(1).replace('.',',')+' %':'—';
+    function vfCell(tr,text,cl){const td=document.createElement('td');td.textContent=String(text);if(cl)td.className=cl;tr.append(td);}
+    function vfSummarizeStats(dst,src){
+      for(const key of ['bets','wins','pnl','pSum','marketSum','brierSum'])dst[key]+=src[key];
+    }
+    function runValueAnalysis(){
+      const target=$('value-results'),bucketBody=$('value-brackets'),message=$('value-status');
+      if(!target||!bucketBody)return;
+      target.replaceChildren();bucketBody.replaceChildren();
+      const code=ODDS_CODES[$('roi-league').value],period=$('roi-period').value,season=$('roi-season').value;
+      const matches=period==='all'?['2324','2425','2526'].map(s=>roiArchives.get(code+'|'+s)).filter(Boolean):[roiArchives.get(code+'|'+season)].filter(Boolean);
+      if(!matches.length){
+        const tr=document.createElement('tr');vfCell(tr,'Aucune archive pour le championnat / la saison choisie.');target.append(tr);
+        const b=document.createElement('tr');vfCell(b,'Importe le fichier CSV dans la rubrique 5.');bucketBody.append(b);
+        message.className='auto-status value-status warn';message.textContent='Aucune cote disponible pour cette sélection. Aucune rentabilité calculée.';
+        return;
+      }
+      const edge=Number($('roi-edge').value),data=matches.map(m=>vfBacktest(m,edge));
+      const byMarket=Object.fromEntries(VF_MARKETS.map(s=>[s,{old:vfEmpty(),careful:vfEmpty()}]));
+      const buckets=VF_BRACKETS.map(x=>({...x,metric:vfEmpty()}));
+      let tested=0,missing=0;
+      for(const d of data){
+        tested+=d.tested;missing+=d.unquoted;
+        for(const name of VF_MARKETS){vfSummarizeStats(byMarket[name].old,d.result[name].old);vfSummarizeStats(byMarket[name].careful,d.result[name].careful);}
+        for(let i=0;i<buckets.length;i++)vfSummarizeStats(buckets[i].metric,d.brackets[i].metric);
+      }
+      for(const name of VF_MARKETS){
+        for(const [methodKey,label] of [['old','Actuel'],['careful','Prudent']]){
+          const s=byMarket[name][methodKey],tr=document.createElement('tr');
+          vfCell(tr,`${name} · ${label}`);vfCell(tr,s.bets);
+          vfCell(tr,vfFmtPct(s,'wins'));vfCell(tr,s.bets?vfFmtMoney(s.pnl):'—');
+          vfCell(tr,vfFmtRoi(s),s.bets>=100?(s.pnl>=0?'value-good':'value-bad'):'');
+          vfCell(tr,s.bets?metricFmt(s.brierSum/s.bets):'—');target.append(tr);
+        }
+      }
+      for(const b of buckets){const s=b.metric,tr=document.createElement('tr');
+        vfCell(tr,b.name);vfCell(tr,s.bets);vfCell(tr,vfFmtPct(s,'wins'));
+        vfCell(tr,vfFmtPct(s,'pSum'));vfCell(tr,vfFmtPct(s,'marketSum'));
+        vfCell(tr,vfFmtRoi(s),s.bets>=100?(s.pnl>=0?'value-good':'value-bad'):'');bucketBody.append(tr);
+      }
+      const old=byMarket['1X2'].old,pr=byMarket['1X2'].careful;
+      message.className='auto-status value-status warn';
+      message.textContent=`${tested} matchs modélisables · ${missing} sans cotes 1X2. 1X2 : ${old.bets} sélections avec la méthode actuelle et ${pr.bets} avec le filtre prudent. `+
+        (pr.bets<100?'⚠ Moins de 100 sélections prudentes : impossible d’en tirer un verdict. ':'')+
+        'Comparaison exploratoire seulement : ces saisons étaient déjà connues lors du choix du filtre. Aucun avantage futur démontré.';
+    }
+
     // Bilan 3 saisons : tests walk-forward par saison, sans données d'après-match.
     // 2025/26 est traité comme période de confirmation NON utilisée pour ajuster les paramètres.
     const ARCHIVE_SEASONS=['2023-24','2024-25','2025-26'];
