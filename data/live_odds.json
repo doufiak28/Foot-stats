@@ -2,7 +2,7 @@
   "provider": "The Odds API",
   "market": "1X2 (h2h)",
   "region": "fr",
-  "generated_at": "2026-10-28T20:50:17Z",
+  "generated_at": "2026-10-28T20:51:09Z",
   "matches": [
     {
       "event_id": "9a9f6c78276f74f15f42b013b033aa5d",
@@ -371,7 +371,7 @@
       "away": "Sochaux",
       "bookmaker": "PMU (FR)",
       "bookmaker_key": "pmu_fr",
-      "updated_at": "2026-10-28T20:49:46Z",
+      "updated_at": "2026-10-28T20:51:03Z",
       "odds": {
         "p1": 1.57,
         "px": 3.35,
