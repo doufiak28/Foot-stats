@@ -2,53 +2,8 @@
   "provider": "The Odds API",
   "market": "1X2 (h2h)",
   "region": "fr",
-  "generated_at": "2026-11-01T16:11:13Z",
+  "generated_at": "2026-11-02T09:23:49Z",
   "matches": [
-    {
-      "event_id": "cf3a2e2b4a4e9815d1d0be8dcef916da",
-      "commence_time": "2026-11-01T16:15:00Z",
-      "home": "Paris FC",
-      "away": "AS Monaco",
-      "bookmaker": "Betclic (FR)",
-      "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:09:10Z",
-      "odds": {
-        "p1": 2.38,
-        "px": 3.25,
-        "p2": 2.62
-      },
-      "league": "Ligue 1"
-    },
-    {
-      "event_id": "961df571fad52d969150e9ced52b16f7",
-      "commence_time": "2026-11-01T16:15:00Z",
-      "home": "Lyon",
-      "away": "Angers",
-      "bookmaker": "Betclic (FR)",
-      "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:09:10Z",
-      "odds": {
-        "p1": 1.35,
-        "px": 4.6,
-        "p2": 6.25
-      },
-      "league": "Ligue 1"
-    },
-    {
-      "event_id": "df1e1589c51bbcac432125567d1f7c58",
-      "commence_time": "2026-11-01T19:45:00Z",
-      "home": "Marseille",
-      "away": "Toulouse",
-      "bookmaker": "Betclic (FR)",
-      "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:09:10Z",
-      "odds": {
-        "p1": 1.83,
-        "px": 4.0,
-        "p2": 3.5
-      },
-      "league": "Ligue 1"
-    },
     {
       "event_id": "5118966f484adf525196d196a61bc5d6",
       "commence_time": "2026-11-02T19:45:00Z",
@@ -56,11 +11,11 @@
       "away": "Brest",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:09:10Z",
+      "updated_at": "2026-11-02T09:17:33Z",
       "odds": {
         "p1": 2.37,
-        "px": 3.1,
-        "p2": 2.83
+        "px": 3.13,
+        "p2": 2.87
       },
       "league": "Ligue 1"
     },
@@ -71,7 +26,7 @@
       "away": "Strasbourg",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:09:10Z",
+      "updated_at": "2026-11-02T09:17:33Z",
       "odds": {
         "p1": 1.94,
         "px": 3.53,
@@ -86,11 +41,11 @@
       "away": "Paris FC",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:09:10Z",
+      "updated_at": "2026-11-02T09:17:33Z",
       "odds": {
-        "p1": 3.42,
-        "px": 3.48,
-        "p2": 1.85
+        "p1": 3.85,
+        "px": 3.6,
+        "p2": 1.72
       },
       "league": "Ligue 1"
     },
@@ -101,11 +56,11 @@
       "away": "Troyes",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:09:10Z",
+      "updated_at": "2026-11-02T09:17:33Z",
       "odds": {
         "p1": 1.1,
         "px": 7.5,
-        "p2": 13.5
+        "p2": 13.25
       },
       "league": "Ligue 1"
     },
@@ -116,7 +71,7 @@
       "away": "Lille",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:09:10Z",
+      "updated_at": "2026-11-02T09:17:33Z",
       "odds": {
         "p1": 1.98,
         "px": 3.47,
@@ -131,10 +86,10 @@
       "away": "AS Monaco",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:09:10Z",
+      "updated_at": "2026-11-02T09:17:33Z",
       "odds": {
-        "p1": 3.95,
-        "px": 3.78,
+        "p1": 4.0,
+        "px": 3.75,
         "p2": 1.66
       },
       "league": "Ligue 1"
@@ -146,10 +101,10 @@
       "away": "Nice",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:09:10Z",
+      "updated_at": "2026-11-02T09:17:33Z",
       "odds": {
-        "p1": 3.27,
-        "px": 3.43,
+        "p1": 3.3,
+        "px": 3.42,
         "p2": 1.91
       },
       "league": "Ligue 1"
@@ -161,7 +116,7 @@
       "away": "Lyon",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:09:10Z",
+      "updated_at": "2026-11-02T09:17:33Z",
       "odds": {
         "p1": 2.75,
         "px": 3.42,
@@ -176,11 +131,11 @@
       "away": "Lorient",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:09:10Z",
+      "updated_at": "2026-11-02T09:17:33Z",
       "odds": {
-        "p1": 2.68,
-        "px": 3.15,
-        "p2": 2.32
+        "p1": 2.57,
+        "px": 3.17,
+        "p2": 2.4
       },
       "league": "Ligue 1"
     },
@@ -191,11 +146,11 @@
       "away": "Marseille",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:09:10Z",
+      "updated_at": "2026-11-02T09:17:33Z",
       "odds": {
-        "p1": 1.93,
-        "px": 3.68,
-        "p2": 3.02
+        "p1": 1.96,
+        "px": 3.65,
+        "p2": 2.97
       },
       "league": "Ligue 1"
     },
@@ -206,11 +161,11 @@
       "away": "Nancy",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:13Z",
+      "updated_at": "2026-11-02T09:22:33Z",
       "odds": {
-        "p1": 2.1,
-        "px": 3.18,
-        "p2": 3.03
+        "p1": 2.23,
+        "px": 3.2,
+        "p2": 2.95
       },
       "league": "Ligue 2"
     },
@@ -221,11 +176,11 @@
       "away": "Sochaux",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:13Z",
+      "updated_at": "2026-11-02T09:22:33Z",
       "odds": {
-        "p1": 1.65,
-        "px": 3.5,
-        "p2": 4.4
+        "p1": 1.62,
+        "px": 3.65,
+        "p2": 4.75
       },
       "league": "Ligue 2"
     },
@@ -236,11 +191,41 @@
       "away": "Annecy FC",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:13Z",
+      "updated_at": "2026-11-02T09:22:33Z",
       "odds": {
         "p1": 2.37,
         "px": 2.85,
         "p2": 2.88
+      },
+      "league": "Ligue 2"
+    },
+    {
+      "event_id": "47b7fc7d25003a9083df3789f996281e",
+      "commence_time": "2026-11-06T19:00:00Z",
+      "home": "Dijon",
+      "away": "Red Star",
+      "bookmaker": "Betclic (FR)",
+      "bookmaker_key": "betclic_fr",
+      "updated_at": "2026-11-02T09:22:33Z",
+      "odds": {
+        "p1": 2.52,
+        "px": 3.25,
+        "p2": 2.42
+      },
+      "league": "Ligue 2"
+    },
+    {
+      "event_id": "d5a74e1730cf9bd8bfe0488e3d064e35",
+      "commence_time": "2026-11-06T19:00:00Z",
+      "home": "Grenoble",
+      "away": "Stade de Reims",
+      "bookmaker": "Betclic (FR)",
+      "bookmaker_key": "betclic_fr",
+      "updated_at": "2026-11-02T09:22:33Z",
+      "odds": {
+        "p1": 3.68,
+        "px": 3.25,
+        "p2": 1.85
       },
       "league": "Ligue 2"
     },
@@ -251,7 +236,7 @@
       "away": "Guingamp",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:13Z",
+      "updated_at": "2026-11-02T09:22:33Z",
       "odds": {
         "p1": 2.53,
         "px": 3.45,
@@ -266,11 +251,26 @@
       "away": "Metz",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:13Z",
+      "updated_at": "2026-11-02T09:22:33Z",
       "odds": {
         "p1": 1.97,
         "px": 2.95,
         "p2": 3.68
+      },
+      "league": "Ligue 2"
+    },
+    {
+      "event_id": "658bb2b77031ef93a7ae893145b663b3",
+      "commence_time": "2026-11-06T19:00:00Z",
+      "home": "Nancy",
+      "away": "Sochaux",
+      "bookmaker": "Betclic (FR)",
+      "bookmaker_key": "betclic_fr",
+      "updated_at": "2026-11-02T09:22:33Z",
+      "odds": {
+        "p1": 1.78,
+        "px": 3.38,
+        "p2": 3.83
       },
       "league": "Ligue 2"
     },
@@ -281,7 +281,7 @@
       "away": "Rodez AF",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:13Z",
+      "updated_at": "2026-11-02T09:22:33Z",
       "odds": {
         "p1": 2.97,
         "px": 3.27,
@@ -296,7 +296,7 @@
       "away": "Nantes",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:13Z",
+      "updated_at": "2026-11-02T09:22:33Z",
       "odds": {
         "p1": 2.9,
         "px": 3.2,
@@ -311,7 +311,7 @@
       "away": "Stade Lavallois",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:13Z",
+      "updated_at": "2026-11-02T09:22:33Z",
       "odds": {
         "p1": 1.29,
         "px": 4.8,
@@ -320,47 +320,17 @@
       "league": "Ligue 2"
     },
     {
-      "event_id": "940b9e69539033539039f9af694e2925",
-      "commence_time": "2026-11-01T17:00:00Z",
-      "home": "Lecce",
-      "away": "Genoa",
-      "bookmaker": "Betclic (FR)",
-      "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:11Z",
-      "odds": {
-        "p1": 3.1,
-        "px": 2.9,
-        "p2": 2.37
-      },
-      "league": "Serie A"
-    },
-    {
-      "event_id": "aeadf1388a1075328536501576b3d550",
-      "commence_time": "2026-11-01T19:45:00Z",
-      "home": "Juventus",
-      "away": "Napoli",
-      "bookmaker": "Betclic (FR)",
-      "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:11Z",
-      "odds": {
-        "p1": 2.13,
-        "px": 3.17,
-        "p2": 3.27
-      },
-      "league": "Serie A"
-    },
-    {
       "event_id": "66608b64d462d1d3deabe573c8456d86",
       "commence_time": "2026-11-02T17:30:00Z",
       "home": "Sassuolo",
       "away": "Fiorentina",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:11Z",
+      "updated_at": "2026-11-02T09:21:18Z",
       "odds": {
-        "p1": 2.7,
-        "px": 3.5,
-        "p2": 2.25
+        "p1": 2.75,
+        "px": 3.53,
+        "p2": 2.27
       },
       "league": "Serie A"
     },
@@ -371,11 +341,11 @@
       "away": "Parma",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:11Z",
+      "updated_at": "2026-11-02T09:21:18Z",
       "odds": {
-        "p1": 1.45,
+        "p1": 1.47,
         "px": 4.4,
-        "p2": 5.4
+        "p2": 5.5
       },
       "league": "Serie A"
     },
@@ -386,10 +356,10 @@
       "away": "Udinese",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:11Z",
+      "updated_at": "2026-11-02T09:21:18Z",
       "odds": {
-        "p1": 2.03,
-        "px": 3.42,
+        "p1": 2.05,
+        "px": 3.4,
         "p2": 2.97
       },
       "league": "Serie A"
@@ -401,11 +371,11 @@
       "away": "Frosinone",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:11Z",
+      "updated_at": "2026-11-02T09:21:18Z",
       "odds": {
-        "p1": 2.5,
+        "p1": 2.63,
         "px": 3.45,
-        "p2": 2.32
+        "p2": 2.22
       },
       "league": "Serie A"
     },
@@ -416,10 +386,10 @@
       "away": "Lecce",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:11Z",
+      "updated_at": "2026-11-02T09:21:18Z",
       "odds": {
-        "p1": 1.73,
-        "px": 3.33,
+        "p1": 1.71,
+        "px": 3.42,
         "p2": 4.15
       },
       "league": "Serie A"
@@ -431,7 +401,7 @@
       "away": "Bologna",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:11Z",
+      "updated_at": "2026-11-02T09:21:18Z",
       "odds": {
         "p1": 4.15,
         "px": 3.3,
@@ -446,10 +416,10 @@
       "away": "Sassuolo",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:11Z",
+      "updated_at": "2026-11-02T09:21:18Z",
       "odds": {
-        "p1": 1.3,
-        "px": 5.0,
+        "p1": 1.28,
+        "px": 5.1,
         "p2": 6.75
       },
       "league": "Serie A"
@@ -461,11 +431,11 @@
       "away": "Lazio",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:11Z",
+      "updated_at": "2026-11-02T09:21:18Z",
       "odds": {
-        "p1": 1.84,
-        "px": 3.43,
-        "p2": 3.48
+        "p1": 1.94,
+        "px": 3.45,
+        "p2": 3.17
       },
       "league": "Serie A"
     },
@@ -476,11 +446,11 @@
       "away": "AC Milan",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:11Z",
+      "updated_at": "2026-11-02T09:21:18Z",
       "odds": {
-        "p1": 4.3,
-        "px": 3.43,
-        "p2": 1.67
+        "p1": 4.25,
+        "px": 3.37,
+        "p2": 1.7
       },
       "league": "Serie A"
     },
@@ -491,7 +461,7 @@
       "away": "Atalanta BC",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:11Z",
+      "updated_at": "2026-11-02T09:21:18Z",
       "odds": {
         "p1": 3.13,
         "px": 3.5,
@@ -506,11 +476,11 @@
       "away": "Como",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:11Z",
+      "updated_at": "2026-11-02T09:21:18Z",
       "odds": {
-        "p1": 1.65,
-        "px": 3.93,
-        "p2": 3.83
+        "p1": 1.67,
+        "px": 3.85,
+        "p2": 3.8
       },
       "league": "Serie A"
     },
@@ -521,43 +491,13 @@
       "away": "Juventus",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:11Z",
+      "updated_at": "2026-11-02T09:21:18Z",
       "odds": {
-        "p1": 3.55,
-        "px": 3.48,
-        "p2": 1.81
+        "p1": 3.53,
+        "px": 3.47,
+        "p2": 1.82
       },
       "league": "Serie A"
-    },
-    {
-      "event_id": "f490ae47cc74ee51a5995de046d1b133",
-      "commence_time": "2026-11-01T16:15:00Z",
-      "home": "Hellas Verona",
-      "away": "Carrarese",
-      "bookmaker": "Betclic (FR)",
-      "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:10:00Z",
-      "odds": {
-        "p1": 1.6,
-        "px": 3.45,
-        "p2": 4.5
-      },
-      "league": "Serie B"
-    },
-    {
-      "event_id": "ce4d5460d752cd4a1353a4bc870f3ed5",
-      "commence_time": "2026-11-01T18:30:00Z",
-      "home": "Palermo",
-      "away": "Vicenza",
-      "bookmaker": "Betclic (FR)",
-      "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:10:00Z",
-      "odds": {
-        "p1": 1.43,
-        "px": 4.25,
-        "p2": 5.4
-      },
-      "league": "Serie B"
     },
     {
       "event_id": "fd02f34a219698f956b133ddb2fc7bdf",
@@ -566,11 +506,11 @@
       "away": "Palermo",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:10:00Z",
+      "updated_at": "2026-11-02T09:21:20Z",
       "odds": {
-        "p1": 2.73,
-        "px": 3.2,
-        "p2": 2.17
+        "p1": 2.58,
+        "px": 3.17,
+        "p2": 2.3
       },
       "league": "Serie B"
     },
@@ -581,11 +521,11 @@
       "away": "Arezzo",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:10:00Z",
+      "updated_at": "2026-11-02T09:21:20Z",
       "odds": {
-        "p1": 1.63,
-        "px": 3.35,
-        "p2": 4.4
+        "p1": 1.66,
+        "px": 3.32,
+        "p2": 4.25
       },
       "league": "Serie B"
     },
@@ -596,11 +536,11 @@
       "away": "US Catanzaro 1929",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:10:00Z",
+      "updated_at": "2026-11-02T09:21:20Z",
       "odds": {
-        "p1": 2.0,
-        "px": 3.27,
-        "p2": 3.0
+        "p1": 1.97,
+        "px": 3.23,
+        "p2": 3.1
       },
       "league": "Serie B"
     },
@@ -611,7 +551,7 @@
       "away": "Empoli",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:10:00Z",
+      "updated_at": "2026-11-02T09:21:20Z",
       "odds": {
         "p1": 1.96,
         "px": 3.13,
@@ -626,7 +566,7 @@
       "away": "Südtirol",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:10:00Z",
+      "updated_at": "2026-11-02T09:21:20Z",
       "odds": {
         "p1": 1.51,
         "px": 3.73,
@@ -641,10 +581,10 @@
       "away": "Hellas Verona",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:10:00Z",
+      "updated_at": "2026-11-02T09:21:20Z",
       "odds": {
-        "p1": 2.35,
-        "px": 3.1,
+        "p1": 2.3,
+        "px": 3.2,
         "p2": 2.55
       },
       "league": "Serie B"
@@ -656,7 +596,7 @@
       "away": "Avellino",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:10:00Z",
+      "updated_at": "2026-11-02T09:21:21Z",
       "odds": {
         "p1": 1.69,
         "px": 3.37,
@@ -671,7 +611,7 @@
       "away": "Modena",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:10:00Z",
+      "updated_at": "2026-11-02T09:21:21Z",
       "odds": {
         "p1": 2.9,
         "px": 3.0,
@@ -680,34 +620,34 @@
       "league": "Serie B"
     },
     {
-      "event_id": "60eaeb599578cd5c951f917c4fef06ff",
-      "commence_time": "2026-11-01T14:30:00Z",
-      "home": "Union Berlin",
-      "away": "1. FC Köln",
+      "event_id": "f892f9aa0772c3febcde6fb5477bb6ea",
+      "commence_time": "2026-11-08T16:15:00Z",
+      "home": "Carrarese",
+      "away": "Sampdoria",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:10:39Z",
+      "updated_at": "2026-11-02T09:21:21Z",
       "odds": {
-        "p1": 5.0,
-        "px": 1.44,
-        "p2": 4.5
+        "p1": 2.27,
+        "px": 2.97,
+        "p2": 2.77
       },
-      "league": "Bundesliga"
+      "league": "Serie B"
     },
     {
-      "event_id": "1eb5e1a69ae9dd9edd92fde344308a4e",
-      "commence_time": "2026-11-01T16:30:00Z",
-      "home": "Eintracht Frankfurt",
-      "away": "Hamburger SV",
+      "event_id": "fd4b1507292f89721d6d024b337a6375",
+      "commence_time": "2026-11-08T18:30:00Z",
+      "home": "Vicenza",
+      "away": "Cremonese",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:10:39Z",
+      "updated_at": "2026-11-02T09:21:21Z",
       "odds": {
-        "p1": 1.44,
-        "px": 4.75,
-        "p2": 5.4
+        "p1": 2.67,
+        "px": 3.05,
+        "p2": 2.28
       },
-      "league": "Bundesliga"
+      "league": "Serie B"
     },
     {
       "event_id": "295076c39e49863cb54db085ac3cd340",
@@ -716,11 +656,11 @@
       "away": "Borussia Monchengladbach",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:10:40Z",
+      "updated_at": "2026-11-02T09:23:08Z",
       "odds": {
-        "p1": 2.15,
+        "p1": 2.17,
         "px": 3.58,
-        "p2": 2.67
+        "p2": 2.65
       },
       "league": "Bundesliga"
     },
@@ -731,10 +671,10 @@
       "away": "Augsburg",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:10:40Z",
+      "updated_at": "2026-11-02T09:23:08Z",
       "odds": {
-        "p1": 1.39,
-        "px": 4.95,
+        "p1": 1.4,
+        "px": 4.9,
         "p2": 5.0
       },
       "league": "Bundesliga"
@@ -746,11 +686,11 @@
       "away": "Bayern Munich",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:10:40Z",
+      "updated_at": "2026-11-02T09:23:08Z",
       "odds": {
-        "p1": 4.8,
-        "px": 5.0,
-        "p2": 1.4
+        "p1": 5.1,
+        "px": 5.25,
+        "p2": 1.36
       },
       "league": "Bundesliga"
     },
@@ -761,7 +701,7 @@
       "away": "Elversberg",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:10:40Z",
+      "updated_at": "2026-11-02T09:23:08Z",
       "odds": {
         "p1": 1.21,
         "px": 5.9,
@@ -776,11 +716,11 @@
       "away": "Eintracht Frankfurt",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:10:40Z",
+      "updated_at": "2026-11-02T09:23:08Z",
       "odds": {
-        "p1": 2.92,
-        "px": 3.7,
-        "p2": 1.97
+        "p1": 2.85,
+        "px": 3.68,
+        "p2": 2.02
       },
       "league": "Bundesliga"
     },
@@ -791,10 +731,10 @@
       "away": "Werder Bremen",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:10:40Z",
+      "updated_at": "2026-11-02T09:23:08Z",
       "odds": {
-        "p1": 1.45,
-        "px": 4.6,
+        "p1": 1.44,
+        "px": 4.65,
         "p2": 4.75
       },
       "league": "Bundesliga"
@@ -806,11 +746,11 @@
       "away": "Bayer Leverkusen",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:10:40Z",
+      "updated_at": "2026-11-02T09:23:08Z",
       "odds": {
-        "p1": 4.1,
+        "p1": 3.98,
         "px": 4.1,
-        "p2": 1.58
+        "p2": 1.6
       },
       "league": "Bundesliga"
     },
@@ -821,11 +761,11 @@
       "away": "Union Berlin",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:10:40Z",
+      "updated_at": "2026-11-02T09:23:08Z",
       "odds": {
-        "p1": 1.42,
-        "px": 4.25,
-        "p2": 5.6
+        "p1": 1.43,
+        "px": 4.3,
+        "p2": 5.25
       },
       "league": "Bundesliga"
     },
@@ -836,7 +776,7 @@
       "away": "FC Schalke 04",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:10:40Z",
+      "updated_at": "2026-11-02T09:23:08Z",
       "odds": {
         "p1": 1.53,
         "px": 4.15,
@@ -851,7 +791,7 @@
       "away": "Greuther Fürth",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:09:12Z",
+      "updated_at": "2026-11-02T09:21:42Z",
       "odds": {
         "p1": 1.73,
         "px": 3.6,
@@ -866,11 +806,11 @@
       "away": "FC Energie Cottbus",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:09:12Z",
+      "updated_at": "2026-11-02T09:21:42Z",
       "odds": {
-        "p1": 1.76,
-        "px": 3.68,
-        "p2": 3.35
+        "p1": 1.77,
+        "px": 3.75,
+        "p2": 3.22
       },
       "league": "Bundesliga 2"
     },
@@ -881,7 +821,7 @@
       "away": "1. FC Kaiserslautern",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:09:12Z",
+      "updated_at": "2026-11-02T09:21:42Z",
       "odds": {
         "p1": 2.5,
         "px": 3.38,
@@ -896,11 +836,11 @@
       "away": "SV Darmstadt 98",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:09:12Z",
+      "updated_at": "2026-11-02T09:21:42Z",
       "odds": {
-        "p1": 1.64,
-        "px": 3.93,
-        "p2": 3.65
+        "p1": 1.6,
+        "px": 3.95,
+        "p2": 3.8
       },
       "league": "Bundesliga 2"
     },
@@ -911,7 +851,7 @@
       "away": "Arminia Bielefeld",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:09:12Z",
+      "updated_at": "2026-11-02T09:21:42Z",
       "odds": {
         "p1": 2.23,
         "px": 3.28,
@@ -926,11 +866,11 @@
       "away": "VfL Wolfsburg",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:09:12Z",
+      "updated_at": "2026-11-02T09:21:42Z",
       "odds": {
-        "p1": 2.05,
-        "px": 3.63,
-        "p2": 2.65
+        "p1": 1.92,
+        "px": 3.68,
+        "p2": 2.87
       },
       "league": "Bundesliga 2"
     },
@@ -941,11 +881,11 @@
       "away": "Hannover 96",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:09:12Z",
+      "updated_at": "2026-11-02T09:21:42Z",
       "odds": {
-        "p1": 1.89,
-        "px": 3.55,
-        "p2": 3.03
+        "p1": 1.93,
+        "px": 3.58,
+        "p2": 2.92
       },
       "league": "Bundesliga 2"
     },
@@ -956,7 +896,7 @@
       "away": "FC St. Pauli",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:09:12Z",
+      "updated_at": "2026-11-02T09:21:42Z",
       "odds": {
         "p1": 2.18,
         "px": 3.33,
@@ -971,7 +911,7 @@
       "away": "Karlsruher SC",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:09:12Z",
+      "updated_at": "2026-11-02T09:21:42Z",
       "odds": {
         "p1": 1.7,
         "px": 3.83,
@@ -980,46 +920,16 @@
       "league": "Bundesliga 2"
     },
     {
-      "event_id": "5262991e389930615bec34b642428c93",
-      "commence_time": "2026-11-01T17:30:00Z",
-      "home": "Elche CF",
-      "away": "Valencia",
-      "bookmaker": "Betclic (FR)",
-      "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:12Z",
-      "odds": {
-        "p1": 2.22,
-        "px": 3.32,
-        "p2": 2.97
-      },
-      "league": "La Liga"
-    },
-    {
-      "event_id": "3757bcd765c7da1538cdf2785e784038",
-      "commence_time": "2026-11-01T20:00:00Z",
-      "home": "Athletic Bilbao",
-      "away": "Real Sociedad",
-      "bookmaker": "Betclic (FR)",
-      "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:12Z",
-      "odds": {
-        "p1": 1.91,
-        "px": 3.5,
-        "p2": 3.55
-      },
-      "league": "La Liga"
-    },
-    {
       "event_id": "7a2cd2744fdf15ea675423a6c23df46b",
       "commence_time": "2026-11-02T20:00:00Z",
       "home": "Deportivo La Coruña",
       "away": "CA Osasuna",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:12Z",
+      "updated_at": "2026-11-02T09:21:31Z",
       "odds": {
         "p1": 2.05,
-        "px": 3.15,
+        "px": 3.25,
         "p2": 3.4
       },
       "league": "La Liga"
@@ -1031,11 +941,11 @@
       "away": "Alavés",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:12Z",
+      "updated_at": "2026-11-02T09:21:31Z",
       "odds": {
         "p1": 1.83,
         "px": 3.2,
-        "p2": 3.8
+        "p2": 3.83
       },
       "league": "La Liga"
     },
@@ -1046,7 +956,7 @@
       "away": "Real Racing Club de Santander",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:12Z",
+      "updated_at": "2026-11-02T09:21:31Z",
       "odds": {
         "p1": 2.2,
         "px": 3.4,
@@ -1061,10 +971,10 @@
       "away": "Deportivo La Coruña",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:12Z",
+      "updated_at": "2026-11-02T09:21:31Z",
       "odds": {
         "p1": 2.05,
-        "px": 3.22,
+        "px": 3.2,
         "p2": 3.12
       },
       "league": "La Liga"
@@ -1076,10 +986,10 @@
       "away": "Athletic Bilbao",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:12Z",
+      "updated_at": "2026-11-02T09:21:31Z",
       "odds": {
-        "p1": 3.12,
-        "px": 3.18,
+        "p1": 3.13,
+        "px": 3.17,
         "p2": 2.07
       },
       "league": "La Liga"
@@ -1091,11 +1001,11 @@
       "away": "Real Madrid",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:12Z",
+      "updated_at": "2026-11-02T09:21:31Z",
       "odds": {
-        "p1": 6.75,
-        "px": 5.1,
-        "p2": 1.28
+        "p1": 7.75,
+        "px": 5.6,
+        "p2": 1.23
       },
       "league": "La Liga"
     },
@@ -1106,11 +1016,11 @@
       "away": "Real Betis",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:12Z",
+      "updated_at": "2026-11-02T09:21:31Z",
       "odds": {
-        "p1": 3.0,
+        "p1": 2.97,
         "px": 3.47,
-        "p2": 2.0
+        "p2": 2.02
       },
       "league": "La Liga"
     },
@@ -1121,11 +1031,11 @@
       "away": "Rayo Vallecano",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:12Z",
+      "updated_at": "2026-11-02T09:21:31Z",
       "odds": {
-        "p1": 1.64,
-        "px": 3.73,
-        "p2": 4.15
+        "p1": 1.59,
+        "px": 3.83,
+        "p2": 4.4
       },
       "league": "La Liga"
     },
@@ -1136,11 +1046,11 @@
       "away": "Levante",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:12Z",
+      "updated_at": "2026-11-02T09:21:31Z",
       "odds": {
         "p1": 1.72,
         "px": 3.5,
-        "p2": 3.98
+        "p2": 3.95
       },
       "league": "La Liga"
     },
@@ -1151,10 +1061,10 @@
       "away": "Getafe",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:12Z",
+      "updated_at": "2026-11-02T09:21:31Z",
       "odds": {
         "p1": 1.39,
-        "px": 4.15,
+        "px": 4.2,
         "p2": 6.25
       },
       "league": "La Liga"
@@ -1166,7 +1076,7 @@
       "away": "Barcelona",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:12Z",
+      "updated_at": "2026-11-02T09:21:31Z",
       "odds": {
         "p1": 3.45,
         "px": 3.93,
@@ -1175,47 +1085,17 @@
       "league": "La Liga"
     },
     {
-      "event_id": "2e86bf1e33883ebc5febc0746f913114",
-      "commence_time": "2026-11-01T15:15:00Z",
-      "home": "AD Ceuta FC",
-      "away": "Sporting Gijón",
-      "bookmaker": "Betclic (FR)",
-      "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:08:52Z",
-      "odds": {
-        "p1": 7.0,
-        "px": 3.4,
-        "p2": 1.42
-      },
-      "league": "La Liga 2"
-    },
-    {
-      "event_id": "d57787a1694c40c4fd54a519d9347180",
-      "commence_time": "2026-11-01T17:30:00Z",
-      "home": "Burgos CF",
-      "away": "CD Castellón",
-      "bookmaker": "Betclic (FR)",
-      "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:08:52Z",
-      "odds": {
-        "p1": 3.38,
-        "px": 3.27,
-        "p2": 2.0
-      },
-      "league": "La Liga 2"
-    },
-    {
-      "event_id": "48f2e1b79c5f2af6ad7cdd618a6aa53a",
-      "commence_time": "2026-11-01T20:00:00Z",
+      "event_id": "f89b9247af7cc118faae54ec9f0934ee",
+      "commence_time": "2026-11-02T13:00:00Z",
       "home": "Tenerife",
       "away": "Andorra CF",
-      "bookmaker": "Winamax (FR)",
-      "bookmaker_key": "winamax_fr",
-      "updated_at": "2026-11-01T16:04:52Z",
+      "bookmaker": "Betclic (FR)",
+      "bookmaker_key": "betclic_fr",
+      "updated_at": "2026-11-02T09:22:28Z",
       "odds": {
-        "p1": 2.15,
-        "px": 3.0,
-        "p2": 2.85
+        "p1": 2.13,
+        "px": 3.1,
+        "p2": 3.23
       },
       "league": "La Liga 2"
     },
@@ -1226,11 +1106,11 @@
       "away": "Las Palmas",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:08:52Z",
+      "updated_at": "2026-11-02T09:22:28Z",
       "odds": {
-        "p1": 1.65,
-        "px": 3.5,
-        "p2": 4.35
+        "p1": 1.64,
+        "px": 3.68,
+        "p2": 4.6
       },
       "league": "La Liga 2"
     },
@@ -1241,11 +1121,11 @@
       "away": "Leganés",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:08:52Z",
+      "updated_at": "2026-11-02T09:22:28Z",
       "odds": {
-        "p1": 1.96,
-        "px": 3.23,
-        "p2": 3.33
+        "p1": 1.94,
+        "px": 3.32,
+        "p2": 3.53
       },
       "league": "La Liga 2"
     },
@@ -1256,11 +1136,11 @@
       "away": "Cádiz CF",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:08:52Z",
+      "updated_at": "2026-11-02T09:22:28Z",
       "odds": {
-        "p1": 1.45,
-        "px": 3.9,
-        "p2": 5.75
+        "p1": 1.42,
+        "px": 4.2,
+        "p2": 6.25
       },
       "league": "La Liga 2"
     },
@@ -1271,11 +1151,11 @@
       "away": "SD Eibar",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:08:52Z",
+      "updated_at": "2026-11-02T09:22:28Z",
       "odds": {
-        "p1": 1.54,
+        "p1": 1.55,
         "px": 3.93,
-        "p2": 4.65
+        "p2": 4.5
       },
       "league": "La Liga 2"
     },
@@ -1286,11 +1166,11 @@
       "away": "Celta Fortuna",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:08:52Z",
+      "updated_at": "2026-11-02T09:22:28Z",
       "odds": {
-        "p1": 1.7,
-        "px": 3.42,
-        "p2": 4.2
+        "p1": 1.63,
+        "px": 3.53,
+        "p2": 4.45
       },
       "league": "La Liga 2"
     },
@@ -1301,7 +1181,7 @@
       "away": "Oviedo",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:08:52Z",
+      "updated_at": "2026-11-02T09:22:28Z",
       "odds": {
         "p1": 2.62,
         "px": 2.95,
@@ -1316,11 +1196,11 @@
       "away": "AD Ceuta FC",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:08:52Z",
+      "updated_at": "2026-11-02T09:22:28Z",
       "odds": {
-        "p1": 1.41,
-        "px": 4.45,
-        "p2": 5.4
+        "p1": 1.42,
+        "px": 4.35,
+        "p2": 5.25
       },
       "league": "La Liga 2"
     },
@@ -1331,7 +1211,7 @@
       "away": "Albacete",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:08:52Z",
+      "updated_at": "2026-11-02T09:22:28Z",
       "odds": {
         "p1": 1.91,
         "px": 3.28,
@@ -1346,11 +1226,11 @@
       "away": "Tenerife",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:08:52Z",
+      "updated_at": "2026-11-02T09:22:28Z",
       "odds": {
-        "p1": 1.98,
-        "px": 3.13,
-        "p2": 3.38
+        "p1": 1.83,
+        "px": 3.3,
+        "p2": 3.73
       },
       "league": "La Liga 2"
     },
@@ -1361,7 +1241,7 @@
       "away": "Mallorca",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:08:52Z",
+      "updated_at": "2026-11-02T09:22:28Z",
       "odds": {
         "p1": 2.72,
         "px": 3.25,
@@ -1376,7 +1256,7 @@
       "away": "Almería",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:08:52Z",
+      "updated_at": "2026-11-02T09:22:28Z",
       "odds": {
         "p1": 1.95,
         "px": 3.42,
@@ -1385,19 +1265,34 @@
       "league": "La Liga 2"
     },
     {
-      "event_id": "6a3819cdbe2ba2fe5a3d8f9b4b459965",
-      "commence_time": "2026-11-01T16:30:00Z",
-      "home": "Liverpool",
-      "away": "Arsenal",
+      "event_id": "0377ed072a93f8b77593c0f001fda9ec",
+      "commence_time": "2026-11-08T17:30:00Z",
+      "home": "Las Palmas",
+      "away": "CD Eldense",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:09:27Z",
+      "updated_at": "2026-11-02T09:22:28Z",
       "odds": {
-        "p1": 3.0,
-        "px": 3.4,
-        "p2": 2.15
+        "p1": 2.03,
+        "px": 3.2,
+        "p2": 3.17
       },
-      "league": "Premier League"
+      "league": "La Liga 2"
+    },
+    {
+      "event_id": "76611e81a480e9f83b04f21c1cad402d",
+      "commence_time": "2026-11-08T17:30:00Z",
+      "home": "Sporting Gijón",
+      "away": "Real Valladolid CF",
+      "bookmaker": "Betclic (FR)",
+      "bookmaker_key": "betclic_fr",
+      "updated_at": "2026-11-02T09:22:28Z",
+      "odds": {
+        "p1": 2.18,
+        "px": 3.1,
+        "p2": 2.95
+      },
+      "league": "La Liga 2"
     },
     {
       "event_id": "0f552d9c6990c69474f50ff2fb54e9a3",
@@ -1406,11 +1301,11 @@
       "away": "Everton",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:09:27Z",
+      "updated_at": "2026-11-02T09:20:04Z",
       "odds": {
-        "p1": 2.18,
+        "p1": 2.08,
         "px": 3.45,
-        "p2": 2.85
+        "p2": 3.13
       },
       "league": "Premier League"
     },
@@ -1421,7 +1316,7 @@
       "away": "Coventry City",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:09:27Z",
+      "updated_at": "2026-11-02T09:20:04Z",
       "odds": {
         "p1": 1.63,
         "px": 3.7,
@@ -1436,11 +1331,11 @@
       "away": "Tottenham Hotspur",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:09:27Z",
+      "updated_at": "2026-11-02T09:20:04Z",
       "odds": {
         "p1": 2.33,
         "px": 3.2,
-        "p2": 2.63
+        "p2": 2.65
       },
       "league": "Premier League"
     },
@@ -1451,11 +1346,11 @@
       "away": "Hull City",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:09:27Z",
+      "updated_at": "2026-11-02T09:20:04Z",
       "odds": {
         "p1": 1.11,
-        "px": 6.6,
-        "p2": 14.25
+        "px": 6.75,
+        "p2": 14.5
       },
       "league": "Premier League"
     },
@@ -1466,11 +1361,11 @@
       "away": "Newcastle United",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:09:27Z",
+      "updated_at": "2026-11-02T09:20:04Z",
       "odds": {
-        "p1": 2.0,
-        "px": 3.45,
-        "p2": 3.03
+        "p1": 2.03,
+        "px": 3.42,
+        "p2": 2.97
       },
       "league": "Premier League"
     },
@@ -1481,11 +1376,11 @@
       "away": "Manchester City",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:09:27Z",
+      "updated_at": "2026-11-02T09:20:04Z",
       "odds": {
-        "p1": 4.3,
+        "p1": 4.25,
         "px": 3.8,
-        "p2": 1.6
+        "p2": 1.61
       },
       "league": "Premier League"
     },
@@ -1496,11 +1391,11 @@
       "away": "Bournemouth",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:09:27Z",
+      "updated_at": "2026-11-02T09:20:04Z",
       "odds": {
-        "p1": 3.53,
+        "p1": 3.58,
         "px": 3.5,
-        "p2": 1.82
+        "p2": 1.8
       },
       "league": "Premier League"
     },
@@ -1511,11 +1406,11 @@
       "away": "Brentford",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:09:27Z",
+      "updated_at": "2026-11-02T09:20:04Z",
       "odds": {
-        "p1": 1.8,
-        "px": 3.6,
-        "p2": 3.48
+        "p1": 1.79,
+        "px": 3.63,
+        "p2": 3.5
       },
       "league": "Premier League"
     },
@@ -1526,11 +1421,11 @@
       "away": "Chelsea",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:09:27Z",
+      "updated_at": "2026-11-02T09:20:04Z",
       "odds": {
-        "p1": 3.4,
+        "p1": 3.45,
         "px": 3.4,
-        "p2": 1.88
+        "p2": 1.87
       },
       "league": "Premier League"
     },
@@ -1541,11 +1436,11 @@
       "away": "Liverpool",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:09:27Z",
+      "updated_at": "2026-11-02T09:20:04Z",
       "odds": {
-        "p1": 4.55,
+        "p1": 4.45,
         "px": 4.0,
-        "p2": 1.54
+        "p2": 1.55
       },
       "league": "Premier League"
     },
@@ -1556,9 +1451,9 @@
       "away": "Aston Villa",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:09:27Z",
+      "updated_at": "2026-11-02T09:20:04Z",
       "odds": {
-        "p1": 2.1,
+        "p1": 2.08,
         "px": 3.5,
         "p2": 2.82
       },
@@ -1571,7 +1466,7 @@
       "away": "Manchester United",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:09:27Z",
+      "updated_at": "2026-11-02T09:20:04Z",
       "odds": {
         "p1": 1.69,
         "px": 3.58,
@@ -1586,7 +1481,7 @@
       "away": "Stoke City",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:09Z",
+      "updated_at": "2026-11-02T09:23:28Z",
       "odds": {
         "p1": 2.48,
         "px": 3.1,
@@ -1601,11 +1496,11 @@
       "away": "Bolton Wanderers",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:09Z",
+      "updated_at": "2026-11-02T09:23:28Z",
       "odds": {
-        "p1": 2.05,
-        "px": 3.35,
-        "p2": 2.8
+        "p1": 2.07,
+        "px": 3.25,
+        "p2": 2.87
       },
       "league": "Championship"
     },
@@ -1616,7 +1511,7 @@
       "away": "Burnley",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:09Z",
+      "updated_at": "2026-11-02T09:23:28Z",
       "odds": {
         "p1": 1.88,
         "px": 3.43,
@@ -1631,11 +1526,11 @@
       "away": "Norwich City",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:09Z",
+      "updated_at": "2026-11-02T09:23:28Z",
       "odds": {
-        "p1": 3.07,
-        "px": 3.45,
-        "p2": 1.91
+        "p1": 3.12,
+        "px": 3.35,
+        "p2": 1.92
       },
       "league": "Championship"
     },
@@ -1646,7 +1541,7 @@
       "away": "Lincoln City",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:09Z",
+      "updated_at": "2026-11-02T09:23:28Z",
       "odds": {
         "p1": 2.22,
         "px": 3.15,
@@ -1661,7 +1556,7 @@
       "away": "Swansea City",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:09Z",
+      "updated_at": "2026-11-02T09:23:28Z",
       "odds": {
         "p1": 2.4,
         "px": 3.13,
@@ -1676,7 +1571,7 @@
       "away": "Sheffield United",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:09Z",
+      "updated_at": "2026-11-02T09:23:28Z",
       "odds": {
         "p1": 3.0,
         "px": 3.33,
@@ -1691,11 +1586,11 @@
       "away": "Millwall",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:09Z",
+      "updated_at": "2026-11-02T09:23:28Z",
       "odds": {
-        "p1": 1.81,
-        "px": 3.38,
-        "p2": 3.45
+        "p1": 1.84,
+        "px": 3.35,
+        "p2": 3.37
       },
       "league": "Championship"
     },
@@ -1706,11 +1601,11 @@
       "away": "Southampton",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:09Z",
+      "updated_at": "2026-11-02T09:23:28Z",
       "odds": {
-        "p1": 2.28,
-        "px": 3.33,
-        "p2": 2.48
+        "p1": 2.25,
+        "px": 3.3,
+        "p2": 2.55
       },
       "league": "Championship"
     },
@@ -1721,11 +1616,11 @@
       "away": "West Ham United",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:09Z",
+      "updated_at": "2026-11-02T09:23:28Z",
       "odds": {
-        "p1": 3.15,
-        "px": 3.73,
-        "p2": 1.8
+        "p1": 3.08,
+        "px": 3.65,
+        "p2": 1.84
       },
       "league": "Championship"
     },
@@ -1736,7 +1631,7 @@
       "away": "Middlesbrough",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:09Z",
+      "updated_at": "2026-11-02T09:23:28Z",
       "odds": {
         "p1": 3.8,
         "px": 3.63,
@@ -1751,7 +1646,7 @@
       "away": "Wolverhampton Wanderers",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:09Z",
+      "updated_at": "2026-11-02T09:23:28Z",
       "odds": {
         "p1": 3.13,
         "px": 3.25,
@@ -1766,7 +1661,7 @@
       "away": "Bolton Wanderers",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:09Z",
+      "updated_at": "2026-11-02T09:23:28Z",
       "odds": {
         "p1": 2.03,
         "px": 3.3,
@@ -1781,7 +1676,7 @@
       "away": "Norwich City",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:09Z",
+      "updated_at": "2026-11-02T09:23:28Z",
       "odds": {
         "p1": 2.35,
         "px": 3.28,
@@ -1796,7 +1691,7 @@
       "away": "Stoke City",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:09Z",
+      "updated_at": "2026-11-02T09:23:28Z",
       "odds": {
         "p1": 2.23,
         "px": 3.07,
@@ -1811,7 +1706,7 @@
       "away": "Wolverhampton Wanderers",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:09Z",
+      "updated_at": "2026-11-02T09:23:28Z",
       "odds": {
         "p1": 2.8,
         "px": 3.32,
@@ -1826,7 +1721,7 @@
       "away": "Swansea City",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:09Z",
+      "updated_at": "2026-11-02T09:23:28Z",
       "odds": {
         "p1": 1.84,
         "px": 3.3,
@@ -1841,7 +1736,7 @@
       "away": "West Ham United",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:09Z",
+      "updated_at": "2026-11-02T09:23:28Z",
       "odds": {
         "p1": 4.5,
         "px": 3.9,
@@ -1856,7 +1751,7 @@
       "away": "Burnley",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:09Z",
+      "updated_at": "2026-11-02T09:23:28Z",
       "odds": {
         "p1": 2.1,
         "px": 3.5,
@@ -1871,7 +1766,7 @@
       "away": "Sheffield United",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:09Z",
+      "updated_at": "2026-11-02T09:23:28Z",
       "odds": {
         "p1": 2.95,
         "px": 3.27,
@@ -1886,7 +1781,7 @@
       "away": "Lincoln City",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:09Z",
+      "updated_at": "2026-11-02T09:23:28Z",
       "odds": {
         "p1": 1.68,
         "px": 3.45,
@@ -1901,7 +1796,7 @@
       "away": "Middlesbrough",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:09Z",
+      "updated_at": "2026-11-02T09:23:28Z",
       "odds": {
         "p1": 4.75,
         "px": 4.2,
@@ -1916,7 +1811,7 @@
       "away": "Millwall",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:09Z",
+      "updated_at": "2026-11-02T09:23:28Z",
       "odds": {
         "p1": 1.87,
         "px": 3.35,
@@ -1931,7 +1826,7 @@
       "away": "Southampton",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:11:09Z",
+      "updated_at": "2026-11-02T09:23:28Z",
       "odds": {
         "p1": 4.7,
         "px": 4.05,
@@ -1940,107 +1835,17 @@
       "league": "Championship"
     },
     {
-      "event_id": "196c38051dc539d3d85bc3b2e3f9b45b",
-      "commence_time": "2026-11-01T20:30:00Z",
-      "home": "Vancouver Whitecaps FC",
-      "away": "Seattle Sounders FC",
-      "bookmaker": "Betclic (FR)",
-      "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:09:11Z",
-      "odds": {
-        "p1": 1.63,
-        "px": 3.93,
-        "p2": 3.98
-      },
-      "league": "MLS"
-    },
-    {
-      "event_id": "2bf8103627b1f0afe9f9b1b619ebbe61",
-      "commence_time": "2026-11-01T21:30:00Z",
-      "home": "Atlanta United FC",
-      "away": "Toronto FC",
-      "bookmaker": "Betclic (FR)",
-      "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:09:11Z",
-      "odds": {
-        "p1": 2.03,
-        "px": 3.73,
-        "p2": 2.77
-      },
-      "league": "MLS"
-    },
-    {
-      "event_id": "54bf2a52e2dd2f8b9212f4816dceaada",
-      "commence_time": "2026-11-01T21:30:00Z",
-      "home": "Nashville SC",
-      "away": "New York Red Bulls",
-      "bookmaker": "Betclic (FR)",
-      "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:09:11Z",
-      "odds": {
-        "p1": 1.45,
-        "px": 4.45,
-        "p2": 4.85
-      },
-      "league": "MLS"
-    },
-    {
-      "event_id": "b728a3eea55b37d5ce5268b9a594802f",
-      "commence_time": "2026-11-02T00:00:00Z",
-      "home": "New England Revolution",
-      "away": "Inter Miami CF",
-      "bookmaker": "Betclic (FR)",
-      "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:09:11Z",
-      "odds": {
-        "p1": 2.78,
-        "px": 3.7,
-        "p2": 2.03
-      },
-      "league": "MLS"
-    },
-    {
-      "event_id": "1a27bec6400dba567344a86aee6fca4a",
-      "commence_time": "2026-11-02T01:30:00Z",
-      "home": "Los Angeles FC",
-      "away": "Minnesota United FC",
-      "bookmaker": "Betclic (FR)",
-      "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:09:11Z",
-      "odds": {
-        "p1": 1.56,
-        "px": 4.15,
-        "p2": 4.15
-      },
-      "league": "MLS"
-    },
-    {
-      "event_id": "c59921cdf131bc3c6e9fdc0cbe5abe3f",
-      "commence_time": "2026-11-02T02:45:00Z",
-      "home": "Portland Timbers",
-      "away": "Houston Dynamo",
-      "bookmaker": "Betclic (FR)",
-      "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:09:11Z",
-      "odds": {
-        "p1": 1.68,
-        "px": 3.75,
-        "p2": 3.85
-      },
-      "league": "MLS"
-    },
-    {
       "event_id": "f5ca1b83c89f16c83a63977c741ed93d",
       "commence_time": "2026-11-07T21:00:00Z",
       "home": "New York Red Bulls",
       "away": "Atlanta United FC",
-      "bookmaker": "PMU (FR)",
-      "bookmaker_key": "pmu_fr",
-      "updated_at": "2026-11-01T16:11:00Z",
+      "bookmaker": "Betclic (FR)",
+      "bookmaker_key": "betclic_fr",
+      "updated_at": "2026-11-02T09:22:46Z",
       "odds": {
-        "p1": 1.82,
-        "px": 3.75,
-        "p2": 3.1
+        "p1": 1.74,
+        "px": 3.85,
+        "p2": 3.27
       },
       "league": "MLS"
     },
@@ -2049,13 +1854,13 @@
       "commence_time": "2026-11-07T21:00:00Z",
       "home": "CF Montreal",
       "away": "Vancouver Whitecaps FC",
-      "bookmaker": "PMU (FR)",
-      "bookmaker_key": "pmu_fr",
-      "updated_at": "2026-11-01T16:11:00Z",
+      "bookmaker": "Betclic (FR)",
+      "bookmaker_key": "betclic_fr",
+      "updated_at": "2026-11-02T09:22:46Z",
       "odds": {
-        "p1": 4.75,
-        "px": 4.0,
-        "p2": 1.47
+        "p1": 4.1,
+        "px": 3.95,
+        "p2": 1.56
       },
       "league": "MLS"
     },
@@ -2064,13 +1869,13 @@
       "commence_time": "2026-11-07T21:00:00Z",
       "home": "Inter Miami CF",
       "away": "Charlotte FC",
-      "bookmaker": "PMU (FR)",
-      "bookmaker_key": "pmu_fr",
-      "updated_at": "2026-11-01T16:11:00Z",
+      "bookmaker": "Betclic (FR)",
+      "bookmaker_key": "betclic_fr",
+      "updated_at": "2026-11-02T09:22:46Z",
       "odds": {
-        "p1": 1.4,
-        "px": 4.7,
-        "p2": 4.8
+        "p1": 1.39,
+        "px": 4.65,
+        "p2": 4.9
       },
       "league": "MLS"
     },
@@ -2081,11 +1886,11 @@
       "away": "Columbus Crew SC",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:09:11Z",
+      "updated_at": "2026-11-02T09:22:46Z",
       "odds": {
-        "p1": 1.79,
-        "px": 3.65,
-        "p2": 3.25
+        "p1": 1.85,
+        "px": 3.6,
+        "p2": 3.1
       },
       "league": "MLS"
     },
@@ -2096,7 +1901,7 @@
       "away": "New York City FC",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:09:11Z",
+      "updated_at": "2026-11-02T09:22:46Z",
       "odds": {
         "p1": 2.75,
         "px": 3.32,
@@ -2109,13 +1914,13 @@
       "commence_time": "2026-11-07T21:00:00Z",
       "home": "FC Cincinnati",
       "away": "Nashville SC",
-      "bookmaker": "PMU (FR)",
-      "bookmaker_key": "pmu_fr",
-      "updated_at": "2026-11-01T16:11:00Z",
+      "bookmaker": "Winamax (FR)",
+      "bookmaker_key": "winamax_fr",
+      "updated_at": "2026-11-02T09:22:56Z",
       "odds": {
-        "p1": 3.2,
-        "px": 3.8,
-        "p2": 1.77
+        "p1": 2.1,
+        "px": 3.6,
+        "p2": 2.45
       },
       "league": "MLS"
     },
@@ -2124,13 +1929,13 @@
       "commence_time": "2026-11-07T21:00:00Z",
       "home": "Orlando City SC",
       "away": "New England Revolution",
-      "bookmaker": "PMU (FR)",
-      "bookmaker_key": "pmu_fr",
-      "updated_at": "2026-11-01T16:11:00Z",
+      "bookmaker": "Betclic (FR)",
+      "bookmaker_key": "betclic_fr",
+      "updated_at": "2026-11-02T09:22:46Z",
       "odds": {
-        "p1": 1.97,
-        "px": 3.65,
-        "p2": 2.75
+        "p1": 1.74,
+        "px": 3.85,
+        "p2": 3.25
       },
       "league": "MLS"
     },
@@ -2139,13 +1944,13 @@
       "commence_time": "2026-11-07T21:00:00Z",
       "home": "Philadelphia Union",
       "away": "Toronto FC",
-      "bookmaker": "PMU (FR)",
-      "bookmaker_key": "pmu_fr",
-      "updated_at": "2026-11-01T16:11:00Z",
+      "bookmaker": "Betclic (FR)",
+      "bookmaker_key": "betclic_fr",
+      "updated_at": "2026-11-02T09:22:46Z",
       "odds": {
-        "p1": 1.24,
-        "px": 5.3,
-        "p2": 7.0
+        "p1": 1.36,
+        "px": 4.6,
+        "p2": 5.4
       },
       "league": "MLS"
     },
@@ -2154,13 +1959,13 @@
       "commence_time": "2026-11-08T00:00:00Z",
       "home": "Austin FC",
       "away": "Portland Timbers",
-      "bookmaker": "PMU (FR)",
-      "bookmaker_key": "pmu_fr",
-      "updated_at": "2026-11-01T16:11:00Z",
+      "bookmaker": "Winamax (FR)",
+      "bookmaker_key": "winamax_fr",
+      "updated_at": "2026-11-02T09:22:56Z",
       "odds": {
-        "p1": 2.48,
-        "px": 3.5,
-        "p2": 2.2
+        "p1": 3.35,
+        "px": 3.85,
+        "p2": 1.66
       },
       "league": "MLS"
     },
@@ -2171,7 +1976,7 @@
       "away": "Colorado Rapids",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:09:11Z",
+      "updated_at": "2026-11-02T09:22:46Z",
       "odds": {
         "p1": 1.9,
         "px": 3.43,
@@ -2184,13 +1989,13 @@
       "commence_time": "2026-11-08T00:00:00Z",
       "home": "Houston Dynamo",
       "away": "St. Louis City SC",
-      "bookmaker": "PMU (FR)",
-      "bookmaker_key": "pmu_fr",
-      "updated_at": "2026-11-01T16:11:00Z",
+      "bookmaker": "Betclic (FR)",
+      "bookmaker_key": "betclic_fr",
+      "updated_at": "2026-11-02T09:22:46Z",
       "odds": {
-        "p1": 2.2,
-        "px": 3.3,
-        "p2": 2.6
+        "p1": 2.17,
+        "px": 3.35,
+        "p2": 2.63
       },
       "league": "MLS"
     },
@@ -2201,11 +2006,11 @@
       "away": "LA Galaxy",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:09:11Z",
+      "updated_at": "2026-11-02T09:22:46Z",
       "odds": {
-        "p1": 1.53,
-        "px": 4.1,
-        "p2": 4.15
+        "p1": 1.54,
+        "px": 4.05,
+        "p2": 4.1
       },
       "league": "MLS"
     },
@@ -2214,13 +2019,13 @@
       "commence_time": "2026-11-08T00:00:00Z",
       "home": "Seattle Sounders FC",
       "away": "Los Angeles FC",
-      "bookmaker": "PMU (FR)",
-      "bookmaker_key": "pmu_fr",
-      "updated_at": "2026-11-01T16:11:00Z",
+      "bookmaker": "Betclic (FR)",
+      "bookmaker_key": "betclic_fr",
+      "updated_at": "2026-11-02T09:22:46Z",
       "odds": {
-        "p1": 2.17,
-        "px": 3.4,
-        "p2": 2.6
+        "p1": 1.86,
+        "px": 3.5,
+        "p2": 3.15
       },
       "league": "MLS"
     },
@@ -2229,13 +2034,13 @@
       "commence_time": "2026-11-08T00:00:00Z",
       "home": "Minnesota United FC",
       "away": "San Jose Earthquakes",
-      "bookmaker": "PMU (FR)",
-      "bookmaker_key": "pmu_fr",
-      "updated_at": "2026-11-01T16:11:00Z",
+      "bookmaker": "Betclic (FR)",
+      "bookmaker_key": "betclic_fr",
+      "updated_at": "2026-11-02T09:22:46Z",
       "odds": {
-        "p1": 1.73,
-        "px": 3.85,
-        "p2": 3.3
+        "p1": 1.68,
+        "px": 3.83,
+        "p2": 3.53
       },
       "league": "MLS"
     },
@@ -2246,11 +2051,11 @@
       "away": "Sporting Kansas City",
       "bookmaker": "Betclic (FR)",
       "bookmaker_key": "betclic_fr",
-      "updated_at": "2026-11-01T16:09:11Z",
+      "updated_at": "2026-11-02T09:22:46Z",
       "odds": {
-        "p1": 1.35,
-        "px": 4.85,
-        "p2": 5.1
+        "p1": 1.38,
+        "px": 4.7,
+        "p2": 4.95
       },
       "league": "MLS"
     }
